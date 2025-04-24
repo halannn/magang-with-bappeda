@@ -4,15 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LaporanKegiatan extends Model
 {
     /** @use HasFactory<\Database\Factories\LaporanKegiatanFactory> */
     use HasFactory;
 
-    public function profile(): HasMany
+    protected $fillable = [
+        'deskripsi_kegiatan',
+        'tanggal',
+        'dokumentasi',
+    ];
+
+    public function profile(): BelongsTo
     {
-        return $this->hasMany(Profile::class);
+        return $this->belongsTo(Profile::class);
     }
 }

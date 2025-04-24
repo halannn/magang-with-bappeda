@@ -3,12 +3,53 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Profile extends Model
 {
-    public function user(): HasOne
+
+    protected $fillable = [
+        'nama_lengkap',
+        'nomor_mahasiswa',
+        'asal_kampus',
+        'fakultas',
+        'jurusan',
+        'program_studi',
+        'kontak',
+        'bio',
+        'cv_link',
+        'status_magang',
+    ];
+
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function pendaftaran(): HasOne
+    {
+        return $this->hasOne(PendaftaranMagang::class);
+    }
+
+    public function sertifikat(): HasOne
+    {
+        return $this->hasOne(SertifikatMagang::class);
+    }
+
+    public function absensi(): HasMany
+    {
+        return $this->hasMany(Absensi::class);
+    }
+
+    public function laporan(): HasMany
+    {
+        return $this->hasMany(LaporanKegiatan::class);
+    }
+
+    public function dokumen(): HasMany
+    {
+        return $this->hasMany(DokumenMagang::class);
     }
 }

@@ -4,15 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Absensi extends Model
 {
     /** @use HasFactory<\Database\Factories\AbsensiFactory> */
     use HasFactory;
 
-    public function user(): HasMany
+
+    protected $fillable = [
+        'tanggal',
+        'waktu_datang',
+        'waktu_pulang',
+        'status',
+        'keterangan',
+        'surat',
+        'verifikasi'
+    ];
+
+    public function profile(): BelongsTo
     {
-        return $this->hasMany(Profile::class);
+        return $this->BelongsTo(Profile::class);
     }
 }

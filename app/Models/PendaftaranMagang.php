@@ -3,16 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PendaftaranMagang extends Model
 {
-    public function user(): HasOne
+    protected $fillable = [
+        'posisi_magang',
+        'deskripsi_magang',
+        'tanggal_mulai',
+        'tanggal_selesai',
+        'surat_magang',
+    ];
+
+    public function user(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
-    public function profile(): HasOne
+    public function profile(): BelongsTo
     {
-        return $this->hasOne(Profile::class);
+        return $this->belongsTo(Profile::class);
     }
 }
