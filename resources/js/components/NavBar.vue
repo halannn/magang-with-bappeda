@@ -2,12 +2,13 @@
 import { Link } from '@inertiajs/vue3';
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import Button from '@/components/ui/button/Button.vue';
 
 const page = usePage();
 
 const checkUrl = ref((url: string) => {
   if (page.url === url) {
-    return (' border-b-2 border-b-blue-900');
+    return (' border-b-3 border-b-blue-900');
   }
 })
 </script>
@@ -36,12 +37,17 @@ const checkUrl = ref((url: string) => {
       </Link>
     </div>
     <div id="cta_button" class="flex flex-row gap-4 items-center">
-      <Link :href="route('login')" class="inline-block px-2 py-3 ">
-      Log In
-      </Link>
-      <Link :href="route('register')" class="inline-block px-2 py-3 ">
-      Register
-      </Link>
+      <Button size="lg"
+        class="outline outline-blue-900 bg-transparent text-blue-900 font-medium hover:bg-blue-900 hover:text-gray-50 px-2 py-3">
+        <Link :href="route('login')" class="">
+        Login
+        </Link>
+      </Button>
+      <Button size="lg" class=" bg-blue-900 text-gray-50 font-medium hover:bg-gray-900 px-2 py-3">
+        <Link :href="route('register')" class="">
+        Daftar
+        </Link>
+      </Button>
     </div>
   </nav>
 </template>
