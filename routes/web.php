@@ -4,19 +4,19 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('public/Home');
 })->name('home');
 
 Route::get('tentang', function () {
-    return Inertia::render('Tentang');
+    return Inertia::render('public/Tentang');
 })->name('tentang');
 
 Route::get('mahasiswa', function () {
-    return Inertia::render('Mahasiswa');
+    return Inertia::render('public/Mahasiswa');
 })->name('mahasiswa');
 
 Route::get('pendaftaran', function () {
-    return Inertia::render('Pendaftaran');
+    return Inertia::render('public/Pendaftaran');
 })->name('pendaftaran');
 
 Route::get('dashboard', function () {
