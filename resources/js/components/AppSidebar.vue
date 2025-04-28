@@ -1,18 +1,43 @@
 <script setup lang="ts">
 import NavFooter from '@/components/NavFooter.vue';
-import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { BookCheckIcon, BookOpen, CalendarPlus2Icon, Clock, Folder, FoldersIcon } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import NavGroup from './NavGroup.vue';
 
-const mainNavItems: NavItem[] = [
+const groupNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
+        title: 'Absensi',
+        href: '/absensi',
+        icon: Clock,
+        children: [
+            {
+                title: 'Izin atau sakit',
+                href: '/absensi/izin-sakit',
+            },
+            {
+                title: 'Riwayat',
+                href: '/absensi/riwayat',
+            },
+        ],
+    },
+    {
+        title: 'Laporan kegiatan',
+        href: '/laporan-kegiatan',
+        icon: CalendarPlus2Icon,
+    },
+    {
+        title: 'Dokumen',
+        href: '/dokumen',
+        icon: FoldersIcon,
+    },
+    {
+        title: 'Sertifikat',
+        href: '/sertifikat',
+        icon: BookCheckIcon,
     },
 ];
 
@@ -45,7 +70,7 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavGroup label="Mahasiswa" :items="groupNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
