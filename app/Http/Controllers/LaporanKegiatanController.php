@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LaporanKegiatan;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LaporanKegiatanController extends Controller
 {
@@ -11,7 +13,13 @@ class LaporanKegiatanController extends Controller
      */
     public function index()
     {
-        //
+        $profile_id = auth()->user()->profile?->id;
+
+        $laporan =  LaporanKegiatan::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
+
+        return Inertia::render('laporan_kegiatan/Index', [
+            'laporan' => $laporan
+        ]);
     }
 
     /**

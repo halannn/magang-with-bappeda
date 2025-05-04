@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Badge from '@/components/ui/badge/Badge.vue';
+import Button from '@/components/ui/button/Button.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
@@ -57,74 +58,74 @@ function goTo(url: string | null) {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
-                <div id="head" class="flex flex-col gap-5 p-5">
-                    <div class="flex flex-row gap-5">
-                        <CalendarClockIcon :size="32" />
-                        <p class="text-2xl font-bold">Riwayat</p>
-                    </div>
+            <div id="head" class="flex flex-col gap-5 p-5">
+                <div class="flex flex-row gap-5">
+                    <CalendarClockIcon :size="32" />
+                    <p class="text-2xl font-bold">Riwayat</p>
                 </div>
-
-                <Table>
-                    <TableCaption>Daftar absensi.</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead class="w-[100px]">No</TableHead>
-                            <TableHead>Tanggal</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Keterangan</TableHead>
-                            <TableHead>Jam Masuk</TableHead>
-                            <TableHead>Jam Pulang</TableHead>
-                            <TableHead>Surat</TableHead>
-                            <TableHead>Verifikasi</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow v-for="(absen, index) in absensi" :key="index">
-                            <TableCell class="font-medium"> {{ index + 1 }} </TableCell>
-                            <TableCell>{{ absen.tanggal }}</TableCell>
-                            <TableCell>{{ absen.status }}</TableCell>
-                            <TableCell>{{ absen.keterangan || '-' }}</TableCell>
-                            <TableCell> {{ absen.waktu_datang || absen.status }} </TableCell>
-                            <TableCell> {{ absen.waktu_pulang || absen.status }} </TableCell>
-                            <TableCell>
-                                <a
-                                    v-if="absen.surat"
-                                    :href="route('absensi.surat', absen.surat.split('/').pop())"
-                                    target="_blank"
-                                    rel="noopener"
-                                    class="underline"
-                                    >Lihat surat</a
-                                >
-                                <p v-else>-</p>
-                            </TableCell>
-                            <TableCell>
-                                <Badge variant="secondary">
-                                    {{ absen.Verifikasi || 'Pending' }}
-                                </Badge>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-                <div class="mt-5">
-                    <Pagination :total="lastPage" :items-per-page="7" :default-page="currentPage" :sibling-count="1" show-edges>
-                        <PaginationContent class="flex items-center gap-1">
-                            <PaginationFirst @click="goTo(pagination.first_page_url)" :disabled="!pagination.prev_page_url" />
-                            <PaginationPrevious @click="goTo(pagination.prev_page_url)" :disabled="!pagination.prev_page_url" />
-                            <template v-for="(link, index) in links" :key="index">
-                                <PaginationItem v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
-                                    <Button
-                                        class="h-9 w-9 p-0"
-                                        :variant="link.active ? 'default' : 'outline'"
-                                        @click="goTo(link.url)"
-                                        v-html="link.label"
-                                    />
-                                </PaginationItem>
-                            </template>
-                            <PaginationNext @click="goTo(pagination.next_page_url)" :disabled="!pagination.next_page_url" />
-                            <PaginationLast @click="goTo(pagination.last_page_url)" :disabled="!pagination.next_page_url" />
-                        </PaginationContent>
-                    </Pagination>
+                <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
+                    <Table>
+                        <TableCaption>Daftar absensi.</TableCaption>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead class="w-[100px]">No</TableHead>
+                                <TableHead>Tanggal</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Keterangan</TableHead>
+                                <TableHead>Jam Masuk</TableHead>
+                                <TableHead>Jam Pulang</TableHead>
+                                <TableHead>Surat</TableHead>
+                                <TableHead>Verifikasi</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow v-for="(absen, index) in absensi" :key="index">
+                                <TableCell class="font-medium"> {{ index + 1 }} </TableCell>
+                                <TableCell>{{ absen.tanggal }}</TableCell>
+                                <TableCell>{{ absen.status }}</TableCell>
+                                <TableCell>{{ absen.keterangan || '-' }}</TableCell>
+                                <TableCell> {{ absen.waktu_datang || absen.status }} </TableCell>
+                                <TableCell> {{ absen.waktu_pulang || absen.status }} </TableCell>
+                                <TableCell>
+                                    <a
+                                        v-if="absen.surat"
+                                        :href="route('absensi.surat', absen.surat.split('/').pop())"
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="underline"
+                                        >Lihat surat</a
+                                    >
+                                    <p v-else>-</p>
+                                </TableCell>
+                                <TableCell>
+                                    <Badge variant="secondary">
+                                        {{ absen.Verifikasi || 'Pending' }}
+                                    </Badge>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                    <div class="mt-5">
+                        <Pagination :total="lastPage" :items-per-page="7" :default-page="currentPage" :sibling-count="1" show-edges>
+                            <PaginationContent class="flex items-center gap-1">
+                                <PaginationFirst @click="goTo(pagination.first_page_url)" :disabled="!pagination.prev_page_url" />
+                                <PaginationPrevious @click="goTo(pagination.prev_page_url)" :disabled="!pagination.prev_page_url" />
+                                <template v-for="(link, index) in links" :key="index">
+                                    <PaginationItem v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
+                                        <Button
+                                            variant="outline"
+                                            class="h-9 w-9 p-0"
+                                            :variant="link.active ? 'default' : 'outline'"
+                                            @click="goTo(link.url)"
+                                            v-html="link.label"
+                                        />
+                                    </PaginationItem>
+                                </template>
+                                <PaginationNext @click="goTo(pagination.next_page_url)" :disabled="!pagination.next_page_url" />
+                                <PaginationLast @click="goTo(pagination.last_page_url)" :disabled="!pagination.next_page_url" />
+                            </PaginationContent>
+                        </Pagination>
+                    </div>
                 </div>
             </div>
         </div>

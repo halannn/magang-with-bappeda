@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsensiController;
-use App\Models\Absensi;
+use App\Http\Controllers\LaporanKegiatanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,7 +33,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('absensi/lupa-absen/{absen}', [AbsensiController::class, 'update'])->name('absensi.update');
     Route::get('absensi/riwayat', [AbsensiController::class, 'index'])->name('absensi.list');
     Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
+
+    Route::controller(LaporanKegiatanController::class)->group(function () {
+        Route::get('laporan-kegiatan', 'index')->name('laporan.index');
+    });
 });
+
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

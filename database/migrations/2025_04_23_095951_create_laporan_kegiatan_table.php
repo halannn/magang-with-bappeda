@@ -15,8 +15,10 @@ return new class extends Migration
         Schema::create('laporan_kegiatan', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Profile::class)->constrained()->cascadeOnDelete();
-            $table->text('deskripsi_kegiatan');
             $table->date('tanggal');
+            $table->text('deskripsi_kegiatan');
+            $table->string('waktu');
+            $table->string('hasil');
             $table->string('dokumentasi')->nullable();
             $table->timestamps();
         });
