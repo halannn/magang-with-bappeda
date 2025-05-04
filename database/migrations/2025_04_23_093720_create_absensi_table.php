@@ -18,10 +18,10 @@ return new class extends Migration
             $table->date('tanggal');
             $table->time('waktu_datang')->nullable();
             $table->time('waktu_pulang')->nullable();
-            $table->enum('status', ['hadir', 'absen', 'sakit', 'izin'])->nullable()->default(null);
-            $table->string('keteragan')->nullable();
+            $table->enum('status', ['Hadir', 'Absen', 'Sakit', 'Izin'])->nullable()->default(null);
+            $table->string('keterangan')->nullable();
             $table->string('surat')->nullable();
-            $table->boolean('verifikasi')->nullable()->default(null);
+            $table->enum('verifikasi', ['Valid', 'Tidak Valid', 'Pending'])->nullable()->default('Pending');
             $table->timestamps();
         });
     }

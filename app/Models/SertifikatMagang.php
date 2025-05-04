@@ -11,6 +11,8 @@ class SertifikatMagang extends Model
     /** @use HasFactory<\Database\Factories\SertifikatMagangFactory> */
     use HasFactory;
 
+    protected $table = 'sertfikat_magang';
+
     protected $fillable = [
         'nama_mahasiswa',
         'tanggal_terbit',

@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sertifikat_magangs', function (Blueprint $table) {
+        Schema::create('sertifikat_magang', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Profile::class)->constrained()->cascadeOnDelete();
             $table->date('tanggal_terbit');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sertifikat_magangs');
+        Schema::dropIfExists('sertifikat_magang');
     }
 };

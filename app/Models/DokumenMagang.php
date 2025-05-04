@@ -11,6 +11,8 @@ class DokumenMagang extends Model
     /** @use HasFactory<\Database\Factories\DokumenMagangFactory> */
     use HasFactory;
 
+    protected $table = 'dokumen_magang';
+
     protected $fillable = [
         'deskripsi_dokumen',
         'tanggal',

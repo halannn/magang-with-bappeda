@@ -11,8 +11,10 @@ class Absensi extends Model
     /** @use HasFactory<\Database\Factories\AbsensiFactory> */
     use HasFactory;
 
+    protected $table = 'absensi_magang';
 
     protected $fillable = [
+        'profile_id',
         'tanggal',
         'waktu_datang',
         'waktu_pulang',
@@ -24,6 +26,6 @@ class Absensi extends Model
 
     public function profile(): BelongsTo
     {
-        return $this->BelongsTo(Profile::class);
+        return $this->belongsTo(Profile::class);
     }
 }

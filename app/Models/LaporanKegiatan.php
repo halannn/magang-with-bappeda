@@ -11,6 +11,8 @@ class LaporanKegiatan extends Model
     /** @use HasFactory<\Database\Factories\LaporanKegiatanFactory> */
     use HasFactory;
 
+    protected $table = 'laporan_kegiatan';
+
     protected $fillable = [
         'deskripsi_kegiatan',
         'tanggal',

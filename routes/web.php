@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
+use App\Models\Absensi;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,9 +25,15 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('absensi', function () {
-    return Inertia::render('Absensi');
-})->middleware(['auth', 'verified'])->name('absensi');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+    Route::post('absensi', [AbsensiController::class, 'store'])->name('absensi.store');
+    Route::get('absensi/izin-sakit', [AbsensiController::class, 'create'])->name('absensi.leave');
+    Route::get('absensi/lupa-absen', [AbsensiController::class, 'create'])->name('absensi.create');
+    Route::put('absensi/lupa-absen/{absen}', [AbsensiController::class, 'update'])->name('absensi.update');
+    Route::get('absensi/riwayat', [AbsensiController::class, 'index'])->name('absensi.list');
+    Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
+});
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
