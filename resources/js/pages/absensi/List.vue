@@ -51,6 +51,12 @@ const links = pagination.links;
 function goTo(url: string | null) {
     if (url) router.get(url);
 }
+
+const checkVariant = (variant: string) => {
+    if (variant === 'Valid') return 'success';
+    if (variant === 'Tidak Valid') return 'destructive';
+    return 'pending';
+};
 </script>
 
 <template>
@@ -98,8 +104,8 @@ function goTo(url: string | null) {
                                     <p v-else>-</p>
                                 </TableCell>
                                 <TableCell>
-                                    <Badge variant="secondary">
-                                        {{ absen.Verifikasi || 'Pending' }}
+                                    <Badge :variant="checkVariant(absen.verifikasi)">
+                                        {{ absen.verifikasi }}
                                     </Badge>
                                 </TableCell>
                             </TableRow>
@@ -113,9 +119,8 @@ function goTo(url: string | null) {
                                 <template v-for="(link, index) in links" :key="index">
                                     <PaginationItem v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
                                         <Button
-                                            variant="outline"
                                             class="h-9 w-9 p-0"
-                                            :variant="link.active ? 'default' : 'outline'"
+                                            :variant="link.active ? 'outline' : 'default'"
                                             @click="goTo(link.url)"
                                             v-html="link.label"
                                         />

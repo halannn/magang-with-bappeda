@@ -126,7 +126,7 @@ onMounted(() => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
-            <form class="w-1/2 space-y-8" @submit="onSubmit">
+            <form class="w-9/10 space-y-8" @submit="onSubmit">
                 <FormField v-slot="{ componentField }" name="tanggal">
                     <FormItem class="flex flex-col">
                         <FormLabel>Tanggal kegiatan</FormLabel>
@@ -222,11 +222,11 @@ onMounted(() => {
                     {{ error }}
                 </div>
 
-                <div class="flex flex-row justify-between">
+                <div class="mt-10 flex flex-row justify-end-safe gap-5">
                     <a :href="route('laporan.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
-                    <Button type="submit"> Edit </Button>
+                    <Button type="submit"> Edit kegiatan </Button>
                 </div>
             </form>
         </div>

@@ -34,31 +34,29 @@ const formSchema = toTypedSchema(
     z.object({
         tanggal: z.string().nonempty('Tanggal harus diisi.'),
         deskripsi_dokumen: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        file: z
-            .any()
-            .superRefine((file, ctx) => {
-                if (!(file instanceof File)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload surat anda, ukuran file maksimal 2MB dengan format .pdf.',
-                    });
-                    return;
-                }
+        file: z.any().superRefine((file, ctx) => {
+            if (!(file instanceof File)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Mohon upload surat anda, ukuran file maksimal 2MB dengan format .pdf.',
+                });
+                return;
+            }
 
-                if (file.size > MAX_FILE_SIZE) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Ukuran file maksimal 2MB',
-                    });
-                }
+            if (file.size > MAX_FILE_SIZE) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Ukuran file maksimal 2MB',
+                });
+            }
 
-                if (!checkFileType(file)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload dokumen dengan format .pdf.',
-                    });
-                }
-            })
+            if (!checkFileType(file)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'Mohon upload dokumen dengan format .pdf.',
+                });
+            }
+        }),
     }),
 );
 
@@ -91,7 +89,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
-            <form class="w-1/2 space-y-8" @submit="onSubmit">
+            <form class="w-9/10 space-y-8" @submit="onSubmit">
                 <FormField v-slot="{ componentField }" name="tanggal">
                     <FormItem class="flex flex-col">
                         <FormLabel>Tanggal Dokumen</FormLabel>
@@ -146,7 +144,12 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     {{ error }}
                 </div>
 
-                <Button type="submit"> Submit </Button>
+                <div class="mt-10 flex flex-row justify-end-safe gap-5">
+                    <a :href="route('dokumen.index')">
+                        <Button type="button" variant="secondary"> Kembali </Button>
+                    </a>
+                    <Button type="submit"> Tambah dokumen </Button>
+                </div>
             </form>
         </div>
     </AppLayout>
