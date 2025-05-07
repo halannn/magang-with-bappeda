@@ -160,7 +160,12 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <Button type="submit"> Submit </Button>
+                <div class="mt-10 flex flex-row justify-end-safe gap-5">
+                    <a :href="route('absensi.index')">
+                        <Button type="button" variant="secondary"> Kembali </Button>
+                    </a>
+                    <Button type="submit"> Ajukan izin </Button>
+                </div>
             </form>
         </div>
     </AppLayout>

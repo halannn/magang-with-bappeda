@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
 import { CalendarClockIcon } from 'lucide-vue-next';
@@ -19,16 +19,20 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const page = usePage();
+const props = defineProps<{
+    auth: Object;
+    absen: Object;
+    errors: Object;
+}>();
+console.log(props);
+const absensi = props.absen as Array<any>;
+const absenHariIni = computed(() => {
+    return absensi.find((absen) => absen.tanggal === tanggal);
+});
 
 const tanggal = dayjs().format('YYYY-MM-DD');
 const hariIni = dayjs().locale('id').format('dddd, DD MMMM YYYY');
 const jam = ref(dayjs().locale('id').format('HH:mm'));
-
-const absensi = page.props.absen as Array<any>;
-const absenHariIni = computed(() => {
-    return absensi.find((absen) => absen.tanggal === tanggal);
-});
 
 const form = useForm({
     tanggal,
@@ -39,23 +43,24 @@ const form = useForm({
 });
 
 let interval: number;
-
 onMounted(() => {
-    if (absenHariIni.value) {
-        Object.assign(form, {
-            tanggal: absenHariIni.value.tanggal,
-            waktu_datang: absenHariIni.value.waktu_datang || '',
-            waktu_pulang: absenHariIni.value.waktu_pulang || '',
-            status: absenHariIni.value.status || 'hadir',
-            absen_id: absenHariIni.value.id,
-        });
-    }
+    updateProgress();
 
     interval = window.setInterval(() => {
         jam.value = dayjs().locale('id').format('HH:mm');
+        updateProgress();
     }, 1000);
-});
 
+    if (absenHariIni.value) {
+        Object.assign(form, {
+            tanggal: absenHariIni.value.tanggal,
+            waktu_datang: absenHariIni.value.waktu_datang,
+            waktu_pulang: absenHariIni.value.waktu_pulang,
+            status: absenHariIni.value.status,
+            absen_id: absenHariIni.value.id,
+        });
+    }
+});
 onUnmounted(() => clearInterval(interval));
 
 const handleAbsenDatang = () => {
@@ -75,10 +80,32 @@ const handleAbsenPulang = () => {
         });
     }
 };
+
+const progress = ref<number>(0);
+function updateProgress(currentTime: Date = new Date()) {
+    const start = new Date(currentTime);
+    start.setHours(8, 0, 0, 0);
+    const end = new Date(currentTime);
+    end.setHours(16, 30, 0, 0);
+
+    const totalMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
+    const elapsedMinutes = (currentTime.getTime() - start.getTime()) / (1000 * 60);
+
+    let percentage = (elapsedMinutes / totalMinutes) * 100;
+    percentage = Math.max(0, Math.min(percentage, 100));
+
+    progress.value = Number(percentage.toFixed(2));
+}
+
+const checkVariant = (variant: string) => {
+    if (variant === 'Valid') return 'success';
+    if (variant === 'Tidak Valid') return 'destructive';
+    return 'pending';
+};
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Absensi" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
@@ -95,8 +122,8 @@ const handleAbsenPulang = () => {
                 <div class="text-center text-8xl font-bold">
                     {{ jam }}
                 </div>
-                <div class="flex flex-row justify-center">
-                    <Progress :model-value="33" class="w-1/4" />
+                <div class="flex justify-center">
+                    <Progress :model-value="progress" class="w-2/3 sm:w-2/3 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4 " />
                 </div>
                 <div class="flex flex-row justify-center gap-5">
                     <Button v-if="form.waktu_datang" variant="secondary">
@@ -114,8 +141,8 @@ const handleAbsenPulang = () => {
             <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
                 <div id="head" class="flex flex-col gap-5 p-5">
                     <div class="flex flex-row gap-5">
-                        <CalendarClockIcon :size="32" />
-                        <p class="text-2xl font-bold">Riwayat</p>
+                        <CalendarClockIcon class="h-6 w-6 2xl:h-8 2xl:w-8" />
+                        <p class="font-bold 2xl:text-2xl">Riwayat</p>
                     </div>
                 </div>
 
@@ -140,10 +167,10 @@ const handleAbsenPulang = () => {
                             <TableCell>{{ absen.status }}</TableCell>
                             <TableCell>{{ absen.keterangan || '-' }}</TableCell>
                             <TableCell>
-                                {{ absen.waktu_datang || absen.status === 'Izin' || absen.status === 'Sakit' ? absen.status : '-' }}
+                                {{ absen.waktu_datang || absen.status === 'Izin' || absen.status === 'Sakit' ? (absen.waktu_datang ||  absen.status ) : '-' }}
                             </TableCell>
                             <TableCell>
-                                {{ absen.waktu_pulang || absen.status === 'Izin' || absen.status === 'Sakit' ? absen.status : '-' }}
+                                {{ absen.waktu_pulang || absen.status === 'Izin' || absen.status === 'Sakit' ? (absen.waktu_pulang ||  absen.status ) : '-' }}
                             </TableCell>
                             <TableCell>
                                 <a
@@ -151,14 +178,14 @@ const handleAbsenPulang = () => {
                                     :href="route('absensi.surat', absen.surat.split('/').pop())"
                                     target="_blank"
                                     rel="noopener"
-                                    class="underline"
-                                    >Lihat surat</a
-                                >
+                                    class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                    >Lihat surat
+                                </a>
                                 <p v-else>-</p>
                             </TableCell>
                             <TableCell>
-                                <Badge variant="secondary">
-                                    {{ absen.Verifikasi || 'Pending' }}
+                                <Badge :variant="checkVariant(absen.verifikasi)">
+                                    {{ absen.verifikasi }}
                                 </Badge>
                             </TableCell>
                         </TableRow>
