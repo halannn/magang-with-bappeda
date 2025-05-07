@@ -89,7 +89,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
-            <form class="w-2/5 space-y-8" @submit="onSubmit">
+            <form class="w-2/3 space-y-8" @submit="onSubmit">
                 <FormField v-slot="{ componentField }" name="tanggal">
                     <FormItem class="flex flex-col">
                         <FormLabel>Tanggal absen</FormLabel>

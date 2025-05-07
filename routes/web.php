@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\DokumenMagangController;
 use App\Http\Controllers\LaporanKegiatanController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,7 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/lupa-absen', [AbsensiController::class, 'create'])->name('create'); // absensi.create
         Route::put('/lupa-absen/{absen}', [AbsensiController::class, 'update'])->name('update'); // absensi.update
         Route::get('/riwayat', [AbsensiController::class, 'index'])->name('list'); // absensi.list
-        Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
+        Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('surat'); // absensi.surat
     });
 
     Route::prefix('laporan-kegiatan')->name('laporan.')->controller(LaporanKegiatanController::class)->group(function () {
@@ -45,6 +46,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('dokumentasi/{dokumentasi}', 'showDokumentasi')->name('dokumentasi');
         Route::put('/{id}', 'update')->name('update'); // laporan.update
         Route::delete('/{id}', 'destroy')->name('destroy'); // laporan.destroy
+    });
+
+    Route::prefix('dokumen')->name('dokumen.')->controller(DokumenMagangController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // dokumen.index
+        Route::post('/', 'store')->name('store'); // dokumen.store
+        Route::get('/tambah-dokumen', 'create')->name('create'); // dokumen.create
+        Route::get('/edit-dokumen/{id}', 'edit')->name('edit'); // dokumen.edit
+        Route::get('file/{file}', 'showFile')->name('file'); // dokumen.file
+        Route::put('/{id}', 'update')->name('update'); // dokumen.update
+        Route::delete('/{id}', 'destroy')->name('destroy'); // dokumen.destroy
     });
 });
 

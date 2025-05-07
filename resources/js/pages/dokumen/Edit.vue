@@ -13,16 +13,16 @@ import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from 
 import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Laporan kegiatan', href: '/laporan-kegiatan' },
-    { title: 'Edit kegiatan', href: '/laporan-kegiatan/edit-kegiatan' },
+    { title: 'Dokumen', href: '/dokumen' },
+    { title: 'Edit Dokumen', href: '/dokumen/edit-dokumen' },
 ];
 
 const props = defineProps({
-    laporan: {
+    dokumen: {
         type: Object,
         required: true,
     },
@@ -31,29 +31,24 @@ const props = defineProps({
         required: true,
     },
 });
-
-const laporan = props.laporan[0];
+const dokumen = props.dokumen[0];
 const error = computed(() => props.error);
 
 const df = new DateFormatter('en-US', { dateStyle: 'long' });
-const value = computed({
-    get: () => (values.tanggal ? parseDate(values.tanggal) : undefined),
-    set: (val) => val,
-});
 
-const MAX_FILE_SIZE: number = 2 * 1024 * 1024;
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
+
 const checkFileType = (file: File) => file.type === 'application/pdf';
+
 const formSchema = toTypedSchema(
     z.object({
         tanggal: z.string().nonempty('Tanggal harus diisi.'),
-        deskripsi_kegiatan: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        hasil: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        waktu: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        dokumentasi: z
+        deskripsi_dokumen: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
+        file: z
             .any()
             .optional()
             .superRefine((file, ctx) => {
-                if (file === undefined || file === null) return;
+              if (file === undefined || file === null) return;
 
                 if (!(file instanceof File)) {
                     ctx.addIssue({
@@ -79,33 +74,33 @@ const formSchema = toTypedSchema(
             }),
     }),
 );
-const selectedFileName = ref<string | null>(null);
+
 const veeValidate = formValidated({ validationSchema: formSchema });
 const { setFieldValue, values } = veeValidate;
 
-const form = useForm({
-    tanggal: laporan.tanggal,
-    deskripsi_kegiatan: laporan.deskripsi_kegiatan,
-    hasil: laporan.hasil,
-    waktu: laporan.waktu,
-    dokumentasi: laporan.dokumentasi,
+const value = computed({
+    get: () => (values.tanggal ? parseDate(values.tanggal) : undefined),
+    set: (val) => val,
 });
+
+const form = useForm({
+    tanggal: dokumen.tanggal,
+    deskripsi_dokumen: dokumen.deskripsi_dokumen,
+    file: dokumen.file,
+});
+
 const onSubmit = veeValidate.handleSubmit((values) => {
     form.tanggal = values.tanggal;
-    form.deskripsi_kegiatan = values.deskripsi_kegiatan;
-    form.hasil = values.hasil;
-    form.waktu = values.waktu;
-    form.dokumentasi = values.dokumentasi ?? laporan.dokumentasi;
+    form.deskripsi_dokumen = values.deskripsi_dokumen;
+    form.file = values.file ?? dokumen.file;
 
     router.post(
-        route('laporan.update', laporan.id),
+        route('dokumen.update', dokumen.id),
         {
             _method: 'put',
             tanggal: form.tanggal,
-            deskripsi_kegiatan: form.deskripsi_kegiatan,
-            hasil: form.hasil,
-            waktu: form.waktu,
-            dokumentasi: form.dokumentasi,
+            deskripsi_dokumen: form.deskripsi_dokumen,
+            file: form.file,
         },
         {
             forceFormData: true,
@@ -114,22 +109,20 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 });
 
 onMounted(() => {
-    setFieldValue('tanggal', laporan.tanggal);
-    setFieldValue('deskripsi_kegiatan', laporan.deskripsi_kegiatan);
-    setFieldValue('hasil', laporan.hasil);
-    setFieldValue('waktu', laporan.waktu);
+    setFieldValue('tanggal', dokumen.tanggal);
+    setFieldValue('deskripsi_dokumen', dokumen.deskripsi_dokumen);
 });
 </script>
 
 <template>
-    <Head title="Edit Kegiatan" />
+    <Head title="Edit Dokumen" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
             <form class="w-1/2 space-y-8" @submit="onSubmit">
                 <FormField v-slot="{ componentField }" name="tanggal">
                     <FormItem class="flex flex-col">
-                        <FormLabel>Tanggal kegiatan</FormLabel>
+                        <FormLabel>Tanggal Dokumen</FormLabel>
                         <Popover>
                             <PopoverTrigger as-child>
                                 <FormControl>
@@ -150,70 +143,34 @@ onMounted(() => {
                                 />
                             </PopoverContent>
                         </Popover>
-                        <FormDescription> Silahkan pilih tanggal kegiatan anda </FormDescription>
+                        <FormDescription> Silahkan pilih tanggal pembuatan dokumen tersebut. </FormDescription>
                         <FormMessage />
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="deskripsi_kegiatan">
+                <FormField v-slot="{ componentField }" name="deskripsi_dokumen">
                     <FormItem>
                         <FormLabel>Deskripsi</FormLabel>
                         <FormControl>
-                            <Textarea placeholder="Deskripsi kegiatan" v-bind="componentField" />
+                            <Textarea placeholder="Deskripsi dokumen" v-bind="componentField" />
                         </FormControl>
-                        <FormDescription> Berikan deskripsi pada kegiatan anda. </FormDescription>
+                        <FormDescription> Berikan deskripsi pada dokumen anda. </FormDescription>
                         <FormMessage />
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="hasil">
+                <FormField v-slot="{ componentField }" name="file">
                     <FormItem>
-                        <FormLabel>Hasil</FormLabel>
+                        <FormLabel>File</FormLabel>
                         <FormControl>
-                            <Input type="text" placeholder="Hasil kegiatan" v-bind="componentField" />
-                        </FormControl>
-                        <FormDescription> Berikan hasil dari kegiatan anda. </FormDescription>
-                        <FormMessage />
-                    </FormItem>
-                </FormField>
-
-                <FormField v-slot="{ componentField }" name="waktu">
-                    <FormItem>
-                        <FormLabel>Waktu</FormLabel>
-                        <FormControl>
-                            <Input type="text" placeholder="08:00-12:00" v-bind="componentField" />
-                        </FormControl>
-                        <FormDescription> Berikan keterangan waktu dalam kegiatan anda. </FormDescription>
-                        <FormMessage />
-                    </FormItem>
-                </FormField>
-
-                <FormField name="dokumentasi">
-                    <FormItem>
-                        <FormLabel>Dokumentasi</FormLabel>
-                        <FormControl>
-                            <Input
-                                type="file"
-                                accept="application/pdf"
-                                @change="
-                                    (e) => {
-                                        const file = e.target.files?.[0] || null;
-                                        setFieldValue('dokumentasi', file);
-                                        selectedFileName.value = file ? file.name : null;
-                                    }
-                                "
-                            />
-                            <div v-if="laporan.dokumentasi" class="m-2">
-                                <a
-                                    :href="route('laporan.dokumentasi', laporan.dokumentasi.split('/').pop())"
-                                    target="_blank"
-                                    class="text-sm underline"
-                                >
+                            <Input type="file" v-bind="componentField" />
+                            <div v-if="dokumen.file" class="m-2">
+                                <a :href="route('dokumen.file', dokumen.file.split('/').pop())" target="_blank" class="text-sm underline">
                                     Lihat dokumentasi saat ini
                                 </a>
                             </div>
                         </FormControl>
-                        <FormDescription> Silahkan upload kembali jika anda ingin mengupdate dokumentasi. </FormDescription>
+                        <FormDescription> Silahkan upload kembali jika anda ingin mengupdate file. </FormDescription>
                         <FormMessage />
                     </FormItem>
                 </FormField>
@@ -223,7 +180,7 @@ onMounted(() => {
                 </div>
 
                 <div class="flex flex-row justify-between">
-                    <a :href="route('laporan.index')">
+                    <a :href="route('dokumen.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
                     <Button type="submit"> Edit </Button>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LaporanKegiatan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class LaporanKegiatanController extends Controller
@@ -85,8 +86,6 @@ class LaporanKegiatanController extends Controller
 
         $profile_id = auth()->user()->profile?->id;
 
-        // dd($request->all(), $request->file('dokumentasi'));
-
         $validated = $request->validate([
             'tanggal' => ['required'],
             'deskripsi_kegiatan' => ['required'],
@@ -96,6 +95,10 @@ class LaporanKegiatanController extends Controller
         ]);
 
         if ($request->hasFile('dokumentasi')) {
+            if ($laporan->dokumentasi && Storage::disk('local')->exists($laporan->dokumentasi)) {
+                Storage::disk('local')->delete($laporan->dokumentasi);
+            }
+
             $validated['dokumentasi'] = $request->file('dokumentasi')->store('dokumentasi', 'local');
         }
 
@@ -112,6 +115,9 @@ class LaporanKegiatanController extends Controller
     public function destroy(string $id)
     {
         $laporan = LaporanKegiatan::where('id', $id)->firstOrFail();
+        if ($laporan->dokumentasi && Storage::disk('local')->exists($laporan->dokumentasi)) {
+            Storage::disk('local')->delete($laporan->dokumentasi);
+        }
         $laporan->delete();
 
         return Inertia::location(route('laporan.index'));

@@ -84,8 +84,8 @@ const handleAbsenPulang = () => {
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div id="head" class="flex flex-col gap-5 p-5">
                 <div class="flex flex-row justify-center gap-5">
-                    <CalendarClockIcon :size="32" />
-                    <p class="text-2xl font-bold">
+                    <CalendarClockIcon class="h-6 w-6 2xl:h-8 2xl:w-8" />
+                    <p class="font-bold 2xl:text-2xl">
                         {{ hariIni }}
                     </p>
                 </div>
@@ -99,11 +99,11 @@ const handleAbsenPulang = () => {
                     <Progress :model-value="33" class="w-1/4" />
                 </div>
                 <div class="flex flex-row justify-center gap-5">
-                    <Button v-if="form.waktu_datang" variant="secondary" >
+                    <Button v-if="form.waktu_datang" variant="secondary">
                         {{ form.waktu_datang }}
                     </Button>
                     <Button v-else type="button" @click="handleAbsenDatang">Absen Datang</Button>
-                    <Button v-if="form.waktu_pulang" variant="secondary" >
+                    <Button v-if="form.waktu_pulang" variant="secondary">
                         {{ form.waktu_pulang }}
                     </Button>
                     <Button v-else type="button" @click="handleAbsenPulang"> Absen Pulang </Button>
@@ -134,13 +134,17 @@ const handleAbsenPulang = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-for="(absen, index) in absensi.slice(0,5)" :key="index">
+                        <TableRow v-for="(absen, index) in absensi.slice(0, 5)" :key="index">
                             <TableCell class="font-medium"> {{ index + 1 }} </TableCell>
                             <TableCell>{{ absen.tanggal }}</TableCell>
                             <TableCell>{{ absen.status }}</TableCell>
                             <TableCell>{{ absen.keterangan || '-' }}</TableCell>
-                            <TableCell> {{ absen.waktu_datang || absen.status }} </TableCell>
-                            <TableCell> {{ absen.waktu_pulang || absen.status }} </TableCell>
+                            <TableCell>
+                                {{ absen.waktu_datang || absen.status === 'Izin' || absen.status === 'Sakit' ? absen.status : '-' }}
+                            </TableCell>
+                            <TableCell>
+                                {{ absen.waktu_pulang || absen.status === 'Izin' || absen.status === 'Sakit' ? absen.status : '-' }}
+                            </TableCell>
                             <TableCell>
                                 <a
                                     v-if="absen.surat"

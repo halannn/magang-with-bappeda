@@ -118,6 +118,7 @@ class AbsensiController extends Controller
 
         $validated = $request->validate([
             'waktu_pulang' => ['required', 'date_format:H:i'],
+            'keterangan' => ['nullable'],
         ]);
 
         $absen->update($validated);

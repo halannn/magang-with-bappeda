@@ -14,6 +14,7 @@ class DokumenMagang extends Model
     protected $table = 'dokumen_magang';
 
     protected $fillable = [
+        'profile_id',
         'deskripsi_dokumen',
         'tanggal',
         'file'
