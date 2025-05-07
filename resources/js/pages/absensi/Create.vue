@@ -40,7 +40,7 @@ const formSchema = toTypedSchema(
                 .string()
                 .regex(/^\d{2}:\d{2}$/, { message: 'Format waktu harus HH:MM, contoh: 16:30' })
                 .optional(),
-            keterangan: z.string().max(255, { message: 'Keterangan maksimal 255 karakter.' }),
+            keterangan: z.string().max(255, { message: 'Keterangan maksimal 255 karakter.' }).optional(),
         })
         .superRefine((data, ctx) => {
             if (data.tipe === 'waktu_datang' && !data.waktu_datang) {
@@ -171,7 +171,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                         <FormControl>
                             <Input type="text" placeholder="Terjebak banjir" v-bind="componentField" />
                         </FormControl>
-                        <FormDescription> Alasan lupa absen (maks. 255 karakter) </FormDescription>
+                        <FormDescription> Berikan alasan mengapa anda lupa absen. </FormDescription>
                         <FormMessage />
                     </FormItem>
                 </FormField>

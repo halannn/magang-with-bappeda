@@ -14,8 +14,11 @@ class LaporanKegiatan extends Model
     protected $table = 'laporan_kegiatan';
 
     protected $fillable = [
-        'deskripsi_kegiatan',
+        'profile_id',
         'tanggal',
+        'deskripsi_kegiatan',
+        'waktu',
+        'hasil',
         'dokumentasi',
     ];
 

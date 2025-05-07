@@ -26,19 +26,27 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('absensi', [AbsensiController::class, 'index'])->name('absensi.index');
-    Route::post('absensi', [AbsensiController::class, 'store'])->name('absensi.store');
-    Route::get('absensi/izin-sakit', [AbsensiController::class, 'create'])->name('absensi.leave');
-    Route::get('absensi/lupa-absen', [AbsensiController::class, 'create'])->name('absensi.create');
-    Route::put('absensi/lupa-absen/{absen}', [AbsensiController::class, 'update'])->name('absensi.update');
-    Route::get('absensi/riwayat', [AbsensiController::class, 'index'])->name('absensi.list');
-    Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
 
-    Route::controller(LaporanKegiatanController::class)->group(function () {
-        Route::get('laporan-kegiatan', 'index')->name('laporan.index');
+    Route::prefix('absensi')->name('absensi.')->group(function () {
+        Route::get('/', [AbsensiController::class, 'index'])->name('index'); // absensi.index
+        Route::post('/', [AbsensiController::class, 'store'])->name('store'); // absensi.store
+        Route::get('/izin-sakit', [AbsensiController::class, 'create'])->name('leave'); // absensi.leave
+        Route::get('/lupa-absen', [AbsensiController::class, 'create'])->name('create'); // absensi.create
+        Route::put('/lupa-absen/{absen}', [AbsensiController::class, 'update'])->name('update'); // absensi.update
+        Route::get('/riwayat', [AbsensiController::class, 'index'])->name('list'); // absensi.list
+        Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
+    });
+
+    Route::prefix('laporan-kegiatan')->name('laporan.')->controller(LaporanKegiatanController::class)->group(function () {
+        Route::get('/', 'index')->name('index'); // laporan.index
+        Route::post('/', 'store')->name('store'); // laporan.store
+        Route::get('/tambah-kegiatan', 'create')->name('create'); // laporan.create
+        Route::get('/edit-kegiatan/{id}', 'edit')->name('edit'); // laporan.edit
+        Route::get('dokumentasi/{dokumentasi}', 'showDokumentasi')->name('dokumentasi');
+        Route::put('/{id}', 'update')->name('update'); // laporan.update
+        Route::delete('/{id}', 'destroy')->name('destroy'); // laporan.destroy
     });
 });
-
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

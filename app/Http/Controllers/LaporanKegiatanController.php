@@ -27,7 +27,7 @@ class LaporanKegiatanController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('laporan_kegiatan/Create');
     }
 
     /**
@@ -35,7 +35,25 @@ class LaporanKegiatanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $profile_id = auth()->user()->profile?->id;
+
+        $validated = $request->validate([
+            'tanggal' => ['required'],
+            'deskripsi_kegiatan' => ['required'],
+            'hasil' => ['required'],
+            'waktu' => ['required'],
+            'dokumentasi' => ['nullable'],
+        ]);
+
+        if ($request->hasFile('dokumentasi')) {
+            $validated['dokumentasi'] = $request->file('dokumentasi')->store('dokumentasi', 'local');
+        }
+
+        $validated['profile_id'] = $profile_id;
+
+        LaporanKegiatan::create($validated);
+
+        return Inertia::location(route('laporan.index'));
     }
 
     /**
@@ -51,7 +69,11 @@ class LaporanKegiatanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $laporan = LaporanKegiatan::where('id', $id)->get();
+
+        return Inertia::render('laporan_kegiatan/Edit', [
+            'laporan' => $laporan
+        ]);
     }
 
     /**
@@ -59,7 +81,29 @@ class LaporanKegiatanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $laporan = LaporanKegiatan::where('id', $id)->firstOrFail();
+
+        $profile_id = auth()->user()->profile?->id;
+
+        // dd($request->all(), $request->file('dokumentasi'));
+
+        $validated = $request->validate([
+            'tanggal' => ['required'],
+            'deskripsi_kegiatan' => ['required'],
+            'waktu' => ['required'],
+            'hasil' => ['required'],
+            'dokumentasi' => ['nullable'],
+        ]);
+
+        if ($request->hasFile('dokumentasi')) {
+            $validated['dokumentasi'] = $request->file('dokumentasi')->store('dokumentasi', 'local');
+        }
+
+        $validated['profile_id'] = $profile_id;
+
+        $laporan->update($validated);
+
+        return Inertia::location(route('laporan.index'));
     }
 
     /**
@@ -67,6 +111,20 @@ class LaporanKegiatanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $laporan = LaporanKegiatan::where('id', $id)->firstOrFail();
+        $laporan->delete();
+
+        return Inertia::location(route('laporan.index'));
+    }
+
+    public function showDokumentasi($dokumentasi)
+    {
+        $path = storage_path('app/private/dokumentasi/' . $dokumentasi);
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
     }
 }
