@@ -54,7 +54,7 @@ class LaporanKegiatanController extends Controller
 
         LaporanKegiatan::create($validated);
 
-        return Inertia::location(route('laporan.index'));
+        return Inertia::location(route('dashboard.laporan.index'));
     }
 
     /**
@@ -106,7 +106,7 @@ class LaporanKegiatanController extends Controller
 
         $laporan->update($validated);
 
-        return Inertia::location(route('laporan.index'));
+        return Inertia::location(route('dashboard.laporan.index'));
     }
 
     /**
@@ -120,7 +120,7 @@ class LaporanKegiatanController extends Controller
         }
         $laporan->delete();
 
-        return Inertia::location(route('laporan.index'));
+        return Inertia::location(route('dashboard.laporan.index'));
     }
 
     public function showDokumentasi($dokumentasi)

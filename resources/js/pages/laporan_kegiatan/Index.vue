@@ -20,7 +20,7 @@ import {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Laporan Kegiatan',
-        href: '/laporan-kegiatan',
+        href: '/dashboard/laporan-kegiatan',
     },
 ];
 
@@ -72,7 +72,7 @@ function goTo(url: string | null) {
 }
 
 const handleDestroy = (id: number) => {
-    router.delete(route('laporan.destroy', id), {});
+    router.delete(route('dashboard.laporan.destroy', id), {});
 };
 </script>
 
@@ -87,7 +87,7 @@ const handleDestroy = (id: number) => {
                     <p class="text-2xl font-bold">Riwayat</p>
                 </div>
                 <Button>
-                    <a :href="route('laporan.create')"> Tambah </a>
+                    <a :href="route('dashboard.laporan.create')"> Tambah </a>
                 </Button>
             </div>
             <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
@@ -116,7 +116,7 @@ const handleDestroy = (id: number) => {
                             <TableCell>
                                 <a
                                     v-if="keterangan.dokumentasi"
-                                    :href="route('laporan.dokumentasi', keterangan.dokumentasi.split('/').pop())"
+                                    :href="route('dashboard.laporan.dokumentasi', keterangan.dokumentasi.split('/').pop())"
                                     target="_blank"
                                     rel="noopener"
                                     class="underline"
@@ -126,7 +126,7 @@ const handleDestroy = (id: number) => {
                             </TableCell>
                             <TableCell>
                                 <div class="flex flex-row gap-2">
-                                    <a :href="route('laporan.edit', keterangan.id)">
+                                    <a :href="route('dashboard.laporan.edit', keterangan.id)">
                                         <Button size="sm"> Edit </Button>
                                     </a>
                                     <Button variant="destructive" size="sm" @click="handleDestroy(keterangan.id)"> Hapus </Button>

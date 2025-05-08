@@ -22,11 +22,15 @@ Route::get('pendaftaran', function () {
     return Inertia::render('public/Pendaftaran');
 })->name('pendaftaran');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified', 'checkStatus' . ':admin'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {
+    
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('index');
 
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/', [AbsensiController::class, 'index'])->name('index'); // absensi.index

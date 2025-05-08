@@ -15,7 +15,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Absensi',
-        href: '/absensi',
+        href: 'dashboard/absensi',
     },
 ];
 
@@ -135,7 +135,7 @@ const checkVariant = (variant: string) => {
                     </Button>
                     <Button v-else type="button" @click="handleAbsenPulang"> Absen Pulang </Button>
                 </div>
-                <TextLink :href="route('absensi.create')" class="text-center underline underline-offset-4">Lupa absen?</TextLink>
+                <TextLink :href="route('dashboard.absensi.create')" class="text-center underline underline-offset-4">Lupa absen?</TextLink>
             </div>
 
             <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
@@ -175,7 +175,7 @@ const checkVariant = (variant: string) => {
                             <TableCell>
                                 <a
                                     v-if="absen.surat"
-                                    :href="route('absensi.surat', absen.surat.split('/').pop())"
+                                    :href="route('dashboard.absensi.surat', absen.surat.split('/').pop())"
                                     target="_blank"
                                     rel="noopener"
                                     class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"

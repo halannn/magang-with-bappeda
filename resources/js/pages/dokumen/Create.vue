@@ -17,8 +17,8 @@ import { computed } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dokumen', href: '/dokumen' },
-    { title: 'Tambah Dokumen', href: '/dokumen/tambah-dokumen' },
+    { title: 'Dokumen', href: '/dashboard/dokumen' },
+    { title: 'Tambah Dokumen', href: 'tambah-dokumen' },
 ];
 
 const page = usePage();
@@ -76,9 +76,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
     };
 
     const form = useForm(formData);
-    console.log('logging...');
-    console.log(formData);
-    form.post(route('dokumen.store'), {
+    form.post(route('dashboard.dokumen.store'), {
         forceFormData: true,
     });
 });
@@ -145,7 +143,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                 </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('dokumen.index')">
+                    <a :href="route('dashboard.dokumen.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
                     <Button type="submit"> Tambah dokumen </Button>

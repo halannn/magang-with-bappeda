@@ -17,8 +17,8 @@ import { computed, onMounted, ref } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Laporan kegiatan', href: '/laporan-kegiatan' },
-    { title: 'Edit kegiatan', href: '/laporan-kegiatan/edit-kegiatan' },
+    { title: 'Laporan kegiatan', href: '/dashboard/laporan-kegiatan' },
+    { title: 'Edit kegiatan', href: 'edit-kegiatan' },
 ];
 
 const props = defineProps({
@@ -98,7 +98,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
     form.dokumentasi = values.dokumentasi ?? laporan.dokumentasi;
 
     router.post(
-        route('laporan.update', laporan.id),
+        route('dashboard.laporan.update', laporan.id),
         {
             _method: 'put',
             tanggal: form.tanggal,
@@ -205,7 +205,7 @@ onMounted(() => {
                             />
                             <div v-if="laporan.dokumentasi" class="m-2">
                                 <a
-                                    :href="route('laporan.dokumentasi', laporan.dokumentasi.split('/').pop())"
+                                    :href="route('dashboard.laporan.dokumentasi', laporan.dokumentasi.split('/').pop())"
                                     target="_blank"
                                     class="text-sm underline"
                                 >
@@ -223,7 +223,7 @@ onMounted(() => {
                 </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('laporan.index')">
+                    <a :href="route('dashboard.laporan.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
                     <Button type="submit"> Edit kegiatan </Button>

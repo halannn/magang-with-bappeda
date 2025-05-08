@@ -17,8 +17,8 @@ import { computed, onMounted } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dokumen', href: '/dokumen' },
-    { title: 'Edit Dokumen', href: '/dokumen/edit-dokumen' },
+    { title: 'Dokumen', href: '/dashboard/dokumen' },
+    { title: 'Edit Dokumen', href: 'edit-dokumen' },
 ];
 
 const props = defineProps({
@@ -95,7 +95,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
     form.file = values.file ?? dokumen.file;
 
     router.post(
-        route('dokumen.update', dokumen.id),
+        route('dashboard.dokumen.update', dokumen.id),
         {
             _method: 'put',
             tanggal: form.tanggal,
@@ -165,7 +165,7 @@ onMounted(() => {
                         <FormControl>
                             <Input type="file" v-bind="componentField" />
                             <div v-if="dokumen.file" class="m-2">
-                                <a :href="route('dokumen.file', dokumen.file.split('/').pop())" target="_blank" class="text-sm underline">
+                                <a :href="route('dashboard.dokumen.file', dokumen.file.split('/').pop())" target="_blank" class="text-sm underline">
                                     Lihat dokumen.
                                 </a>
                             </div>
@@ -180,7 +180,7 @@ onMounted(() => {
                 </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('dokumen.index')">
+                    <a :href="route('dashboard.dokumen.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
                     <Button type="submit"> Edit dokumen </Button>

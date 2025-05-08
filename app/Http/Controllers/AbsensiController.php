@@ -16,14 +16,14 @@ class AbsensiController extends Controller
     {
         $profile_id = auth()->user()->profile?->id;
 
-        if (request()->is('absensi')) {
+        if (request()->is('dashboard/absensi')) {
             $absen = Absensi::where('profile_id', $profile_id)->orderByDesc('tanggal')->get();
             return Inertia::render('absensi/Index', [
                 'absen' => $absen
             ]);
         }
 
-        if (request()->is('absensi/riwayat')) {
+        if (request()->is('dashboard/absensi/riwayat')) {
             $absen = Absensi::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
             return Inertia::render('absensi/List', [
                 'absen' => $absen,
@@ -39,13 +39,13 @@ class AbsensiController extends Controller
         $profile_id = auth()->user()->profile?->id;
         $absen = Absensi::where('profile_id', $profile_id)->get();
 
-        if (request()->is('absensi/lupa-absen')) {
+        if (request()->is('dashboard/absensi/lupa-absen')) {
             return Inertia::render('absensi/Create', [
                 'absen' => $absen
             ]);
         }
 
-        if (request()->is('absensi/izin-sakit')) {
+        if (request()->is('dashboard/absensi/izin-sakit')) {
             return Inertia::render('absensi/Leave', [
                 'absen' => $absen
             ]);
@@ -81,7 +81,7 @@ class AbsensiController extends Controller
 
             Absensi::create($validated);
 
-            return Inertia::location(route('absensi.index'));
+            return Inertia::location(route('dashboard.absensi.index'));
         }
 
         return back()->withErrors([
@@ -123,7 +123,7 @@ class AbsensiController extends Controller
 
         $absen->update($validated);
 
-        return Inertia::location(route('absensi.index'));
+        return Inertia::location(route('dashboard.absensi.index'));
     }
 
     /**

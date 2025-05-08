@@ -17,8 +17,8 @@ import { computed, ref } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Absensi', href: '/absensi' },
-    { title: 'Lupa absen', href: '/absensi/lupa-absen' },
+    { title: 'Absensi', href: '/dashboard/absensi' },
+    { title: 'Lupa absen', href: 'lupa-absen' },
 ];
 
 const page = usePage();
@@ -80,7 +80,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
     };
 
     const form = useForm(formData);
-    values.tipe === 'waktu_datang' ? form.post(route('absensi.store')) : form.put(route('absensi.update', absen.id));
+    values.tipe === 'waktu_datang' ? form.post(route('dashboard.absensi.store')) : form.put(route('dashboard.absensi.update', absen.id));
 });
 </script>
 
@@ -181,7 +181,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                 </div>
 
                 <div class="flex flex-row gap-5 justify-end-safe mt-10">
-                    <a :href="route('absensi.index')">
+                    <a :href="route('dashboard.absensi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
                     <Button type="submit"> Ajukan absen </Button>

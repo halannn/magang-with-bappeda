@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('kontak');
             $table->text('bio');
             $table->string('cv_link');
-            $table->enum('status_magang', ['aktif', 'selesai', 'dikeluarkan', 'pending'])->nullable()->default('pending');
+            $table->enum('status_magang', ['Aktif', 'Selesai', 'Dikeluarkan', 'pending'])->nullable()->default('Pending');
             $table->timestamps();
         });
     }

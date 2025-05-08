@@ -57,7 +57,7 @@ class DokumenMagangController extends Controller
 
         DokumenMagang::create($validated);
 
-        return Inertia::location(route('dokumen.index'));
+        return Inertia::location(route('dashboard.dokumen.index'));
     }
 
     /**
@@ -109,7 +109,7 @@ class DokumenMagangController extends Controller
 
         $dokumen->update($validated);
 
-        return Inertia::location(route('dokumen.index'));
+        return Inertia::location(route('dashboard.dokumen.index'));
     }
 
     /**
@@ -123,7 +123,7 @@ class DokumenMagangController extends Controller
         }
         $dokumen->delete();
 
-        return Inertia::location(route('dokumen.index'));
+        return Inertia::location(route('dashboard.dokumen.index'));
     }
 
     public function showFile($file)

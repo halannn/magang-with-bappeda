@@ -17,8 +17,8 @@ import { computed, ref } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Absensi', href: '/absensi' },
-    { title: 'Izin atau sakit', href: '/absensi/izin-sakit' },
+    { title: 'Absensi', href: '/dashboard/absensi' },
+    { title: 'Izin atau sakit', href: 'izin-sakit' },
 ];
 
 const df = new DateFormatter('en-US', { dateStyle: 'long' });
@@ -161,7 +161,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                 </FormField>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('absensi.index')">
+                    <a :href="route('dashboard.absensi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
                     <Button type="submit"> Ajukan izin </Button>

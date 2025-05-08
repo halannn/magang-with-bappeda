@@ -21,11 +21,11 @@ import {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Absensi',
-        href: '/absensi',
+        href: '/dashboard/absensi',
     },
     {
         title: 'Riwayat Absensi',
-        href: '/absensi/riwayat',
+        href: 'riwayat',
     },
 ];
 
@@ -95,7 +95,7 @@ const checkVariant = (variant: string) => {
                                 <TableCell>
                                     <a
                                         v-if="absen.surat"
-                                        :href="route('absensi.surat', absen.surat.split('/').pop())"
+                                        :href="route('dashboard.absensi.surat', absen.surat.split('/').pop())"
                                         target="_blank"
                                         rel="noopener"
                                         class="underline"

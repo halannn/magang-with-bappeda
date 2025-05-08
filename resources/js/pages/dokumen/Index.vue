@@ -18,7 +18,7 @@ import { FileClockIcon } from 'lucide-vue-next';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dokumen',
-        href: '/dokumen',
+        href: '/dashboard/dokumen',
     },
 ];
 
@@ -64,7 +64,7 @@ function goTo(url: string | null) {
 }
 
 const handleDestroy = (id: number) => {
-    router.delete(route('dokumen.destroy', id), {});
+    router.delete(route('dashboard.dokumen.destroy', id), {});
 };
 </script>
 
@@ -79,7 +79,7 @@ const handleDestroy = (id: number) => {
                     <p class="text-2xl font-bold">Dokumen Magang</p>
                 </div>
                 <Button>
-                    <a :href="route('dokumen.create')"> Tambah </a>
+                    <a :href="route('dashboard.dokumen.create')"> Tambah </a>
                 </Button>
             </div>
 
@@ -105,7 +105,7 @@ const handleDestroy = (id: number) => {
                             <TableCell>
                                 <a
                                     v-if="item.file"
-                                    :href="route('dokumen.file', item.file.split('/').pop())"
+                                    :href="route('dashboard.dokumen.file', item.file.split('/').pop())"
                                     target="_blank"
                                     rel="noopener"
                                     class="underline"
@@ -114,7 +114,7 @@ const handleDestroy = (id: number) => {
                             </TableCell>
                             <TableCell>
                                 <div class="flex flex-row gap-2">
-                                    <a :href="route('dokumen.edit', item.id)">
+                                    <a :href="route('dashboard.dokumen.edit', item.id)">
                                         <Button size="sm"> Edit </Button>
                                     </a>
                                     <Button variant="destructive" size="sm" @click="handleDestroy(item.id)"> Hapus </Button>

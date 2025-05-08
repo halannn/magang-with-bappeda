@@ -11,32 +11,32 @@ import NavGroup from './NavGroup.vue';
 const groupNavItems: NavItem[] = [
     {
         title: 'Absensi',
-        href: '/absensi',
+        href: '/dashboard/absensi',
         icon: Clock,
         children: [
             {
                 title: 'Izin atau sakit',
-                href: '/absensi/izin-sakit',
+                href: '/dashboard/absensi/izin-sakit',
             },
             {
                 title: 'Riwayat',
-                href: '/absensi/riwayat',
+                href: '/dashboard/absensi/riwayat',
             },
         ],
     },
     {
         title: 'Laporan kegiatan',
-        href: '/laporan-kegiatan',
+        href: '/dashboard/laporan-kegiatan',
         icon: CalendarPlus2Icon,
     },
     {
         title: 'Dokumen',
-        href: '/dokumen',
+        href: '/dashboard/dokumen',
         icon: FoldersIcon,
     },
     {
         title: 'Sertifikat',
-        href: '/sertifikat',
+        href: '/dashboard/sertifikat',
         icon: BookCheckIcon,
     },
 ];
@@ -61,7 +61,7 @@ const footerNavItems: NavItem[] = [
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton size="lg" as-child>
-                        <Link :href="route('dashboard')">
+                        <Link :href="route('dashboard.index')">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>
