@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PendaftaranMagang;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PendaftaranMagangController extends Controller
 {
@@ -19,7 +21,7 @@ class PendaftaranMagangController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('FormMagang');
     }
 
     /**
@@ -27,7 +29,21 @@ class PendaftaranMagangController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'posisi_magang' =>  'required|string|max:255',
+            'deskripsi_magang' =>  'required|string',
+            'tanggal_mulai' =>  'required|date',
+            'tanggal_selesai' =>  'required|date',
+            'surat_magang' => 'required|file|mimes:pdf|max:2048',
+
+        ]);
+        $validated['user_id'] = auth()->id();
+        $validated['profile_id'] = auth()->user()->profile->id;
+        $validated['surat_magang'] = $request->file('surat_magang')->store('proposal', 'local');
+
+        PendaftaranMagang::create($validated);
+
+        return Inertia::location(route('pendaftaran.pemberitahuan'));
     }
 
     /**

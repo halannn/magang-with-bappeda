@@ -22,7 +22,7 @@ class CheckUserStatus
         }
 
         if (!$user->profile || $user->profile->status_magang !== 'aktif') {
-            return redirect()->route('home');
+            return redirect()->route('pendaftaran.profile.create');
         }
 
         return $next($request);

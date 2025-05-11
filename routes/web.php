@@ -3,6 +3,8 @@
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\DokumenMagangController;
 use App\Http\Controllers\LaporanKegiatanController;
+use App\Http\Controllers\PendaftaranMagangController;
+use App\Http\Controllers\ProfileMagangController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,12 +24,27 @@ Route::get('pendaftaran', function () {
     return Inertia::render('public/Pendaftaran');
 })->name('pendaftaran');
 
-// Route::get('dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified', 'checkStatus' . ':admin'])->name('dashboard');
+Route::middleware(['auth', 'verified'])
+    ->prefix('pendaftaran')
+    ->name('pendaftaran.')
+    ->group(function () {
+        Route::get('/form-profile', [ProfileMagangController::class, 'create'])->name('profile.create');
+        Route::post('/profile', [ProfileMagangController::class, 'store'])->name('profile.store');
+
+        Route::get('/form-magang', [PendaftaranMagangController::class, 'create'])->name('magang.create');
+        Route::post('/magang', [PendaftaranMagangController::class, 'store'])->name('magang.store');
+
+        Route::get('/pemberitahuan', function () {
+            return Inertia::render('Pemberitahuan');
+        })->name('pemberitahuan');
+    });
+
+Route::get('dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified', 'checkStatus' . ':admin'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {
-    
+
     Route::get('/', function () {
         return Inertia::render('Dashboard');
     })->name('index');

@@ -16,6 +16,8 @@ class PendaftaranMagang extends Model
         'tanggal_mulai',
         'tanggal_selesai',
         'surat_magang',
+        'user_id',
+        'profile_id',
     ];
 
     public function user(): BelongsTo
@@ -24,6 +26,6 @@ class PendaftaranMagang extends Model
     }
     public function profile(): BelongsTo
     {
-        return $this->belongsTo(Profile::class);
+        return $this->belongsTo(ProfileMagang::class);
     }
 }

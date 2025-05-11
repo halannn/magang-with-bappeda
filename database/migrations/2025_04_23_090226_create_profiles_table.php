@@ -21,10 +21,12 @@ return new class extends Migration
             $table->string('fakultas');
             $table->string('jurusan');
             $table->string('program_studi');
-            $table->string('kontak');
-            $table->text('bio');
-            $table->string('cv_link');
-            $table->enum('status_magang', ['Aktif', 'Selesai', 'Dikeluarkan', 'pending'])->nullable()->default('Pending');
+            $table->text('deskripsi_diri');
+            $table->string('kontak');   
+            $table->string('foto_profile');   
+            $table->string('cv_pribadi');
+            $table->enum('bidang_magang', ['PIPP', 'KRA', 'P3'])->nullable();
+            $table->enum('status_magang', ['Aktif', 'Selesai', 'Dikeluarkan', 'Pending'])->nullable()->default('Pending');
             $table->timestamps();
         });
     }

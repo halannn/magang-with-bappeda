@@ -9,21 +9,26 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class Profile extends Model
+class ProfileMagang extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
+    protected $table = 'profiles';
+
     protected $fillable = [
+        'user_id',
         'nama_lengkap',
         'nomor_mahasiswa',
         'asal_kampus',
         'fakultas',
         'jurusan',
         'program_studi',
+        'deskripsi_diri',
         'kontak',
-        'bio',
-        'cv_link',
+        'foto_profile',
+        'cv_pribadi',
+        'bidang_magang',
         'status_magang',
     ];
 
