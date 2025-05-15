@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PendaftaranMagang;
+use App\Models\ProfileMagang;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,7 +14,11 @@ class PendaftaranMagangController extends Controller
      */
     public function index()
     {
-        //
+        $verifikasi = PendaftaranMagang::with(['user', 'profile'])->paginate(15);
+
+        return Inertia::render('admin/verifikasi/Index', [
+            'verifikasi' => $verifikasi
+        ]);
     }
 
     /**
@@ -59,7 +64,11 @@ class PendaftaranMagangController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $verifikasi = PendaftaranMagang::with(['user', 'profile'])->find($id);;
+
+        return Inertia::render('admin/verifikasi/Edit', [
+            'verifikasi' => $verifikasi
+        ]);
     }
 
     /**
@@ -67,7 +76,16 @@ class PendaftaranMagangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $profile = ProfileMagang::where('id', $id)->find($id);
+
+        $validated = $request->validate([
+            'bidang_magang' => 'required|string',
+            'status_magang' => 'required|string'
+        ]);
+
+        $profile->update($validated);
+
+        return Inertia::location(route('admin.dashboard.verifikasi.index'));
     }
 
     /**
@@ -76,5 +94,38 @@ class PendaftaranMagangController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function showProposal($proposal)
+    {
+        $path = storage_path('app/private/proposal/' . $proposal);
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    }
+
+    public function showAvatar($avatar)
+    {
+        $path = storage_path('app/private/avatar/' . $avatar);
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    }
+
+    public function showCV($cv)
+    {
+        $path = storage_path('app/private/cv/' . $cv);
+
+        if (! file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
     }
 }

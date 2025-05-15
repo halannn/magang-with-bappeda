@@ -77,7 +77,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 
     const form = useForm(formData);
 
-    form.post(route('absensi.store'), {
+    form.post(route('dashboard.absensi.store'), {
         forceFormData: true,
     });
 });
@@ -149,11 +149,11 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="surat">
+                <FormField v-slot="{ componentField: field }" name="surat">
                     <FormItem>
                         <FormLabel>Surat keteragan</FormLabel>
                         <FormControl>
-                            <Input type="file" v-bind="componentField" />
+                            <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Silahkan upload surat atau berikan bukti (bisa dengan chat whatsapp). </FormDescription>
                         <FormMessage />

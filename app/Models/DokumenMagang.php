@@ -22,6 +22,6 @@ class DokumenMagang extends Model
 
     public function profile(): BelongsTo
     {
-        return $this->belBelongsTo(Profile::class);
+        return $this->belongsTo(ProfileMagang::class);
     }
 }

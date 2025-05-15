@@ -14,6 +14,14 @@ class AbsensiController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->status === 'admin') {
+            $absen = Absensi::with('profile')->orderByDesc('tanggal')->paginate(15);
+
+            return Inertia::render('admin/AdminAbsensi', [
+                'absen' => $absen
+            ]);
+        }
+
         $profile_id = auth()->user()->profile?->id;
 
         if (request()->is('dashboard/absensi')) {
@@ -110,6 +118,17 @@ class AbsensiController extends Controller
      */
     public function update(Request $request, Absensi $absen)
     {
+
+        if (auth()->user()->status === 'admin') {
+            $validated = $request->validate([
+                'verifikasi' => 'required|string'
+            ]);
+
+            $absen->update($validated);
+
+            return redirect()->back()->with('success', 'Verifikasi berhasil diperbarui.');
+        }
+
         if (!is_null($absen->waktu_pulang)) {
             return back()->withErrors([
                 'absen' => 'Anda sudah melakukan absen pada tanggal tersebut.'

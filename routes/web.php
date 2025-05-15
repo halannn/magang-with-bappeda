@@ -39,9 +39,32 @@ Route::middleware(['auth', 'verified'])
         })->name('pemberitahuan');
     });
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified', 'checkStatus' . ':admin'])->name('dashboard');
+Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('admin/AdminDashboard');
+    })->name('index');
+
+    Route::prefix('verifikasi')->name('verifikasi.')->controller(PendaftaranMagangController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/pendaftar/{id}', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::get('proposal/{proposal}', 'showProposal')->name('proposal');
+        Route::get('avatar/{avatar}', 'showAvatar')->name('avatar');
+        Route::get('cv/{cv}', 'showCV')->name('cv');
+    });
+
+    Route::get('/absensi', [AbsensiController::class, 'Index'])->name('absensi.index');
+    Route::put('/absensi/{absen}', [AbsensiController::class, 'update'])->name('absensi.update');
+    Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
+
+    Route::get('/laporan-kegiatan', [LaporanKegiatanController::class, 'Index'])->name('laporan.index');
+    Route::delete('/laporan-kegiatan/{id}', [LaporanKegiatanController::class, 'destroy'])->name('laporan.destroy');
+
+    Route::get('/dokumen', [DokumenMagangController::class, 'Index'])->name('dokumen.index');
+    Route::delete('/dokumen/{id}', [DokumenMagangController::class, 'destroy'])->name('dokumen.destroy');
+    Route::get('/dokumen/file/{file}', [DokumenMagangController::class, 'showFile'])->name('dokumen.file');
+
+});
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {
 

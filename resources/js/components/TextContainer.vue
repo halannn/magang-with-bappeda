@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
 import { ArrowRight } from 'lucide-vue-next';
 import Button from './ui/button/Button.vue';
-import { Link } from '@inertiajs/vue3';
 
 defineProps({
     caption: {
@@ -34,9 +34,9 @@ defineProps({
 <template>
     <div id="hero" class="flex w-full flex-col justify-center gap-10">
         <div id="text" class="flex flex-col gap-2 md:gap-6">
-            <p class="md:text-xl font-bold text-blue-900" v-if="caption">{{ caption }}</p>
-            <p class="text-xl md:text-4xl font-bold" v-html="title"></p>
-            <p class="md:text-lg" v-html="description"></p>
+            <p class="font-bold text-blue-900 md:text-xl" v-if="caption">{{ caption }}</p>
+            <p class="text-xl font-bold md:text-2xl" v-html="title"></p>
+            <p class="md:text-lg" v-if="description" v-html="description"></p>
         </div>
         <div id="cta" v-if="button">
             <Link :href="buttonLink" class="inline-block px-2 py-3">

@@ -10,19 +10,23 @@ class CheckUserStatus
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $status): Response
+    public function handle(Request $request, Closure $next, string $requiredStatus): Response
     {
         $user = $request->user();
 
-        if (!$user || $user->status !== $status) {
-            abort(403, 'Unauthorized access.');
+        if (!$user) {
+            abort(403, 'Unauthorized: No user.');
         }
 
-        if (!$user->profile || $user->profile->status_magang !== 'aktif') {
-            return redirect()->route('pendaftaran.profile.create');
+        if ($user->status !== $requiredStatus) {
+            abort(403, 'Unauthorized: Status mismatch.');
+        }
+
+        if ($user->status !== 'admin') {
+            if (!$user->profile || $user->profile->status_magang !== 'Aktif') {
+                return redirect()->route('pendaftaran.profile.create');
+            }
         }
 
         return $next($request);

@@ -14,6 +14,14 @@ class DokumenMagangController extends Controller
      */
     public function index()
     {
+
+        if (auth()->user()->status === 'admin') {
+            $dokumen = DokumenMagang::with('profile')->orderByDesc('tanggal')->Paginate(15);
+            return Inertia::render('admin/AdminDokumenMagang', [
+                'dokumen' => $dokumen
+            ]);
+        }
+
         $profile_id = auth()->user()->profile?->id;
 
         $dokumen = DokumenMagang::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
@@ -122,6 +130,11 @@ class DokumenMagangController extends Controller
             Storage::disk('local')->delete($dokumen->file);
         }
         $dokumen->delete();
+
+
+        if (auth()->user()->status === 'admin') {
+            return Inertia::location(route('admin.dashboard.dokumen.index'));
+        }
 
         return Inertia::location(route('dashboard.dokumen.index'));
     }

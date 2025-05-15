@@ -14,6 +14,14 @@ class LaporanKegiatanController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->status === 'admin') {
+
+            $laporan =  LaporanKegiatan::with('profile')->orderByDesc('tanggal')->Paginate(15);
+            return Inertia::render('admin/AdminLaporanKegiatan', [
+                'laporan' => $laporan
+            ]);
+        }
+
         $profile_id = auth()->user()->profile?->id;
 
         $laporan =  LaporanKegiatan::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
@@ -119,6 +127,12 @@ class LaporanKegiatanController extends Controller
             Storage::disk('local')->delete($laporan->dokumentasi);
         }
         $laporan->delete();
+
+        if (auth()->user()->status === 'admin') {
+
+            return IInertia::location(route('admin.dashboard.laporan.index'));
+        }
+
 
         return Inertia::location(route('dashboard.laporan.index'));
     }

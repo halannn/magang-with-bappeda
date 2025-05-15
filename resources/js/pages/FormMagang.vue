@@ -77,113 +77,113 @@ const onSubmit = handleSubmit((values) => {
     <main class="mt-18 flex flex-col gap-6 p-4">
         <TextContainer title="Form magang" description="Silahkan mengisi keterangan magang anda." :button="false" />
         <form @submit="onSubmit" class="flex flex-col gap-6">
-            <FormField v-slot="{ componentField }" name="posisi_magang">
-                <FormItem>
-                    <FormLabel>Posisi magang</FormLabel>
-                    <FormControl>
-                        <Input type="text" v-bind="componentField" />
-                    </FormControl>
-                    <FormDescription> Berikan posisi yang anda harapan. Contoh : Data analyst. </FormDescription>
-                    <FormMessage />
-                </FormItem>
-            </FormField>
+                <FormField v-slot="{ componentField }" name="posisi_magang">
+                    <FormItem>
+                        <FormLabel>Posisi magang</FormLabel>
+                        <FormControl>
+                            <Input type="text" v-bind="componentField" />
+                        </FormControl>
+                        <FormDescription> Berikan posisi yang anda harapan. Contoh : Data analyst. </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
 
-            <FormField v-slot="{ componentField }" name="deskripsi_magang">
-                <FormItem>
-                    <FormLabel>Deskripsi magang</FormLabel>
-                    <FormControl>
-                        <Textarea v-bind="componentField" />
-                    </FormControl>
-                    <FormDescription> Jelaskan dengan detail tentang harapan anda saat menjalani magang nantinya. </FormDescription>
-                    <FormMessage />
-                </FormItem>
-            </FormField>
+                <FormField v-slot="{ componentField }" name="deskripsi_magang">
+                    <FormItem>
+                        <FormLabel>Deskripsi magang</FormLabel>
+                        <FormControl>
+                            <Textarea v-bind="componentField" />
+                        </FormControl>
+                        <FormDescription> Jelaskan dengan detail tentang harapan anda saat menjalani magang nantinya. </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
 
-            <FormField name="tanggal_mulai">
-                <FormItem class="flex w-full flex-col">
-                    <FormLabel>Tanggal mulai</FormLabel>
-                    <Popover>
-                        <PopoverTrigger as-child>
-                            <FormControl>
-                                <Button variant="outline" :class="cn('w-full ps-3 text-start font-normal', !value1 && 'text-muted-foreground')">
-                                    <span>{{ value1 ? df.format(toDate(value1)) : 'Pilih hari' }}</span>
-                                    <CalendarIcon class="ms-auto h-4 w-4 opacity-50" />
-                                </Button>
-                                <input hidden />
-                            </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent class="w-full p-0">
-                            <Calendar
-                                v-model:placeholder="placeholder"
-                                v-model="value1"
-                                calendar-label="tanggal_mulai"
-                                initial-focus
-                                :min-value="new CalendarDate(1900, 1, 1)"
-                                :max-value="today(getLocalTimeZone())"
-                                @update:model-value="
-                                    (v) => {
-                                        if (v) {
-                                            setFieldValue('tanggal_mulai', v.toString());
-                                        } else {
-                                            setFieldValue('tanggal_mulai', undefined);
+                <FormField name="tanggal_mulai">
+                    <FormItem class="flex w-full flex-col">
+                        <FormLabel>Tanggal mulai</FormLabel>
+                        <Popover>
+                            <PopoverTrigger as-child>
+                                <FormControl>
+                                    <Button variant="outline" :class="cn('w-full ps-3 text-start font-normal', !value1 && 'text-muted-foreground')">
+                                        <span>{{ value1 ? df.format(toDate(value1)) : 'Pilih hari' }}</span>
+                                        <CalendarIcon class="ms-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                    <input hidden />
+                                </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent class="w-full p-0">
+                                <Calendar
+                                    v-model:placeholder="placeholder"
+                                    v-model="value1"
+                                    calendar-label="tanggal_mulai"
+                                    initial-focus
+                                    :min-value="new CalendarDate(1900, 1, 1)"
+                                    :max-value="today(getLocalTimeZone())"
+                                    @update:model-value="
+                                        (v) => {
+                                            if (v) {
+                                                setFieldValue('tanggal_mulai', v.toString());
+                                            } else {
+                                                setFieldValue('tanggal_mulai', undefined);
+                                            }
                                         }
-                                    }
-                                "
-                            />
-                        </PopoverContent>
-                    </Popover>
-                    <FormDescription> Silahkan masukan tanggal mulai magang anda. </FormDescription>
-                    <FormMessage />
-                </FormItem>
-            </FormField>
+                                    "
+                                />
+                            </PopoverContent>
+                        </Popover>
+                        <FormDescription> Silahkan masukan tanggal mulai magang anda. </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
 
-            <FormField name="tanggal_selesai">
-                <FormItem class="flex w-full flex-col">
-                    <FormLabel>Tanggal selesai</FormLabel>
-                    <Popover>
-                        <PopoverTrigger as-child>
-                            <FormControl>
-                                <Button variant="outline" :class="cn('w-full ps-3 text-start font-normal', !value2 && 'text-muted-foreground')">
-                                    <span>{{ value2 ? df.format(toDate(value2)) : 'Pilih hari' }}</span>
-                                    <CalendarIcon class="ms-auto h-4 w-4 opacity-50" />
-                                </Button>
-                                <input hidden />
-                            </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent class="w-full p-0">
-                            <Calendar
-                                v-model:placeholder="placeholder"
-                                v-model="value2"
-                                calendar-label="Date of birth"
-                                initial-focus
-                                :min-value="new CalendarDate(1900, 1, 1)"
-                                @update:model-value="
-                                    (v) => {
-                                        if (v) {
-                                            setFieldValue('tanggal_selesai', v.toString());
-                                        } else {
-                                            setFieldValue('tanggal_selesai', undefined);
+                <FormField name="tanggal_selesai">
+                    <FormItem class="flex w-full flex-col">
+                        <FormLabel>Tanggal selesai</FormLabel>
+                        <Popover>
+                            <PopoverTrigger as-child>
+                                <FormControl>
+                                    <Button variant="outline" :class="cn('w-full ps-3 text-start font-normal', !value2 && 'text-muted-foreground')">
+                                        <span>{{ value2 ? df.format(toDate(value2)) : 'Pilih hari' }}</span>
+                                        <CalendarIcon class="ms-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                    <input hidden />
+                                </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent class="w-full p-0">
+                                <Calendar
+                                    v-model:placeholder="placeholder"
+                                    v-model="value2"
+                                    calendar-label="Date of birth"
+                                    initial-focus
+                                    :min-value="new CalendarDate(1900, 1, 1)"
+                                    @update:model-value="
+                                        (v) => {
+                                            if (v) {
+                                                setFieldValue('tanggal_selesai', v.toString());
+                                            } else {
+                                                setFieldValue('tanggal_selesai', undefined);
+                                            }
                                         }
-                                    }
-                                "
-                            />
-                        </PopoverContent>
-                    </Popover>
-                    <FormDescription> Silahkan masukan tanggal selesai magang anda. </FormDescription>
-                    <FormMessage />
-                </FormItem>
-            </FormField>
+                                    "
+                                />
+                            </PopoverContent>
+                        </Popover>
+                        <FormDescription> Silahkan masukan tanggal selesai magang anda. </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
 
-            <FormField v-slot="{ componentField: field }" name="surat_magang">
-                <FormItem>
-                    <FormLabel>Surat atau proposal magang</FormLabel>
-                    <FormControl>
-                        <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
-                    </FormControl>
-                    <FormDescription> Upload dokumen dengan format pdf. </FormDescription>
-                    <FormMessage />
-                </FormItem>
-            </FormField>
+                <FormField v-slot="{ componentField: field }" name="surat_magang">
+                    <FormItem>
+                        <FormLabel>Surat atau proposal magang</FormLabel>
+                        <FormControl>
+                            <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                        </FormControl>
+                        <FormDescription> Upload dokumen dengan format pdf. </FormDescription>
+                        <FormMessage />
+                    </FormItem>
+                </FormField>
 
             <Button type="submit"> Konfirmasi </Button>
         </form>

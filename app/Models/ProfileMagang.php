@@ -14,7 +14,7 @@ class ProfileMagang extends Model
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
 
-    protected $table = 'profiles';
+    protected $table = 'profile_magang';
 
     protected $fillable = [
         'user_id',

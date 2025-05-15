@@ -22,25 +22,5 @@ class DatabaseSeeder extends Seeder
             'email' => 'adminbappeda@gmail.com',
             'password' => 'admin_bappeda_#1',
         ]);
-
-        // User::factory()->create([
-        //     'name' => 'Hairul Irawan',
-        //     'status' => 'user',
-        //     'email' => 'hairulirawann@gmail.com',
-        // ]);
-
-        // Profile::factory()->create([
-        //     'user_id' => 2,
-        //     'nama_lengkap' => 'Hairul Irawan',
-        //     'nomor_mahasiswa' => '11221043',
-        //     'asal_kampus' => 'Institut Teknologi Kalimantan',
-        //     'fakultas' => 'Sains dan Teknologi Informasi',
-        //     'jurusan' => 'Teknik Elektro, Informatika, dan Bisnis',
-        //     'program_studi' => 'Informatika',
-        //     'kontak' => '081346509049',
-        //     'bio' => 'Saya seorang mahasiswa semester 6.',
-        //     'cv_link' => '',
-        //     'status_magang' => 'Aktif',
-        // ]);
     }
 }
