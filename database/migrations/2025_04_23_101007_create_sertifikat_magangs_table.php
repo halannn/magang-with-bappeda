@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Profile;
+use App\Models\ProfileMagang;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
