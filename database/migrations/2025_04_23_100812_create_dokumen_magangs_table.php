@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('dokumen_magang', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ProfileMagang::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Profile::class)->constrained()->cascadeOnDelete();
             $table->string('deskripsi_dokumen');
             $table->date('tanggal');
             $table->string('file');

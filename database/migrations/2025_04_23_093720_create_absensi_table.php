@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('absensi_magang', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ProfileMagang::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Profile::class)->constrained()->cascadeOnDelete();
             $table->date('tanggal');
             $table->time('waktu_datang')->nullable();
             $table->time('waktu_pulang')->nullable();

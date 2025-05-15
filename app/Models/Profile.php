@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
-class ProfileMagang extends Model
+class Profile extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Data   ase\Factories\UserFactory> */
     use HasFactory;
 
     protected $table = 'profile_magang';

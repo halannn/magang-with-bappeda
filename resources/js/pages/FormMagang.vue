@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import NavBar from '@/components/NavBar.vue';
 import TextContainer from '@/components/TextContainer.vue';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -7,6 +6,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
+import HomeLayout from '@/layouts/HomeLayout.vue';
 import { cn } from '@/lib/utils';
 import { Head, router } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
@@ -72,11 +72,10 @@ const onSubmit = handleSubmit((values) => {
 <template>
     <Head title="Form Magang" />
 
-    <NavBar />
-
-    <main class="mt-18 flex flex-col gap-6 p-4">
-        <TextContainer title="Form magang" description="Silahkan mengisi keterangan magang anda." :button="false" />
-        <form @submit="onSubmit" class="flex flex-col gap-6">
+    <HomeLayout>
+        <main class="mt-18 flex flex-col gap-6 p-4">
+            <TextContainer title="Form magang" description="Silahkan mengisi keterangan magang anda." :button="false" />
+            <form @submit="onSubmit" class="flex flex-col gap-6">
                 <FormField v-slot="{ componentField }" name="posisi_magang">
                     <FormItem>
                         <FormLabel>Posisi magang</FormLabel>
@@ -185,7 +184,8 @@ const onSubmit = handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-            <Button type="submit"> Konfirmasi </Button>
-        </form>
-    </main>
+                <Button type="submit"> Konfirmasi </Button>
+            </form>
+        </main>
+    </HomeLayout>
 </template>

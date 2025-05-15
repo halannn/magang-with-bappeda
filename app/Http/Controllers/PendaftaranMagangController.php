@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PendaftaranMagang;
+use App\Models\Profile;
 use App\Models\ProfileMagang;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -76,7 +77,7 @@ class PendaftaranMagangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $profile = ProfileMagang::where('id', $id)->find($id);
+        $profile = Profile::where('id', $id)->find($id);
 
         $validated = $request->validate([
             'bidang_magang' => 'required|string',

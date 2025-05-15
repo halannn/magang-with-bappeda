@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProfileMagang;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -50,7 +50,7 @@ class ProfileMagangController extends Controller
         $validated['foto_profile'] = $request->file('foto_profile')->store('avatar', 'local');
         $validated['cv_pribadi']   = $request->file('cv_pribadi')->store('cv', 'local');
 
-        ProfileMagang::create($validated);
+        Profile::create($validated);
 
         return Inertia::location(route('pendaftaran.magang.create'));
     }

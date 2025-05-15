@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sertifikat_magang', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ProfileMagang::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Profile::class)->constrained()->cascadeOnDelete();
             $table->date('tanggal_terbit');
             $table->string('file');
             $table->timestamps();

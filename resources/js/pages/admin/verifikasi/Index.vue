@@ -30,7 +30,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Profile {
     id: number;
-    user_id: number;
+    user: Auth;
     nama_lengkap: string;
     nomor_mahasiswa: string;
     asal_kampus: string;
@@ -86,6 +86,8 @@ const { verifikasi, auth, errors } = page.props;
 const pagination = verifikasi as Verifikasi;
 const pendaftar = verifikasi.data;
 
+console.log(pendaftar);
+
 const currentPage = pagination.current_page;
 const lastPage = pagination.last_page;
 const links = pagination.links;
@@ -114,7 +116,7 @@ function goTo(url: string | null) {
                                 <TableHead>Nama</TableHead>
                                 <TableHead>Asal kampus</TableHead>
                                 <TableHead>Posisi magang</TableHead>
-                                <TableHead>Deskripsi magang</TableHead>
+                                <TableHead class="w-80 whitespace-pre-wrap break-words">Deskripsi magang</TableHead>
                                 <TableHead>Tanggal mulai</TableHead>
                                 <TableHead>Tanggal selesai</TableHead>
                                 <TableHead>Proposal magang</TableHead>
@@ -127,7 +129,7 @@ function goTo(url: string | null) {
                                 <TableCell>{{ daftar.profile.nama_lengkap }}</TableCell>
                                 <TableCell>{{ daftar.profile.asal_kampus }}</TableCell>
                                 <TableCell>{{ daftar.posisi_magang }}</TableCell>
-                                <TableCell>{{ daftar.deskripsi_magang }}</TableCell>
+                                <TableCell class="w-80 whitespace-pre-wrap break-words">{{ daftar.deskripsi_magang }}</TableCell>
                                 <TableCell>{{ daftar.tanggal_mulai }}</TableCell>
                                 <TableCell>{{ daftar.tanggal_selesai }}</TableCell>
                                 <TableCell>
