@@ -16,7 +16,7 @@ class CheckUserStatus
         $user = $request->user();
 
         if (!$user) {
-            abort(403, 'Unauthorized: No user.');
+            return redirect()->route('home');
         }
 
         if ($user->status !== $requiredStatus) {
