@@ -17,6 +17,7 @@ import { computed, onMounted } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: '/dashboard/' },
     { title: 'Dokumen', href: '/dashboard/dokumen' },
     { title: 'Edit Dokumen', href: 'edit-dokumen' },
 ];

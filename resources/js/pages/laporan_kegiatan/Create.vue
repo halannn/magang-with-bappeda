@@ -17,6 +17,7 @@ import { computed } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: '/dashboard' },
     { title: 'Laporan kegiatan', href: '/dashboard/laporan-kegiatan' },
     { title: 'Tambah kegiatan', href: 'tambah-kegiatan' },
 ];

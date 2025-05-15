@@ -17,8 +17,9 @@ import { computed, ref } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: '/dashboard' },
     { title: 'Absensi', href: '/dashboard/absensi' },
-    { title: 'Izin atau sakit', href: 'izin-sakit' },
+    { title: 'Izin atau sakit', href: '/dashboard/izin-sakit' },
 ];
 
 const df = new DateFormatter('en-US', { dateStyle: 'long' });

@@ -14,8 +14,12 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dokumen',
+        href: '/dashboard',
+    },
+    {
         title: 'Absensi',
-        href: 'dashboard/absensi',
+        href: '/dashboard/absensi',
     },
 ];
 
@@ -65,7 +69,7 @@ onUnmounted(() => clearInterval(interval));
 
 const handleAbsenDatang = () => {
     form.waktu_datang = jam.value;
-    form.post(route('absensi.store'), {
+    form.post(route('dashboard.absensi.store'), {
         preserveScroll: true,
         onSuccess: () => location.reload(),
     });
@@ -74,7 +78,7 @@ const handleAbsenDatang = () => {
 const handleAbsenPulang = () => {
     form.waktu_pulang = jam.value;
     if (form.absen_id) {
-        form.put(route('absensi.update', form.absen_id), {
+        form.put(route('dashboard.absensi.update', form.absen_id), {
             preserveScroll: true,
             onSuccess: () => location.reload(),
         });

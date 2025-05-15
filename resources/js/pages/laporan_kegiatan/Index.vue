@@ -19,6 +19,10 @@ import {
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboarad',
+        href: '/dashboard',
+    },
+    {
         title: 'Laporan Kegiatan',
         href: '/dashboard/laporan-kegiatan',
     },

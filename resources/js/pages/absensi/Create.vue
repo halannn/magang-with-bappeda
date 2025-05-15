@@ -17,7 +17,14 @@ import { computed, ref } from 'vue';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Absensi', href: '/dashboard/absensi' },
+    {
+        title: 'Dashboard',
+        href: '/dashboard',
+    },
+    {
+        title: 'Absensi',
+        href: '/dashboard/absensi',
+    },
     { title: 'Lupa absen', href: 'lupa-absen' },
 ];
 
@@ -89,7 +96,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
-            <form class=" w-9/10 space-y-8" @submit="onSubmit">
+            <form class="w-9/10 space-y-8" @submit="onSubmit">
                 <FormField v-slot="{ componentField }" name="tanggal">
                     <FormItem class="flex flex-col">
                         <FormLabel>Tanggal absen</FormLabel>
@@ -180,7 +187,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     {{ error }}
                 </div>
 
-                <div class="flex flex-row gap-5 justify-end-safe mt-10">
+                <div class="mt-10 flex flex-row justify-end-safe gap-5">
                     <a :href="route('dashboard.absensi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>

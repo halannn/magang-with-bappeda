@@ -17,6 +17,10 @@ import { FileClockIcon } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Dashboard',
+        href: '/dashboard/',
+    },
+    {
         title: 'Dokumen',
         href: '/dashboard/dokumen',
     },
