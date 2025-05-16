@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\PendaftaranMagang;
 use App\Models\Profile;
-use App\Models\ProfileMagang;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

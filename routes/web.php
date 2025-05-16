@@ -5,6 +5,7 @@ use App\Http\Controllers\DokumenMagangController;
 use App\Http\Controllers\LaporanKegiatanController;
 use App\Http\Controllers\PendaftaranMagangController;
 use App\Http\Controllers\ProfileMagangController;
+use App\Http\Controllers\SertifikatMagangController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -64,6 +65,7 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin
     Route::delete('/dokumen/{id}', [DokumenMagangController::class, 'destroy'])->name('dokumen.destroy');
     Route::get('/dokumen/file/{file}', [DokumenMagangController::class, 'showFile'])->name('dokumen.file');
 
+    Route::get('/sertifikat', [SertifikatMagangController::class, 'Index'])->name('sertifikat.index');
 });
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {
