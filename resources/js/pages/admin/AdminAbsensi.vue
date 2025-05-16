@@ -130,7 +130,7 @@ const verifikasiAbsen = (value: any, absen: AbsenItem['data'][0]) => {
                                 <PaginationFirst @click="goTo(firstPageUrl)" :disabled="!prevPageUrl" />
                                 <PaginationPrevious @click="goTo(prevPageUrl)" :disabled="!prevPageUrl" />
                                 <template v-for="(link, index) in links" :key="index">
-                                    <PaginationItem v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
+                                    <PaginationItem :value="Object.keys(link).length" v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
                                         <Button
                                             class="h-9 w-9 p-0"
                                             :variant="link.active ? 'outline' : 'default'"

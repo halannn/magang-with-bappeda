@@ -2,7 +2,7 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { LaporanItem, type BreadcrumbItem } from '@/types';
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import 'dayjs/locale/id';
 import { CalendarClockIcon } from 'lucide-vue-next';
 
@@ -97,7 +97,7 @@ const {
                                 <PaginationFirst @click="goTo(firstPageUrl)" :disabled="!prevPageUrl" />
                                 <PaginationPrevious @click="goTo(prevPageUrl)" :disabled="!prevPageUrl" />
                                 <template v-for="(link, index) in links" :key="index">
-                                    <PaginationItem v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
+                                    <PaginationItem :value="Object.keys(link).length" v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
                                         <Button
                                             class="h-9 w-9 p-0"
                                             :variant="link.active ? 'outline' : 'default'"
