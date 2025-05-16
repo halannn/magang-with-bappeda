@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { PageProps } from '@inertiajs/core';
 import TextContainer from '@/components/TextContainer.vue';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -9,8 +10,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
-import Profile from '@/pages/settings/Profile.vue';
-import { type BreadcrumbItem } from '@/types';
+import { Auth, Verifikasi, VerifikasiItem, type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { toTypedSchema } from '@vee-validate/zod';
@@ -35,48 +35,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Profile {
-    id: number;
-    user: Auth;
-    nama_lengkap: string;
-    nomor_mahasiswa: string;
-    asal_kampus: string;
-    fakultas: string;
-    jurusan: string;
-    program_studi: string;
-    kontak: string;
-    deskripsi_diri: string;
-    foto_profile: string;
-    cv_pribadi: string;
-    bidang_magang: string;
-    status_magang: string;
-}
-
-interface Pendaftar {
-    id: number;
-    user: Auth;
-    profile: Profile;
-    posisi_magang: string;
-    deskripsi_magang: string;
-    tanggal_mulai: string;
-    tanggal_selesai: string;
-    surat_magang: string;
-}
-
-interface Auth {
-    user: {
-        id: number;
-        name: string;
-        email: string;
-        status: string;
-    };
-}
-
-interface Props {
-    verifikasi: Pendaftar;
+interface Props extends PageProps {
+    verifikasi: Verifikasi;
     auth: Auth;
     errors: Record<string, string>;
-    [key: string]: unknown;
 }
 
 const page = usePage<Props>();
@@ -275,7 +237,7 @@ onMounted(() => {
                             >
                                 Lihat Proposal
                             </a>
-                            <Input v-else type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input v-else type="file" @change="(e : any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
                 </FormField>
@@ -291,7 +253,7 @@ onMounted(() => {
                             >
                                 Lihat Proposal
                             </a>
-                            <Input v-else type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input v-else type="file" @change="(e : any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
                 </FormField>
@@ -406,7 +368,7 @@ onMounted(() => {
                             >
                                 Lihat Proposal
                             </a>
-                            <Input v-else type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input v-else type="file" @change="(e : any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
                 </FormField>
@@ -423,6 +385,8 @@ onMounted(() => {
                             </FormControl>
                             <SelectContent>
                                 <SelectGroup>
+                                    <SelectItem value="Litbang"> Litbang </SelectItem>
+                                    <SelectItem value="Seketariat"> P3 </SelectItem>
                                     <SelectItem value="KRA"> KRA </SelectItem>
                                     <SelectItem value="PIPP"> PIPP </SelectItem>
                                     <SelectItem value="P3"> P3 </SelectItem>

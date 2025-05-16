@@ -10,58 +10,34 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import { DokumenItem, type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
 import { FileClockIcon } from 'lucide-vue-next';
 
 const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
     {
         title: 'Dokumen',
         href: '/dashboard/dokumen',
     },
 ];
 
-const props = defineProps({
-    dokumen: {
-        type: Object,
-        required: true,
-    },
-});
-
-interface Pagination<T> {
-    current_page: number;
-    last_page: number;
-    first_page_url: string | null;
-    prev_page_url: string | null;
-    next_page_url: string | null;
-    last_page_url: string | null;
-    data: T[];
-    links: {
-        url: string | null;
-        label: string;
-        active: boolean;
-    }[];
-}
-
-interface Dokumen {
-    id: number;
-    profile_id: number;
-    deskripsi_dokumen: string;
-    tanggal: string;
-    file: string;
-}
-
-const pagination = props.dokumen as Pagination<Dokumen>;
-const dokumen: Dokumen[] = pagination.data;
-
-const currentPage = pagination.current_page;
-const lastPage = pagination.last_page;
-const links = pagination.links;
-
-function goTo(url: string | null) {
-    if (url) router.get(url);
-}
+const {
+    items: dokumen,
+    currentPage,
+    lastPage,
+    links,
+    firstPageUrl,
+    prevPageUrl,
+    nextPageUrl,
+    lastPageUrl,
+    goTo,
+} = usePagination<DokumenItem>('dokumen');
 
 const handleDestroy = (id: number) => {
     router.delete(route('admin.dashboard.dokumen.destroy', id), {});
@@ -118,15 +94,20 @@ const handleDestroy = (id: number) => {
                     <div class="mt-5">
                         <Pagination :total="lastPage" :items-per-page="7" :default-page="currentPage" :sibling-count="1" show-edges>
                             <PaginationContent class="flex items-center gap-1">
-                                <PaginationFirst @click="goTo(pagination.first_page_url)" :disabled="!pagination.prev_page_url" />
-                                <PaginationPrevious @click="goTo(pagination.prev_page_url)" :disabled="!pagination.prev_page_url" />
+                                <PaginationFirst @click="goTo(firstPageUrl)" :disabled="!prevPageUrl" />
+                                <PaginationPrevious @click="goTo(prevPageUrl)" :disabled="!prevPageUrl" />
                                 <template v-for="(link, index) in links" :key="index">
-                                    <template v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
-                                        <PaginationItem :isActive="link.active" @click="goTo(link.url)" v-html="link.label" />
-                                    </template>
+                                    <PaginationItem v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
+                                        <Button
+                                            class="h-9 w-9 p-0"
+                                            :variant="link.active ? 'outline' : 'default'"
+                                            @click="goTo(link.url)"
+                                            v-html="link.label"
+                                        />
+                                    </PaginationItem>
                                 </template>
-                                <PaginationNext @click="goTo(pagination.next_page_url)" :disabled="!pagination.next_page_url" />
-                                <PaginationLast @click="goTo(pagination.last_page_url)" :disabled="!pagination.next_page_url" />
+                                <PaginationNext @click="goTo(nextPageUrl)" :disabled="!nextPageUrl" />
+                                <PaginationLast @click="goTo(lastPageUrl)" :disabled="!nextPageUrl" />
                             </PaginationContent>
                         </Pagination>
                     </div>

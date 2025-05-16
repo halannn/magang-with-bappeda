@@ -53,12 +53,12 @@ const groupNavItems: NavItem[] = [
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Verifikasi Mahasiswa',
+        title: 'Verifikasi',
         href: '/admin/dashboard/verifikasi',
         icon: VerifiedIcon,
     },
     {
-        title: 'Absensi Mahasiswa',
+        title: 'Absensi',
         href: '/admin/dashboard/absensi',
         icon: Clock,
     },
@@ -68,12 +68,12 @@ const mainNavItems: NavItem[] = [
         icon: CalendarPlus2Icon,
     },
     {
-        title: 'Dokumen Magang',
+        title: 'Dokumen',
         href: '/admin/dashboard/dokumen',
         icon: FoldersIcon,
     },
     {
-        title: 'Sertifikat Magang',
+        title: 'Sertifikat',
         href: '/admin/dashboard/sertifikat',
         icon: BookCheckIcon,
     },

@@ -44,9 +44,15 @@ const checkUrl = ref((url: string) => {
             </div>
 
             <div class="flex flex-row gap-4">
-                <Link v-if="user" :href="route('dashboard.index')">
-                    <Button variant="secondary"> Dashboard </Button>
-                </Link>
+                <div v-if="user">
+                    <Link v-if="user.status === 'admin'" :href="route('admin.dashboard.index')">
+                        <Button variant="secondary"> Dashboard </Button>
+                    </Link>
+
+                    <Link v-else :href="route('dashboard.index')">
+                        <Button variant="secondary"> Dashboard </Button>
+                    </Link>
+                </div>
 
                 <div v-else class="flex flex-row gap-4">
                     <Button variant="secondary" class="w-full">
@@ -68,9 +74,15 @@ const checkUrl = ref((url: string) => {
         </div>
 
         <div class="hidden flex-row gap-4 lg:flex">
-            <Link v-if="user" :href="route('dashboard.index')">
-                <Button variant="secondary"> Dashboard </Button>
-            </Link>
+            <div v-if="user">
+                <Link v-if="user.status === 'admin'" :href="route('admin.dashboard.index')">
+                    <Button variant="secondary"> Dashboard </Button>
+                </Link>
+
+                <Link v-else :href="route('dashboard.index')">
+                    <Button variant="secondary"> Dashboard </Button>
+                </Link>
+            </div>
 
             <div v-else class="flex flex-row gap-4">
                 <Button variant="secondary" class="w-full">
