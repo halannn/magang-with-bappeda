@@ -65,8 +65,13 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin
     Route::delete('/dokumen/{id}', [DokumenMagangController::class, 'destroy'])->name('dokumen.destroy');
     Route::get('/dokumen/file/{file}', [DokumenMagangController::class, 'showFile'])->name('dokumen.file');
 
-    Route::get('/sertifikat', [SertifikatMagangController::class, 'Index'])->name('sertifikat.index');
-    Route::get('/sertifikat/tambah-sertifikat', [SertifikatMagangController::class, 'create'])->name('sertifikat.create');
+    Route::prefix('sertifikat')->name('sertifikat.')->controller(SertifikatMagangController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('tambah-sertifikat', 'create')->name('create');
+        Route::post('/', 'store')->name('post');
+        Route::delete('/{id}', 'destroy')->name('delete');
+        Route::get('file/{file}', 'showFile')->name('file');
+    });
 });
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {

@@ -14,7 +14,7 @@ class SertifikatMagang extends Model
     protected $table = 'sertifikat_magang';
 
     protected $fillable = [
-        'nama_mahasiswa',
+        'profile_id',
         'tanggal_terbit',
         'file',
     ];
