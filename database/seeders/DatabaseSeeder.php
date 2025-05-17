@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\PendaftaranMagang;
+use App\Models\Profile;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -21,5 +23,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'adminbappeda@gmail.com',
             'password' => 'admin_bappeda_#1',
         ]);
+
+        PendaftaranMagang::factory(10)->create();
     }
 }
