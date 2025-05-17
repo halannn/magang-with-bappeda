@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin
     Route::get('/dokumen/file/{file}', [DokumenMagangController::class, 'showFile'])->name('dokumen.file');
 
     Route::get('/sertifikat', [SertifikatMagangController::class, 'Index'])->name('sertifikat.index');
+    Route::get('/sertifikat/tambah-sertifikat', [SertifikatMagangController::class, 'create'])->name('sertifikat.create');
 });
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {

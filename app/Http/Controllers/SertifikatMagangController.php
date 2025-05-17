@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use App\Models\SertifikatMagang;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,7 +15,7 @@ class SertifikatMagangController extends Controller
     public function index()
     {
         $sertifikat = SertifikatMagang::with('profile')->paginate(15);
-        
+
         return Inertia::render('admin/sertifikat/Index', [
             'sertifikat' => $sertifikat
         ]);
@@ -25,7 +26,11 @@ class SertifikatMagangController extends Controller
      */
     public function create()
     {
-        //
+        $profile = Profile::all();
+
+        return Inertia::render('admin/sertifikat/Create', [
+            'profile' => $profile
+        ]);
     }
 
     /**
