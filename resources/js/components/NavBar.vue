@@ -12,14 +12,14 @@ const menuOpen = ref(false);
 
 const checkUrl = ref((url: string) => {
     if (page.url === url) {
-        return 'border-b-3 border-b-primary';
+        return 'border-b-2 border-b-primary';
     }
 });
 </script>
 
 <template>
     <nav
-        class="fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-10 border-b-2 border-gray-300 bg-gray-50 px-6 py-4 sm:px-10 md:px-10 lg:px-20"
+        class="text-primary border-secondary bg-secondary fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-10 border-b-2 p-4 sm:px-10 lg:px-20"
     >
         <div class="flex flex-row items-center gap-2">
             <AppLogo />
@@ -34,7 +34,7 @@ const checkUrl = ref((url: string) => {
 
         <div
             v-if="menuOpen"
-            class="fixed top-16 right-0 left-0 z-40 flex h-full flex-col gap-10 border-b-2 border-gray-300 bg-gray-50 px-6 py-2 sm:px-10 md:px-10 lg:hidden"
+            class="text-primary border-secondary bg-secondary fixed top-16 right-0 left-0 z-40 flex h-full flex-col gap-10 border-b-2 px-6 py-2 sm:px-10 md:px-10 lg:hidden"
         >
             <div class="flex flex-col items-start gap-2">
                 <Link :href="route('home')" class="mt-2 py-2"><div :class="checkUrl('/')">Beranda</div></Link>
@@ -76,19 +76,19 @@ const checkUrl = ref((url: string) => {
         <div class="hidden flex-row gap-4 lg:flex">
             <div v-if="user">
                 <Link v-if="user.status === 'admin'" :href="route('admin.dashboard.index')">
-                    <Button variant="secondary"> Dashboard </Button>
+                    <Button variant="default"> Dashboard </Button>
                 </Link>
 
                 <Link v-else :href="route('dashboard.index')">
-                    <Button variant="secondary"> Dashboard </Button>
+                    <Button variant="default"> Dashboard </Button>
                 </Link>
             </div>
 
             <div v-else class="flex flex-row gap-4">
-                <Button variant="secondary" class="w-full">
+                <Button variant="secondary">
                     <Link :href="route('login')">Login</Link>
                 </Button>
-                <Button variant="default" class="w-full">
+                <Button variant="default">
                     <Link :href="route('register')">Daftar</Link>
                 </Button>
             </div>

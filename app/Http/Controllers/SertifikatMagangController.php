@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
+use function Termwind\render;
+
 class SertifikatMagangController extends Controller
 {
     /**
@@ -15,6 +17,17 @@ class SertifikatMagangController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->status !== 'admin') {
+
+            $profile_id = auth()->user()->profile?->id;
+
+            $sertifikat = SertifikatMagang::with('profile')->where('profile_id', $profile_id)->first();
+
+            return Inertia::render('sertifikat/Index', [
+                'sertifikat' => $sertifikat
+            ]);
+        }
+
         $sertifikat = SertifikatMagang::with('profile')->paginate(15);
 
         return Inertia::render('admin/sertifikat/Index', [
@@ -99,6 +112,10 @@ class SertifikatMagangController extends Controller
             abort(404);
         }
 
-        return response()->file($path);
+        return response()->file($path, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="sertifikat.pdf"',
+            'X-Frame-Options' => 'SAMEORIGIN', // Atau 'ALLOWALL' jika perlu
+        ]);
     }
 }

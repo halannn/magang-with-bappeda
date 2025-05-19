@@ -43,7 +43,6 @@ interface Props extends PageProps {
 
 const page = usePage<Props>();
 const { pendaftar, auth, errors } = page.props;
-console.log(pendaftar);
 
 const formSchema = toTypedSchema(
     z.object({

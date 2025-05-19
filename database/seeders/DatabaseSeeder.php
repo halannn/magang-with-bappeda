@@ -24,6 +24,6 @@ class DatabaseSeeder extends Seeder
             'password' => 'admin_bappeda_#1',
         ]);
 
-        PendaftaranMagang::factory(10)->create();
+        // PendaftaranMagang::factory(10)->create();
     }
 }

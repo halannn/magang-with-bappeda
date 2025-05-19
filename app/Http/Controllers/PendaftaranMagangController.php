@@ -26,6 +26,12 @@ class PendaftaranMagangController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
+
+        if ($user->profile && $user->profile->pendaftaran) {
+            return Inertia::location(route('pendaftaran.pemberitahuan'));
+        }
+
         return Inertia::render('FormMagang');
     }
 
@@ -42,7 +48,7 @@ class PendaftaranMagangController extends Controller
             'surat_magang' => 'required|file|mimes:pdf|max:2048',
 
         ]);
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = auth()->id;
         $validated['profile_id'] = auth()->user()->profile->id;
         $validated['surat_magang'] = $request->file('surat_magang')->store('proposal', 'local');
 

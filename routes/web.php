@@ -109,6 +109,9 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashbo
         Route::put('/{id}', 'update')->name('update'); // dokumen.update
         Route::delete('/{id}', 'destroy')->name('destroy'); // dokumen.destroy
     });
+
+    Route::get('/sertifikat', [SertifikatMagangController::class, 'Index'])->name('sertifikat.index');
+    Route::get('/sertifikat/file/{file}', [SertifikatMagangController::class, 'showFile'])->name('sertifikat.file');
 });
 
 require __DIR__ . '/settings.php';

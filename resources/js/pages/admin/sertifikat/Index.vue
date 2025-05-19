@@ -38,7 +38,6 @@ const {
     nextPageUrl,
     lastPageUrl,
 } = usePagination<SertifikatItem>('sertifikat');
-console.log(sertifikat);
 
 const handleDestroy = (id: number) => {
     router.delete(route('admin.dashboard.sertifikat.delete', id));
