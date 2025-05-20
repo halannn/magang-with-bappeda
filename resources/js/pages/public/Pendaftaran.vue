@@ -45,12 +45,14 @@ const contents = [
                     title="Pendaftaran Magang yang Mudah, Cepat, dan Terstruktur"
                     description="Proses pendaftaran dirancang agar kamu bisa fokus pada yang penting: bersiap untuk berkembang.
         Cukup ikuti langkah-langkahnya, dan kami akan bantu mengarahkanmu sampai siap bergabung."
-                    :button="false"
+                    :button="true"
+                    buttonLink="pendaftaran/form-profile"
+                    button-text="Daftar"
                 />
                 <TimelineCard :contents="contents" class="mt-10" />
             </div>
 
-            <div id="short_faq" class=" bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
+            <div id="short_faq" class="bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
                 <div id="head" class="flex flex-col gap-5">
                     <p class="text-center font-medium">Pertanyaan yang Sering Ditanyakan</p>
                     <p class="text-center text-2xl font-bold whitespace-normal">Temukan jawaban atas pertanyaan umum seputar program magang.</p>

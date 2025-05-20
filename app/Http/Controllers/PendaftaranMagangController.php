@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\VerificationNotice;
 use App\Models\PendaftaranMagang;
 use App\Models\Profile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class PendaftaranMagangController extends Controller
@@ -48,7 +50,7 @@ class PendaftaranMagangController extends Controller
             'surat_magang' => 'required|file|mimes:pdf|max:2048',
 
         ]);
-        $validated['user_id'] = auth()->id;
+        $validated['user_id'] = auth()->user()->id;
         $validated['profile_id'] = auth()->user()->profile->id;
         $validated['surat_magang'] = $request->file('surat_magang')->store('proposal', 'local');
 
@@ -82,14 +84,20 @@ class PendaftaranMagangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $profile = Profile::where('id', $id)->find($id);
+        $profile = Profile::findOrFail($id);;
 
         $validated = $request->validate([
             'bidang_magang' => 'required|string',
             'status_magang' => 'required|string'
         ]);
 
+        $oldStatus = $profile->status_magang;
+
         $profile->update($validated);
+
+        if ($oldStatus !== $validated['status_magang'] && $validated['status_magang'] === 'Aktif') {
+            Mail::to($profile->user->email)->send(new VerificationNotice($profile));
+        }
 
         return Inertia::location(route('admin.dashboard.verifikasi.index'));
     }

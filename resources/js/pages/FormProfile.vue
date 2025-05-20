@@ -59,7 +59,7 @@ const onSubmit = form.handleSubmit((values) => {
 <template>
     <Head title="Form Profile" />
     <HomeLayout>
-        <main class="mt-18 flex flex-col gap-6 p-4">
+        <main class="mt-18 flex flex-col gap-6 p-4 md:p-10 lg:p-20">
             <TextContainer title="Form profile" description="Silahkan mengisi keterangan pribadi anda." :button="false" />
             <form @submit="onSubmit" class="flex flex-col gap-6">
                 <FormField v-slot="{ componentField }" name="nama_lengkap">
