@@ -19,7 +19,7 @@ const checkUrl = ref((url: string) => {
 
 <template>
     <nav
-        class="text-primary border-secondary bg-secondary fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-10 border-b-2 p-4 sm:px-10 lg:px-20"
+        class="border-background bg-background fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-10 border-b-2 p-4 sm:px-10 lg:px-20"
     >
         <div class="flex flex-row items-center gap-2">
             <AppLogo />
@@ -34,7 +34,7 @@ const checkUrl = ref((url: string) => {
 
         <div
             v-if="menuOpen"
-            class="text-primary border-secondary bg-secondary fixed top-16 right-0 left-0 z-40 flex h-full flex-col gap-10 border-b-2 px-6 py-2 sm:px-10 md:px-10 lg:hidden"
+            class="border-background bg-background fixed top-18 right-0 left-0 z-40 flex h-full flex-col gap-10 border-b-2 px-6 py-2 sm:px-10 md:px-10 lg:hidden"
         >
             <div class="flex flex-col items-start gap-2">
                 <Link :href="route('home')" class="mt-2 py-2"><div :class="checkUrl('/')">Beranda</div></Link>
@@ -44,17 +44,17 @@ const checkUrl = ref((url: string) => {
             </div>
 
             <div class="flex flex-row gap-4">
-                <div v-if="user">
+                <div v-if="user" class="w-full">
                     <Link v-if="user.status === 'admin'" :href="route('admin.dashboard.index')">
-                        <Button variant="secondary"> Dashboard </Button>
+                        <Button variant="secondary" class="w-full"> Dashboard </Button>
                     </Link>
 
                     <Link v-else :href="route('dashboard.index')">
-                        <Button variant="secondary"> Dashboard </Button>
+                        <Button variant="secondary" class="w-full"> Dashboard </Button>
                     </Link>
                 </div>
 
-                <div v-else class="flex flex-row gap-4">
+                <div v-else class="w-full flex flex-col gap-4">
                     <Button variant="secondary" class="w-full">
                         <Link :href="route('login')">Login</Link>
                     </Button>
@@ -69,7 +69,7 @@ const checkUrl = ref((url: string) => {
         <div class="hidden flex-1 gap-4 lg:flex">
             <Link :href="route('home')" class="px-2 py-3"><div :class="checkUrl('/')">Beranda</div></Link>
             <Link :href="route('tentang')" class="px-2 py-3"><div :class="checkUrl('/tentang')">Tentang</div></Link>
-            <Link :href="route('mahasiswa')" class="px-2 py-3"><div :class="checkUrl('/mahasiswa')">Mahasiswa Magang</div></Link>
+            <Link :href="route('mahasiswa')" class="px-2 py-3"><div :class="checkUrl('/mahasiswa')">Mahasiswa</div></Link>
             <Link :href="route('pendaftaran')" class="px-2 py-3"><div :class="checkUrl('/pendaftaran')">Pendaftaran</div></Link>
         </div>
 

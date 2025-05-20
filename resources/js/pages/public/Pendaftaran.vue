@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import Footer from '@/components/Footer.vue';
-import NavBar from '@/components/NavBar.vue';
 import ShortFAQ from '@/components/ShortFAQ.vue';
 import TextContainer from '@/components/TextContainer.vue';
 import TimelineCard from '@/components/TimelineCard.vue';
+import HomeLayout from '@/layouts/HomeLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { BookCheck, ClipboardList, Newspaper, ShieldCheck, UserRoundCheck } from 'lucide-vue-next';
 
@@ -37,35 +36,27 @@ const contents = [
 </script>
 
 <template>
-    <Head title="Pendaftaran">
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    </Head>
+    <Head title="Pendaftaran" />
+    <HomeLayout>
+        <main class="mt-18 flex flex-col">
+            <div id="timeline_pendaftaram" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
+                <TextContainer
+                    caption="Siap Bergabung? Wujudkan Langkah Awal Menuju Karier Impianmu."
+                    title="Pendaftaran Magang yang Mudah, Cepat, dan Terstruktur"
+                    description="Proses pendaftaran dirancang agar kamu bisa fokus pada yang penting: bersiap untuk berkembang.
+        Cukup ikuti langkah-langkahnya, dan kami akan bantu mengarahkanmu sampai siap bergabung."
+                    :button="false"
+                />
+                <TimelineCard :contents="contents" class="mt-10" />
+            </div>
 
-    <NavBar />
-
-    <div id="timeline_pendaftaram" class="flex flex-col gap-20 bg-gray-50 px-20 py-20">
-        <TextContainer
-            class=""
-            caption="Siap Bergabung? Wujudkan Langkah Awal Menuju Karier Impianmu."
-            title="Pendaftaran Magang yang Mudah, Cepat, dan Terstruktur"
-            description="Proses pendaftaran dirancang agar kamu bisa fokus pada yang penting: bersiap untuk berkembang.
-Cukup ikuti langkah-langkahnya, dan kami akan bantu mengarahkanmu sampai siap bergabung."
-            :button="false"
-        />
-        <TimelineCard :contents="contents" />
-    </div>
-
-    <div id="short_faq" class="flex flex-col gap-20 bg-gray-800 px-20 py-20">
-        <div id="head" class="flex flex-col gap-5 text-gray-50">
-            <p class="text-center text-xl font-medium">Pertanyaan yang Sering Ditanyakan</p>
-            <p class="text-center text-4xl font-bold whitespace-normal">
-                Temukan jawaban atas pertanyaan umum <br />
-                seputar program magang di sini.
-            </p>
-        </div>
-        <ShortFAQ />
-    </div>
-
-    <Footer />
+            <div id="short_faq" class=" bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
+                <div id="head" class="flex flex-col gap-5">
+                    <p class="text-center font-medium">Pertanyaan yang Sering Ditanyakan</p>
+                    <p class="text-center text-2xl font-bold whitespace-normal">Temukan jawaban atas pertanyaan umum seputar program magang.</p>
+                </div>
+                <ShortFAQ />
+            </div>
+        </main>
+    </HomeLayout>
 </template>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import FeatureCard from '@/components/FeatureCard.vue';
-import Footer from '@/components/Footer.vue';
-import NavBar from '@/components/NavBar.vue';
 import ShortFAQ from '@/components/ShortFAQ.vue';
 import TestimonialCard from '@/components/TestimonialCard.vue';
 import TextContainer from '@/components/TextContainer.vue';
+import HomeLayout from '@/layouts/HomeLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { AwardIcon, BookOpenCheckIcon, Building2Icon, Calendar, CheckCircle2, FileCheckIcon, University, Users } from 'lucide-vue-next';
 
@@ -53,133 +52,117 @@ const testimonials = [
 </script>
 
 <template>
-    <Head title="Beranda">
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    </Head>
-
-    <NavBar />
-
-    <div id="hero_section" class="flex flex-row justify-between bg-gray-50 px-20 py-10">
-        <TextContainer
-            class="p-10"
-            caption="Tingkatkan Pengalaman, Bangun Masa Depan!"
-            title="Magang Bersama BAPPEDA - Langkah Awal Menuju Karier Gemilang"
-            subtitle="Magang Bersama BAPPEDA – Langkah Awal Menuju Karier Gemilang"
-            description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
-            :button="true"
-            buttonText="Daftar Magang Sekarang"
-            buttonLink="pendaftaran"
-        />
-        <div id="hero_right" class="w-full">
-            <img src="/Hero_Image.png" alt="" class="" />
-        </div>
-    </div>
-
-    <div id="why_us" class="flex flex-col gap-20 bg-gray-900 px-20 py-20">
-        <TextContainer
-            class="text-center text-gray-50"
-            title="Mengapa Magang di BAPPEDA?"
-            description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
-            :button="false"
-        />
-        <div id="content" class="flex flex-row gap-20">
-            <div id="left" class="flex w-full flex-col gap-5">
-                <FeatureCard
-                    :icon="FileCheckIcon"
-                    costum-style="flex flex-row items-center gap-5 rounded-2xl bg-gray-50 px-5 py-5"
-                    iconColor="black"
-                    title="Belajar dari Praktisi Pemerintah Daerah"
-                    description="Dapatkan wawasan langsung dari profesional di bidang perencanaan pembangunan daerah."
+    <Head title="Beranda" />
+    <HomeLayout>
+        <main class="mt-18 flex flex-col">
+            <div id="hero_section" class="bg-background flex flex-col-reverse justify-between gap-4 px-4 py-10 md:px-10 lg:flex-row lg:px-20">
+                <TextContainer
+                    caption="Tingkatkan Pengalaman, Bangun Masa Depan!"
+                    title="Magang Bersama BAPPEDA - Langkah Awal Menuju Karier Gemilang"
+                    subtitle="Magang Bersama BAPPEDA – Langkah Awal Menuju Karier Gemilang"
+                    description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
+                    :button="true"
+                    buttonText="Daftar Magang Sekarang"
+                    buttonLink="pendaftaran"
                 />
-                <FeatureCard
-                    :icon="BookOpenCheckIcon"
-                    costum-style="flex flex-row items-center gap-5 rounded-2xl bg-gray-50 px-5 py-5"
-                    iconColor="black"
-                    title="Perluas Relasi Profesional"
-                    description="Bangun jaringan dengan ASN, akademisi, dan mitra pembangunan kota."
-                />
-                <FeatureCard
-                    :icon="Building2Icon"
-                    costum-style="flex flex-row items-center gap-5 rounded-2xl bg-gray-50 px-5 py-5"
-                    iconColor="black"
-                    title="Kontribusi Nyata untuk Daerah"
-                    description="Berpartisipasi dalam kegiatan yang berdampak langsung terhadap perencanaan kota Balikpapan."
-                />
-                <FeatureCard
-                    :icon="AwardIcon"
-                    costum-style="flex flex-row items-center gap-5 rounded-2xl bg-gray-50 px-5 py-5"
-                    iconColor="black"
-                    title="Sertifikat dan Portofolio"
-                    description="Dapatkan sertifikat resmi dan hasil kerja yang dapat digunakan untuk portofolio kariermu."
-                />
+                <div id="hero_right" class="flex w-full justify-center">
+                    <img src="/Hero_Image.png" alt="" class="lg:w-full" />
+                </div>
             </div>
-            <div id="right" class="w-full shadow-2xl">
-                <img src="/why_section.jpg" alt="" class="h-full rounded-2xl object-cover" />
+
+            <div id="why_us" class="bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
+                <TextContainer
+                    class="text-center"
+                    title="Mengapa Magang di BAPPEDA?"
+                    description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
+                    :button="false"
+                />
+                <div id="content" class="flex flex-col-reverse lg:flex-row gap-4 md:gap-10 lg:gap-20">
+                    <div id="left" class="flex w-full flex-col gap-5">
+                        <FeatureCard
+                            :icon="FileCheckIcon"
+                            title="Belajar dari Praktisi Pemerintah Daerah"
+                            description="Dapatkan wawasan langsung dari profesional di bidang perencanaan pembangunan daerah."
+                        />
+                        <FeatureCard
+                            :icon="BookOpenCheckIcon"
+                            title="Perluas Relasi Profesional"
+                            description="Bangun jaringan dengan ASN, akademisi, dan mitra pembangunan kota."
+                        />
+                        <FeatureCard
+                            :icon="Building2Icon"
+                            title="Kontribusi Nyata untuk Daerah"
+                            description="Berpartisipasi dalam kegiatan yang berdampak langsung terhadap perencanaan kota Balikpapan."
+                        />
+                        <FeatureCard
+                            :icon="AwardIcon"
+                            title="Sertifikat dan Portofolio"
+                            description="Dapatkan sertifikat resmi dan hasil kerja yang dapat digunakan untuk portofolio kariermu."
+                        />
+                    </div>
+                    <div id="right" class="w-full shadow-2xl">
+                        <img src="/why_section.jpg" alt="" class="h-full rounded-2xl object-cover" />
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <div id="testimonials" class="flex flex-col gap-10 bg-gray-50 px-20 py-20">
-        <div id="head" class="flex flex-col gap-5">
-            <TextContainer
-                class="text-center text-gray-900"
-                title="Apa Kata Mereka Tentang Magang di BAPPEDA?"
-                description="Kami percaya bahwa pengalaman terbaik datang dari proses yang nyata. <br/>
-        Berikut kisah dan kesan para mahasiswa yang telah tumbuh bersama BAPPEDA."
-                :button="false"
-            />
-        </div>
-        <div id="content" class="flex flex-row justify-between gap-20">
-            <TestimonialCard :testimonial="testimonials" />
-        </div>
-    </div>
+            <div id="testimonials" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:flex-col lg:px-20">
+                <div id="head" class="flex flex-col gap-4">
+                    <TextContainer
+                        class="text-center"
+                        title="Apa Kata Mereka Tentang Magang di BAPPEDA?"
+                        description="Kami percaya bahwa pengalaman terbaik datang dari proses yang nyata. Berikut kisah dan kesan para mahasiswa yang telah tumbuh bersama BAPPEDA."
+                        :button="false"
+                    />
+                </div>
+                <TestimonialCard :testimonial="testimonials" />
+            </div>
 
-    <div id="highlight" class="flex flex-col justify-center gap-12 bg-gray-50 px-20 py-12">
-        <div id="head" class="flex flex-col gap-4">
-            <p class="text-center text-4xl font-bold">Dibangun untuk Masa Depan</p>
-            <p class="text-center">
-                Sejak diluncurkan, program magang BAPPEDA telah menjadi wadah pengembangan diri bagi mahasiswa dari berbagai perguruan tinggi.
-            </p>
-        </div>
-        <div id="cards" class="flex flex-row gap-6">
-            <FeatureCard
-                :icon="Users"
-                costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
-                title="25+"
-                description="Mahasiswa magang"
-            />
-            <FeatureCard
-                :icon="University"
-                costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
-                title="4+"
-                description="Kampus Bergabung"
-            />
-            <FeatureCard
-                :icon="Calendar"
-                costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
-                title="3+"
-                description="Tahun program berjalan"
-            />
-            <FeatureCard
-                :icon="CheckCircle2"
-                costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
-                title="100%"
-                description="Menerima sertifikat"
-            />
-        </div>
-    </div>
+            <div id="highlight" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:flex-col lg:px-20">
+                <div id="head" class="flex flex-col gap-4">
+                    <p class="text-center text-2xl font-bold">Dibangun untuk masa depan</p>
+                    <p class="text-center">
+                        Sejak diluncurkan, program magang BAPPEDA telah menjadi wadah pengembangan diri bagi mahasiswa dari berbagai perguruan tinggi.
+                    </p>
+                </div>
+                <div id="cards" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <FeatureCard
+                        :icon="Users"
+                        costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
+                        title="25+"
+                        description="Mahasiswa magang"
+                    />
+                    <FeatureCard
+                        :icon="University"
+                        costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
+                        title="4+"
+                        description="Kampus Bergabung"
+                    />
+                    <FeatureCard
+                        :icon="Calendar"
+                        costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
+                        title="3+"
+                        description="Tahun program berjalan"
+                    />
+                    <FeatureCard
+                        :icon="CheckCircle2"
+                        costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
+                        title="100%"
+                        description="Menerima sertifikat"
+                    />
+                </div>
+            </div>
 
-    <div id="short_faq" class="flex flex-col gap-20 bg-gray-800 px-20 py-20">
-        <div id="head" class="flex flex-col gap-5 text-gray-50">
-            <p class="text-center text-xl font-medium">Pertanyaan yang Sering Ditanyakan</p>
-            <p class="text-center text-4xl font-bold whitespace-normal">
-                Temukan jawaban atas pertanyaan umum <br />
-                seputar program magang di sini.
-            </p>
-        </div>
-        <ShortFAQ />
-    </div>
-
-    <Footer />
+            <div id="short_faq" class="bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
+                <div id="head" class="flex flex-col gap-5">
+                    <p class="text-center font-medium">Pertanyaan yang Sering Ditanyakan</p>
+                    <p class="text-center text-2xl font-bold whitespace-normal">
+                        Temukan jawaban atas pertanyaan umum
+                        seputar program magang.
+                    </p>
+                </div>
+                <ShortFAQ />
+            </div>
+        </main>
+    </HomeLayout>
 </template>

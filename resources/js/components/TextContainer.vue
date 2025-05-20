@@ -32,15 +32,15 @@ defineProps({
 </script>
 
 <template>
-    <div id="hero" class="flex w-full flex-col justify-center gap-10">
-        <div id="text" class="flex flex-col gap-2 md:gap-6">
-            <p class="font-bold text-blue-900 md:text-xl" v-if="caption">{{ caption }}</p>
-            <p class="text-xl font-bold md:text-2xl" v-html="title"></p>
+    <div id="hero" class="flex w-full flex-col justify-center gap-4 md:gap-10">
+        <div id="text" class="flex flex-col gap-4">
+            <p class="text-primary font-bold md:text-xl" v-if="caption">{{ caption }}</p>
+            <p class="text-2xl font-bold md:text-2xl" v-html="title"></p>
             <p class="md:text-lg" v-if="description" v-html="description"></p>
         </div>
         <div id="cta" v-if="button">
-            <Link :href="buttonLink" class="inline-block px-2 py-3">
-                <Button v size="lg" class="bg-blue-900 font-medium text-gray-50 hover:bg-gray-900">
+            <Link :href="buttonLink">
+                <Button size="default" md:size="lg" variant="default">
                     {{ buttonText }}
                     <ArrowRight />
                 </Button>

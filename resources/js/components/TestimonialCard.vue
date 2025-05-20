@@ -16,15 +16,15 @@ defineProps<{
 </script>
 
 <template>
-  <div id="card_testimonial" class="flex flex-row gap-5">
-    <div v-for="(item, index) in testimonial" :key="index" class="flex w-full flex-col gap-5 rounded-2xl p-4 shadow">
+  <div id="card_testimonial" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div v-for="(item, index) in testimonial" :key="index" class="flex w-full flex-col gap-4 rounded-2xl p-4 shadow">
       <div id="head" class="w-full">
         <img :src="item.image" alt="" class="h-60 w-full rounded-2xl object-cover" />
       </div>
       <div id="body" class="flex h-full flex-col gap-3">
         <div id="title">
           <p class="text-xl font-bold">{{ item.nama }}</p>
-          <p class="font-medium text-gray-500">{{ item.kampus }}</p>
+          <p class="text-sm md:text-base font-medium text-muted-foreground">{{ item.kampus }}</p>
         </div>
         <p id="content" class="h-full">{{ item.bodyText }}</p>
       </div>
