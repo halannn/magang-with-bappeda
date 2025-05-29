@@ -68,7 +68,7 @@ const submit = () => {
 
       <div class="text-muted-foreground text-center text-sm">
         Sudah mempunyai akun?
-        <TextLink :href="route('login')" class="text-blue-900 underline underline-offset-4" :tabindex="6">Log in</TextLink>
+        <TextLink :href="route('login')" class="text-blue-900 underline underline-offset-4" :tabindex="6">Masuk</TextLink>
       </div>
     </form>
   </AuthBase>

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->time('waktu_datang')->nullable();
             $table->time('waktu_pulang')->nullable();
-            $table->enum('status', ['Hadir', 'Absen', 'Sakit', 'Izin'])->nullable()->default(null);
+            $table->enum('status', ['Hadir', 'Sakit', 'Izin'])->nullable()->default(null);
             $table->string('keterangan')->nullable();
             $table->string('surat')->nullable();
             $table->enum('verifikasi', ['Valid', 'Tidak Valid', 'Pending'])->nullable()->default('Pending');
