@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { PageProps } from '@inertiajs/core';
+import Alert from '@/components/Alert.vue';
 import TextContainer from '@/components/TextContainer.vue';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
-import { Auth, Verifikasi, VerifikasiItem, type BreadcrumbItem } from '@/types';
+import { Auth, Verifikasi, type BreadcrumbItem } from '@/types';
+import type { PageProps } from '@inertiajs/core';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { toTypedSchema } from '@vee-validate/zod';
@@ -50,7 +51,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 function checkFileType(file: File) {
     if (file?.name) {
         const fileType = file.name.split('.').pop();
-        if (fileType === 'docx' || fileType === 'pdf') return true;
+        if (fileType === 'pdf') return true;
     }
     return false;
 }
@@ -67,14 +68,14 @@ const formSchema = toTypedSchema(
         kontak: z.string().min(2),
         foto_profile: z
             .any()
-            .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 2MB.`)
-            .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'Only .jpg, .jpeg, .png and .webp formats are supported.')
+            .refine((file) => file?.size <= MAX_FILE_SIZE, `Ukuran gambar maksimal 2MB.`)
+            .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'Hanya format .jpg, .jpeg, .png dan .webp yang didukung.')
             .optional(),
         cv_pribadi: z
             .any()
-            .refine((file) => file instanceof File, 'File is required')
-            .refine((file) => file?.size < MAX_FILE_SIZE, 'Max size is 2MB.')
-            .refine((file) => checkFileType(file), 'Only .pdf, .docx formats are supported.')
+            .refine((file) => file instanceof File, 'File diperlukan')
+            .refine((file) => file?.size < MAX_FILE_SIZE, 'Ukuran maksimal file 2MB.')
+            .refine((file) => checkFileType(file), 'Hanya format .pdf yang didukung.')
             .optional(),
         posisi_magang: z.string().min(2).max(50),
         deskripsi_magang: z.string().min(2),
@@ -82,9 +83,9 @@ const formSchema = toTypedSchema(
         tanggal_selesai: z.string().nonempty('Tanggal harus diisi.'),
         surat_magang: z
             .any()
-            .refine((file) => file instanceof File, 'File is required')
-            .refine((file) => file?.size < MAX_FILE_SIZE, 'Max size is 2MB.')
-            .refine((file) => checkFileType(file), 'Only .pdf, .docx formats are supported.')
+            .refine((file) => file instanceof File, 'File diperlukan')
+            .refine((file) => file?.size < MAX_FILE_SIZE, 'Ukuran maksimal file 2MB.')
+            .refine((file) => checkFileType(file), 'Hanya format .pdf yang didukung.')
             .optional(),
         bidang_magang: z.string().min(2),
         status_magang: z.string().min(2),
@@ -98,8 +99,8 @@ const form = useForm({
 const { handleSubmit, setFieldValue, values } = form;
 
 const placeholder = ref();
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
+const df = new DateFormatter('id-ID', {
+    dateStyle: 'full',
 });
 
 const value1 = computed({
@@ -237,7 +238,7 @@ onMounted(() => {
                             >
                                 Lihat Proposal
                             </a>
-                            <Input v-else type="file" @change="(e : any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input v-else type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
                 </FormField>
@@ -253,7 +254,7 @@ onMounted(() => {
                             >
                                 Lihat Proposal
                             </a>
-                            <Input v-else type="file" @change="(e : any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input v-else type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
                 </FormField>
@@ -368,7 +369,7 @@ onMounted(() => {
                             >
                                 Lihat Proposal
                             </a>
-                            <Input v-else type="file" @change="(e : any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input v-else type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
                 </FormField>
@@ -385,8 +386,8 @@ onMounted(() => {
                             </FormControl>
                             <SelectContent>
                                 <SelectGroup>
+                                    <SelectItem value="Seketariat"> Seketariat </SelectItem>
                                     <SelectItem value="Litbang"> Litbang </SelectItem>
-                                    <SelectItem value="Seketariat"> P3 </SelectItem>
                                     <SelectItem value="KRA"> KRA </SelectItem>
                                     <SelectItem value="PIPP"> PIPP </SelectItem>
                                     <SelectItem value="P3"> P3 </SelectItem>
@@ -410,6 +411,7 @@ onMounted(() => {
                                     <SelectItem value="Aktif"> Aktif </SelectItem>
                                     <SelectItem value="Selesai"> Selesai </SelectItem>
                                     <SelectItem value="Dikeluarkan"> Dikeluarkan </SelectItem>
+                                    <SelectItem value="Pending"> Pending </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
@@ -420,7 +422,12 @@ onMounted(() => {
                     <a :href="route('admin.dashboard.verifikasi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
-                    <Button type="submit"> Verifikasi </Button>
+                    <Alert
+                        dialog="Konfirmasi"
+                        title="Konfirmasi Pengiriman Data"
+                        description="Pastikan data sudah benar sebelum mengirim."
+                        :event="onSubmit"
+                    />
                 </div>
             </form>
         </main>

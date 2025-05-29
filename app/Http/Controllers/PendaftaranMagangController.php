@@ -14,12 +14,26 @@ class PendaftaranMagangController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $verifikasi = PendaftaranMagang::with(['user', 'profile'])->paginate(15);
+        $query = PendaftaranMagang::with(['user', 'profile']);
+
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->input('search');
+            $query->whereHas('profile', function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                    ->orWhere('asal_kampus', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('date') && $request->date !== null) {
+            $query->whereDate('tanggal_mulai', $request->input('date'));
+        }
+
+        $verifikasi = $query->paginate(10)->withQueryString();
 
         return Inertia::render('admin/verifikasi/Index', [
-            'verifikasi' => $verifikasi
+            'verifikasi' => $verifikasi,
         ]);
     }
 
@@ -42,6 +56,8 @@ class PendaftaranMagangController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
+
         $validated = $request->validate([
             'posisi_magang' =>  'required|string|max:255',
             'deskripsi_magang' =>  'required|string',
@@ -50,8 +66,8 @@ class PendaftaranMagangController extends Controller
             'surat_magang' => 'required|file|mimes:pdf|max:2048',
 
         ]);
-        $validated['user_id'] = auth()->user()->id;
-        $validated['profile_id'] = auth()->user()->profile->id;
+        $validated['user_id'] = $user->id;
+        $validated['profile_id'] = $user->profile->id;
         $validated['surat_magang'] = $request->file('surat_magang')->store('proposal', 'local');
 
         PendaftaranMagang::create($validated);
@@ -95,7 +111,7 @@ class PendaftaranMagangController extends Controller
 
         $profile->update($validated);
 
-        if ($oldStatus !== $validated['status_magang'] && $validated['status_magang'] === 'Aktif') {
+        if ($oldStatus !== $validated['status_magang']) {
             Mail::to($profile->user->email)->send(new VerificationNotice($profile));
         }
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import TextContainer from '@/components/TextContainer.vue';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -21,7 +22,7 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024;
 function checkFileType(file: File) {
     if (file?.name) {
         const fileType = file.name.split('.').pop();
-        if (fileType === 'docx' || fileType === 'pdf') return true;
+        if (fileType === 'pdf') return true;
     }
     return false;
 }
@@ -38,9 +39,9 @@ const formSchema = toTypedSchema(
         tanggal_selesai: z.string().nonempty('Tanggal harus diisi.'),
         surat_magang: z
             .any()
-            .refine((file) => file instanceof File, 'File is required')
+            .refine((file) => file instanceof File, 'File diperlukan')
             .refine((file) => file?.size < MAX_FILE_SIZE, 'Max size is 2MB.')
-            .refine((file) => checkFileType(file), 'Only .pdf, .docx formats are supported.'),
+            .refine((file) => checkFileType(file), 'Hanya format .pdf yang didukung.'),
     }),
 );
 
@@ -183,8 +184,13 @@ const onSubmit = handleSubmit((values) => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
-
-                <Button type="submit"> Konfirmasi </Button>
+                
+                <Alert
+                    dialog="Konfirmasi"
+                    title="Konfirmasi Pengiriman Data"
+                    description="Pastikan data sudah benar sebelum mengirim."
+                    :event="onSubmit"
+                />
             </form>
         </main>
     </HomeLayout>

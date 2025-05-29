@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: hsl(0, 0%, 100%);
-            color: hsl(222.2, 84%, 4.9%);       
+            background-color: #ffffff;
+            color: #0f172a;
             margin: 0;
             padding: 0;
         }
@@ -17,11 +17,10 @@
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            background-color: hsl(0, 0%, 100%); 
-            color: hsl(222.2, 84%, 4.9%);       
+            background-color: #ffffff;
             padding: 2rem;
             border-radius: 8px;
-            border: 1px solid hsl(214.3, 31.8%, 91.4%);
+            border: 1px solid #e2e8f0;
         }
 
         h1 {
@@ -35,29 +34,42 @@
         }
 
         .status-box {
-            background-color: hsl(210, 40%, 96.1%); 
-            color: hsl(222.2, 47.4%, 11.2%);       
             padding: 10px 15px;
-            border-left: 4px solid hsl(221.2, 83.2%, 53.3%);
             margin: 1rem 0;
             border-radius: 6px;
             font-weight: bold;
         }
 
+        .status-aktif {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .status-dikeluarkan {
+            background-color: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .status-pending {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+
         .button {
-            display: inline-block;
-            color: hsl(210, 40%, 98%);                 
-            background-color: hsl(221.2, 83.2%, 53.3%); 
             padding: 10px 20px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 14px;
             margin-top: 1rem;
+            display: inline-block;
         }
 
         .footer {
             font-size: 12px;
-            color: hsl(215.4, 16.3%, 46.9%);
+            color: #64748b;
             text-align: center;
             margin-top: 2rem;
         }
@@ -68,24 +80,33 @@
     <div class="container">
         <h1>Halo {{ $profile->user->name }},</h1>
 
-        <p>Status pendaftaran magang Anda di <strong>BAPPEDA Litbang Balikpapan</strong> telah diperbarui oleh admin.</p>
+        <p>Status pendaftaran magang Anda di <strong>BAPPEDA Litbang Balikpapan</strong> telah diperbarui oleh admin.
+        </p>
 
-        <div class="status-box">
+        @php
+            $status = strtolower($profile->status_magang);
+        @endphp
+
+        <div
+            class="status-box 
+            {{ $status === 'aktif' ? 'status-aktif' : ($status === 'dikeluarkan' ? 'status-dikeluarkan' : 'status-pending') }}">
             Status terbaru: {{ strtoupper($profile->status_magang) }}
         </div>
 
-        <p>Silakan login ke dashboard Anda untuk melihat detail lebih lanjut.</p>
+        @if ($status !== 'dikeluarkan')
+            <p>Silakan login ke dashboard Anda untuk melihat detail lebih lanjut.</p>
 
-        <p style="text-align: center;">
-            <a href="{{ route('dashboard.index') }}" class="button" target="_blank">
-                Buka Dashboard
-            </a>
-        </p>
+            <p style="text-align: center;">
+                <a href="{{ route('dashboard.index') }}" class="button" target="_blank">
+                    Buka Dashboard
+                </a>
+            </p>
 
-        <p class="footer">
-            Email ini dikirim secara otomatis. Harap tidak membalas email ini.<br>
-            © {{ date('Y') }} BAPPEDA Litbang Balikpapan
-        </p>
+            <p class="footer">
+                Email ini dikirim secara otomatis. Harap tidak membalas email ini.<br>
+                © {{ date('Y') }} BAPPEDA Litbang Balikpapan
+            </p>
+        @endif
     </div>
 </body>
 

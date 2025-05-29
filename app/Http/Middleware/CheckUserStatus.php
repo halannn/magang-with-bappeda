@@ -24,7 +24,17 @@ class CheckUserStatus
         }
 
         if ($user->status !== 'admin') {
-            if (!$user->profile || $user->profile->status_magang !== 'Aktif') {
+            if (!$user->profile) {
+                return redirect()->route('pendaftaran.profile.create');
+            }
+
+            $statusMagang = $user->profile->status_magang;
+
+            if ($statusMagang === 'Dikeluarkan') {
+                abort(403, 'Anda Resmi Dikeluarkan dari magang.');
+            }
+
+            if ($statusMagang === 'Pending') {
                 return redirect()->route('pendaftaran.profile.create');
             }
         }

@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue';
+import { Calendar } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import PaginationEllipsis from '@/components/ui/pagination/PaginationEllipsis.vue';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem, VerifikasiItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
-import 'dayjs/locale/id';
-import { ListCheckIcon } from 'lucide-vue-next';
-
-import {
-    Pagination,
-    PaginationContent,
-    PaginationFirst,
-    PaginationItem,
-    PaginationLast,
-    PaginationNext,
-    PaginationPrevious,
-} from '@/components/ui/pagination';
 import { usePagination } from '@/composables/usePagination';
+import AppLayout from '@/layouts/AppLayout.vue';
+import { cn } from '@/lib/utils';
+import { type BreadcrumbItem, VerifikasiItem } from '@/types';
+import { Head, router } from '@inertiajs/vue3';
+import { DateFormatter, DateValue, getLocalTimeZone, today } from '@internationalized/date';
+import 'dayjs/locale/id';
+import { CalendarIcon, ListCheckIcon, Search } from 'lucide-vue-next';
+import { ref, watch } from 'vue';
+
+const df = new DateFormatter('id-ID', {
+    dateStyle: 'full',
+});
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,6 +34,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const {
     items: pendaftar,
+    from,
+    to,
+    total,
     currentPage,
     lastPage,
     links,
@@ -39,7 +45,32 @@ const {
     prevPageUrl,
     nextPageUrl,
     lastPageUrl,
+    visibleLinks,
 } = usePagination<VerifikasiItem>('verifikasi');
+
+const items = [
+    { value: 1, label: 'Kemarin' },
+    { value: 7, label: '7 Hari Terakhir' },
+    { value: 30, label: '30 Hari Terakhir' },
+];
+
+const search = ref('');
+const selectedDate = ref<DateValue>();
+
+watch([search, selectedDate], () => {
+    router.get(
+        '/admin/dashboard/verifikasi',
+        {
+            search: search.value,
+            date: selectedDate.value ? selectedDate.value.toString() : null,
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+        },
+    );
+});
 </script>
 
 <template>
@@ -47,12 +78,54 @@ const {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div id="head" class="flex flex-col gap-5 p-5">
+            <div id="content" class="flex flex-col gap-10 p-5">
                 <div class="flex flex-row gap-5">
                     <ListCheckIcon :size="32" />
                     <p class="text-2xl font-bold">Data Mahasiswa</p>
                 </div>
-                <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
+
+                <div class="flex flex-row items-center justify-between gap-4">
+                    <Popover>
+                        <PopoverTrigger as-child>
+                            <Button
+                                variant="outline"
+                                :class="cn('w-[280px] justify-start text-left font-normal', !selectedDate && 'text-muted-foreground')"
+                            >
+                                <CalendarIcon class="mr-2 h-4 w-4" />
+                                {{ selectedDate ? df.format(selectedDate.toDate(getLocalTimeZone())) : 'Pilih tanggal mulai magang' }}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="flex w-auto flex-col gap-y-2 p-2">
+                            <Select
+                                @update:model-value="
+                                    (v) => {
+                                        if (!v) return;
+                                        selectedDate = today(getLocalTimeZone()).subtract({ days: Number(v) });
+                                    }
+                                "
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="item in items" :key="item.value" :value="item.value.toString()">
+                                        {{ item.label }}
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Calendar v-model="selectedDate" />
+                        </PopoverContent>
+                    </Popover>
+
+                    <div class="relative w-full max-w-sm items-center">
+                        <Input v-model="search" id="search" type="text" placeholder="Cari nama atau asal kampus" class="pl-10" />
+                        <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
+                            <Search class="text-muted-foreground size-6" />
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex-flex-col gap-10 rounded-2xl shadow">
                     <Table>
                         <TableCaption>Daftar mahasiswa.</TableCaption>
                         <TableHeader>
@@ -61,7 +134,7 @@ const {
                                 <TableHead>Nama</TableHead>
                                 <TableHead>Asal kampus</TableHead>
                                 <TableHead>Posisi magang</TableHead>
-                                <TableHead class="w-80 break-words whitespace-pre-wrap">Deskripsi magang</TableHead>
+                                <TableHead>Deskripsi magang</TableHead>
                                 <TableHead>Tanggal mulai</TableHead>
                                 <TableHead>Tanggal selesai</TableHead>
                                 <TableHead>Proposal magang</TableHead>
@@ -70,11 +143,11 @@ const {
                         </TableHeader>
                         <TableBody>
                             <TableRow v-for="(daftar, index) in pendaftar" :key="index">
-                                <TableCell class="w-fit font-medium"> {{ index + 1 }} </TableCell>
+                                <TableCell class="w-fit font-medium"> {{ daftar.id }} </TableCell>
                                 <TableCell>{{ daftar.profile.nama_lengkap }}</TableCell>
                                 <TableCell>{{ daftar.profile.asal_kampus }}</TableCell>
                                 <TableCell>{{ daftar.posisi_magang }}</TableCell>
-                                <TableCell class="w-80 break-words whitespace-pre-wrap">{{ daftar.deskripsi_magang }}</TableCell>
+                                <TableCell class="line-clamp-3 whitespace-pre-line">{{ daftar.deskripsi_magang }}</TableCell>
                                 <TableCell>{{ daftar.tanggal_mulai }}</TableCell>
                                 <TableCell>{{ daftar.tanggal_selesai }}</TableCell>
                                 <TableCell>
@@ -96,25 +169,32 @@ const {
                                     </div>
                                 </TableCell>
                             </TableRow>
+                            <TableRow v-if="pendaftar.length === 0">
+                                <TableCell colspan="9" class="text-center">Tidak ada data ditemukan.</TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
-                    <div class="mt-5">
-                        <Pagination :total="lastPage" :items-per-page="7" :default-page="currentPage" :sibling-count="1" show-edges>
+                    <div class="mt-5 flex flex-row justify-between">
+                        <div class="flex w-full items-center">
+                            <p v-if="total > 1">Menampilkan {{ from }} - {{ to }} dari {{ total }}</p>
+                        </div>
+                        <Pagination :total="lastPage" :items-per-page="10" :default-page="currentPage" :sibling-count="1" show-edges>
                             <PaginationContent class="flex items-center gap-1">
-                                <PaginationFirst @click="goTo(firstPageUrl)" :disabled="!prevPageUrl" />
+                                <!-- <PaginationFirst @click="goTo(firstPageUrl)" :disabled="!prevPageUrl" /> -->
                                 <PaginationPrevious @click="goTo(prevPageUrl)" :disabled="!prevPageUrl" />
-                                <template v-for="(link, index) in links" :key="index">
-                                    <PaginationItem :value="Object.keys(link).length" v-if="!link.label.includes('Previous') && !link.label.includes('Next')">
+                                <template v-for="(link, index) in visibleLinks" :key="index">
+                                    <PaginationEllipsis v-if="link.label === '...'" />
+                                    <PaginationItem v-else :value="index">
                                         <Button
                                             class="h-9 w-9 p-0"
-                                            :variant="link.active ? 'outline' : 'default'"
+                                            :variant="link.active ? 'default' : 'outline'"
                                             @click="goTo(link.url)"
                                             v-html="link.label"
                                         />
                                     </PaginationItem>
                                 </template>
                                 <PaginationNext @click="goTo(nextPageUrl)" :disabled="!nextPageUrl" />
-                                <PaginationLast @click="goTo(lastPageUrl)" :disabled="!nextPageUrl" />
+                                <!-- <PaginationLast @click="goTo(lastPageUrl)" :disabled="!nextPageUrl" /> -->
                             </PaginationContent>
                         </Pagination>
                     </div>

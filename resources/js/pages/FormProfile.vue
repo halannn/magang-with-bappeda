@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import TextContainer from '@/components/TextContainer.vue';
-import { Button } from '@/components/ui/button';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,14 +8,13 @@ import { Head, router } from '@inertiajs/vue3';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import * as z from 'zod';
-
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
 function checkFileType(file: File) {
     if (file?.name) {
         const fileType = file.name.split('.').pop();
-        if (fileType === 'docx' || fileType === 'pdf') return true;
+        if (fileType === 'pdf') return true;
     }
     return false;
 }
@@ -33,13 +31,13 @@ const formSchema = toTypedSchema(
         kontak: z.string().min(2),
         foto_profile: z
             .any()
-            .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 2MB.`)
-            .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'Only .jpg, .jpeg, .png and .webp formats are supported.'),
+            .refine((file) => file?.size <= MAX_FILE_SIZE, `Ukuran gambar maksimal 2MB.`)
+            .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'Hanya format .jpg, .jpeg, .png dan .webp yang didukung.'),
         cv_pribadi: z
             .any()
-            .refine((file) => file instanceof File, 'File is required')
-            .refine((file) => file?.size < MAX_FILE_SIZE, 'Max size is 2MB.')
-            .refine((file) => checkFileType(file), 'Only .pdf, .docx formats are supported.'),
+            .refine((file) => file instanceof File, 'File diperlukan')
+            .refine((file) => file?.size < MAX_FILE_SIZE, 'Ukuran maksimal file 2MB.')
+            .refine((file) => checkFileType(file), 'Hanya format .pdf yang didukung.'),
     }),
 );
 
@@ -171,8 +169,13 @@ const onSubmit = form.handleSubmit((values) => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
-
-                <Button type="submit"> Konfirmasi </Button>
+                
+                <Alert
+                    dialog="Konfirmasi"
+                    title="Konfirmasi Pengiriman Data"
+                    description="Pastikan data sudah benar sebelum mengirim."
+                    :event="onSubmit"
+                />
             </form>
         </main>
     </HomeLayout>

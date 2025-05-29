@@ -35,6 +35,10 @@ interface Pagination {
     first_page_url: string;
     last_page_url: string;
     links: any;
+    data : Array
+    from : number
+    to : number
+    total : number
 }
 
 interface User {
