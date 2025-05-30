@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { toast } from 'vue-sonner';
 
 defineProps<{
@@ -13,11 +23,11 @@ defineProps<{
 </script>
 
 <template>
-    <Dialog>
-        <DialogTrigger as-child>
+    <AlertDialog>
+        <AlertDialogTrigger as-child>
             <Button>{{ dialog }}</Button>
-        </DialogTrigger>
-        <DialogContent
+        </AlertDialogTrigger>
+        <AlertDialogContent
             class="sm:max-w-md"
             @interact-outside="
                 (event) => {
@@ -26,24 +36,24 @@ defineProps<{
                 }
             "
         >
-            <DialogHeader>
-                <DialogTitle>{{ title }}</DialogTitle>
-                <DialogDescription>
+            <AlertDialogHeader>
+                <AlertDialogTitle>{{ title }}</AlertDialogTitle>
+                <AlertDialogDescription>
                     {{ description }}
-                </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-                <Button variant="secondary">Batal</Button>
-                <Button
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel variant="secondary">Batal</AlertDialogCancel>
+                <AlertDialogAction
                     @click="
                         () => {
                             event();
                             toast.success(info);
                         }
                     "
-                    >Kirim</Button
+                    >Kirim</AlertDialogAction
                 >
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
 </template>

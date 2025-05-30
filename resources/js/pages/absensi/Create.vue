@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import { Button } from '@/components/ui/button';
 import Calendar from '@/components/ui/calendar/Calendar.vue';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -14,6 +15,8 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed, ref } from 'vue';
+import { Toaster } from 'vue-sonner';
+import 'vue-sonner/style.css';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -92,6 +95,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 </script>
 
 <template>
+    <Toaster class="pointer-events-auto" position="top-center" richColors />
     <Head title="Lupa absen" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
@@ -191,7 +195,13 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     <a :href="route('dashboard.absensi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
                     </a>
-                    <Button type="submit"> Ajukan absen </Button>
+                    <Alert
+                        dialog="Konfirmasi"
+                        title="Konfirmasi Pengiriman Data"
+                        description="Pastikan data sudah benar sebelum mengirim."
+                        info="Pengajuan lupa absen terkirim."
+                        :event="onSubmit"
+                    />
                 </div>
             </form>
         </div>

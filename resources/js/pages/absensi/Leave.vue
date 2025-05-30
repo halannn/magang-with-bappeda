@@ -8,19 +8,24 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed, ref } from 'vue';
 import * as z from 'zod';
+import 'vue-sonner/style.css';
+import { Toaster } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Absensi', href: '/dashboard/absensi' },
     { title: 'Izin atau sakit', href: '/dashboard/izin-sakit' },
 ];
+
+const page = usePage();
+const error = computed(() => page.props.errors.absen);
 
 const df = new DateFormatter('en-US', { dateStyle: 'long' });
 
@@ -160,6 +165,10 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
+
+                <div v-if="error" class="text-red-500">
+                    {{ error }}
+                </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
                     <a :href="route('dashboard.absensi.index')">

@@ -15,7 +15,7 @@ class AbsensiController extends Controller
     public function index(Request $request)
     {
         if (auth()->user()->status === 'admin') {
-            $query = Absensi::with('profile');
+            $query = Absensi::with('profile')->orderByDesc('tanggal');
 
             if ($request->has('search') && $request->search !== '') {
                 $search = $request->input('search');
@@ -157,7 +157,22 @@ class AbsensiController extends Controller
 
     public function list(Request $request)
     {
-        $absen = Absensi::where('profile_id',  auth()->user()->profile?->id)->orderByDesc('tanggal')->Paginate(15);
+        $query = Absensi::where('profile_id',  auth()->user()->profile?->id)->orderByDesc('tanggal');
+
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->input('search');
+            $query->whereHas('profile', function ($q) use ($search) {
+                $q->where('status', 'like', "%{$search}%")
+                    ->orWhere('keterangan', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('date') && $request->date !== null) {
+            $query->whereDate('tanggal', $request->input('date'));
+        }
+
+        $absen = $query->paginate($request->input('rows', 10))->withQueryString();
+
         return Inertia::render('absensi/List', [
             'absen' => $absen,
         ]);

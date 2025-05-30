@@ -5,7 +5,7 @@ import Button from '@/components/ui/button/Button.vue';
 import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
+import { Absen, type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
@@ -14,7 +14,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dokumen',
+        title: 'Dashboard',
         href: '/dashboard',
     },
     {
@@ -28,8 +28,7 @@ const props = defineProps<{
     absen: Object;
     errors: Object;
 }>();
-console.log(props);
-const absensi = props.absen as Array<any>;
+const absensi = props.absen as Absen;
 const absenHariIni = computed(() => {
     return absensi.find((absen) => absen.tanggal === tanggal);
 });
@@ -45,6 +44,28 @@ const form = useForm({
     status: 'hadir',
     absen_id: null,
 });
+
+const progress = ref<number>(0);
+function updateProgress(currentTime: Date = new Date()) {
+    const start = new Date(currentTime);
+    start.setHours(8, 0, 0, 0);
+    const end = new Date(currentTime);
+    end.setHours(16, 30, 0, 0);
+
+    const totalMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
+    const elapsedMinutes = (currentTime.getTime() - start.getTime()) / (1000 * 60);
+
+    let percentage = (elapsedMinutes / totalMinutes) * 100;
+    percentage = Math.max(0, Math.min(percentage, 100));
+
+    progress.value = Number(percentage.toFixed(2));
+}
+
+const checkVariant = (variant: string) => {
+    if (variant === 'Valid') return 'success';
+    if (variant === 'Tidak Valid') return 'destructive';
+    return 'pending';
+};
 
 let interval: number;
 onMounted(() => {
@@ -84,28 +105,6 @@ const handleAbsenPulang = () => {
         });
     }
 };
-
-const progress = ref<number>(0);
-function updateProgress(currentTime: Date = new Date()) {
-    const start = new Date(currentTime);
-    start.setHours(8, 0, 0, 0);
-    const end = new Date(currentTime);
-    end.setHours(16, 30, 0, 0);
-
-    const totalMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
-    const elapsedMinutes = (currentTime.getTime() - start.getTime()) / (1000 * 60);
-
-    let percentage = (elapsedMinutes / totalMinutes) * 100;
-    percentage = Math.max(0, Math.min(percentage, 100));
-
-    progress.value = Number(percentage.toFixed(2));
-}
-
-const checkVariant = (variant: string) => {
-    if (variant === 'Valid') return 'success';
-    if (variant === 'Tidak Valid') return 'destructive';
-    return 'pending';
-};
 </script>
 
 <template>
@@ -127,17 +126,17 @@ const checkVariant = (variant: string) => {
                     {{ jam }}
                 </div>
                 <div class="flex justify-center">
-                    <Progress :model-value="progress" class="w-2/3 sm:w-2/3 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4 " />
+                    <Progress :model-value="progress" class="w-2/3 sm:w-2/3 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4" />
                 </div>
                 <div class="flex flex-row justify-center gap-5">
                     <Button v-if="form.waktu_datang" variant="secondary">
                         {{ form.waktu_datang }}
                     </Button>
                     <Button v-else type="button" @click="handleAbsenDatang">Absen Datang</Button>
-                    <Button v-if="form.waktu_pulang" variant="secondary">
-                        {{ form.waktu_pulang }}
+                    <Button v-if="form.waktu_datang && !form.waktu_pulang" type="button" @click="handleAbsenPulang"> Absen Pulang </Button>
+                    <Button v-else variant="secondary">
+                        {{ form.waktu_pulang || 'Absen Pulang' }}
                     </Button>
-                    <Button v-else type="button" @click="handleAbsenPulang"> Absen Pulang </Button>
                 </div>
                 <TextLink :href="route('dashboard.absensi.create')" class="text-center underline underline-offset-4">Lupa absen?</TextLink>
             </div>
@@ -171,10 +170,18 @@ const checkVariant = (variant: string) => {
                             <TableCell>{{ absen.status }}</TableCell>
                             <TableCell>{{ absen.keterangan || '-' }}</TableCell>
                             <TableCell>
-                                {{ absen.waktu_datang || absen.status === 'Izin' || absen.status === 'Sakit' ? (absen.waktu_datang ||  absen.status ) : '-' }}
+                                {{
+                                    absen.waktu_datang || absen.status === 'Izin' || absen.status === 'Sakit'
+                                        ? absen.waktu_datang || absen.status
+                                        : '-'
+                                }}
                             </TableCell>
                             <TableCell>
-                                {{ absen.waktu_pulang || absen.status === 'Izin' || absen.status === 'Sakit' ? (absen.waktu_pulang ||  absen.status ) : '-' }}
+                                {{
+                                    absen.waktu_pulang || absen.status === 'Izin' || absen.status === 'Sakit'
+                                        ? absen.waktu_pulang || absen.status
+                                        : '-'
+                                }}
                             </TableCell>
                             <TableCell>
                                 <a

@@ -86,7 +86,7 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashbo
         Route::get('/izin-sakit', [AbsensiController::class, 'create'])->name('leave'); // absensi.leave
         Route::get('/lupa-absen', [AbsensiController::class, 'create'])->name('create'); // absensi.create
         Route::put('/lupa-absen/{absen}', [AbsensiController::class, 'update'])->name('update'); // absensi.update
-        Route::get('/riwayat', [AbsensiController::class, 'index'])->name('list'); // absensi.list
+        Route::get('/riwayat', [AbsensiController::class, 'list'])->name('list'); // absensi.list
         Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('surat'); // absensi.surat
     });
 
