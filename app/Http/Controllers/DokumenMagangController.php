@@ -10,21 +10,50 @@ use Inertia\Inertia;
 class DokumenMagangController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.   
      */
-    public function index()
+    public function index(Request $request)
     {
 
         if (auth()->user()->status === 'admin') {
-            $dokumen = DokumenMagang::with('profile')->orderByDesc('tanggal')->Paginate(15);
+            $query = DokumenMagang::with('profile')->orderByDesc('tanggal');
+
+            if ($request->has('search') && $request->search !== '') {
+                $search = $request->input('search');
+                $query->whereHas('profile', function ($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                        ->orWhere('bidang_magang', 'like', "%{$search}%");
+                });
+            }
+
+            if ($request->has('date') && $request->date !== null) {
+                $query->whereDate('tanggal', $request->input('date'));
+            }
+
+            $dokumen = $query->paginate($request->input('rows', 10))->withQueryString();
+
             return Inertia::render('admin/AdminDokumenMagang', [
-                'dokumen' => $dokumen
+                'dokumen' => $dokumen,
             ]);
         }
 
         $profile_id = auth()->user()->profile?->id;
 
-        $dokumen = DokumenMagang::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
+        $query = DokumenMagang::where('profile_id', $profile_id)->orderByDesc('tanggal');
+
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->input('search');
+            $query->whereHas('profile', function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                    ->orWhere('deskripsi_dokumen', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('date') && $request->date !== null) {
+            $query->whereDate('tanggal', $request->input('date'));
+        }
+
+        $dokumen = $query->paginate($request->input('rows', 10))->withQueryString();
 
         return Inertia::render('dokumen/Index', [
             'dokumen' => $dokumen
@@ -97,15 +126,13 @@ class DokumenMagangController extends Controller
 
         $profile_id = auth()->user()->profile?->id;
 
-        // dd($request);
-
         $validated = $request->validate([
             'tanggal' => ['required'],
             'deskripsi_dokumen' => ['required'],
             'file' => ['required'],
         ]);
 
-        if ($request->hasFile('dokumentasi')) {
+        if ($request->hasFile('file')) {
             if ($dokumen->file && Storage::disk('local')->exists($dokumen->file)) {
                 Storage::disk('local')->delete($dokumen->file);
             }

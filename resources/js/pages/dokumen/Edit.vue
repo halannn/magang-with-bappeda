@@ -160,11 +160,11 @@ onMounted(() => {
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="file">
+                <FormField v-slot="{ componentField: field }" name="file">
                     <FormItem>
                         <FormLabel>File</FormLabel>
                         <FormControl>
-                            <Input type="file" v-bind="componentField" />
+                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                             <div v-if="dokumen.file" class="m-2">
                                 <a :href="route('dashboard.dokumen.file', dokumen.file.split('/').pop())" target="_blank" class="text-sm underline">
                                     Lihat dokumen.

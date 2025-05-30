@@ -128,11 +128,11 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="file">
+                <FormField v-slot="{ componentField: field }" name="file">
                     <FormItem>
                         <FormLabel>File</FormLabel>
                         <FormControl>
-                            <Input type="file" v-bind="componentField" />
+                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Silahkan upload file dokumen dengan format .pdf. </FormDescription>
                         <FormMessage />
