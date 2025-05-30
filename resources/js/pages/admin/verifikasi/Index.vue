@@ -2,10 +2,9 @@
 import Button from '@/components/ui/button/Button.vue';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
-import PaginationEllipsis from '@/components/ui/pagination/PaginationEllipsis.vue';
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -50,19 +49,22 @@ const {
 
 const items = [
     { value: 1, label: 'Kemarin' },
-    { value: 7, label: '7 Hari Terakhir' },
-    { value: 30, label: '30 Hari Terakhir' },
+    { value: 3, label: '3 Hari' },
+    { value: 7, label: '7 Hari' },
+    { value: 30, label: '30 Hari' },
 ];
 
-const search = ref('');
+const search = ref();
 const selectedDate = ref<DateValue>();
+const rows = ref();
 
-watch([search, selectedDate], () => {
+watch([search, selectedDate, rows], () => {
     router.get(
         '/admin/dashboard/verifikasi',
         {
             search: search.value,
             date: selectedDate.value ? selectedDate.value.toString() : null,
+            rows: rows.value,
         },
         {
             preserveState: true,
@@ -125,7 +127,7 @@ watch([search, selectedDate], () => {
                     </div>
                 </div>
 
-                <div class="flex-flex-col gap-10 rounded-2xl shadow">
+                <div class="flex-flex-col gap-10 rounded-2xl p-5 shadow">
                     <Table>
                         <TableCaption>Daftar mahasiswa.</TableCaption>
                         <TableHeader>
@@ -174,11 +176,27 @@ watch([search, selectedDate], () => {
                             </TableRow>
                         </TableBody>
                     </Table>
-                    <div class="mt-5 flex flex-row justify-between">
-                        <div class="flex w-full items-center">
-                            <p v-if="total > 1">Menampilkan {{ from }} - {{ to }} dari {{ total }}</p>
-                        </div>
-                        <Pagination :total="lastPage" :items-per-page="10" :default-page="currentPage" :sibling-count="1" show-edges>
+                </div>
+                <div class="flex flex-row justify-between">
+                    <div class="flex w-full items-center">
+                        <p v-if="total > 1">Menampilkan {{ to }} dari {{ total }} data</p>
+                    </div>
+                    <div class="flex flex-row gap-4">
+                        <Select v-model="rows">
+                            <SelectTrigger>
+                                <SelectValue placeholder="Baris" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectItem :value="10"> 10 </SelectItem>
+                                    <SelectItem :value="15"> 15 </SelectItem>
+                                    <SelectItem :value="25"> 25 </SelectItem>
+                                    <SelectItem :value="50"> 50 </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+
+                        <Pagination :total="lastPage" :items-per-page="rows" :default-page="currentPage" show-edges>
                             <PaginationContent class="flex items-center gap-1">
                                 <!-- <PaginationFirst @click="goTo(firstPageUrl)" :disabled="!prevPageUrl" /> -->
                                 <PaginationPrevious @click="goTo(prevPageUrl)" :disabled="!prevPageUrl" />

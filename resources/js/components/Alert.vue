@@ -1,41 +1,49 @@
 <script setup lang="ts">
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { toast } from 'vue-sonner';
 
 defineProps<{
     dialog: string;
     title: string;
     description: string;
+    info: string;
     event: () => void;
 }>();
 </script>
 
 <template>
-    <AlertDialog>
-        <AlertDialogTrigger as-child>
+    <Dialog>
+        <DialogTrigger as-child>
             <Button>{{ dialog }}</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>{{ title }}</AlertDialogTitle>
-                <AlertDialogDescription>
+        </DialogTrigger>
+        <DialogContent
+            class="sm:max-w-md"
+            @interact-outside="
+                (event) => {
+                    const target = event.target as HTMLElement;
+                    if (target?.closest('[data-sonner-toaster]')) return event.preventDefault();
+                }
+            "
+        >
+            <DialogHeader>
+                <DialogTitle>{{ title }}</DialogTitle>
+                <DialogDescription>
                     {{ description }}
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel>Batal</AlertDialogCancel>
-                <AlertDialogAction @click="event">Kirim</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+                <Button variant="secondary">Batal</Button>
+                <Button
+                    @click="
+                        () => {
+                            event();
+                            toast.success(info);
+                        }
+                    "
+                    >Kirim</Button
+                >
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>

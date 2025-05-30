@@ -7,6 +7,7 @@ import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/for
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Toaster } from '@/components/ui/sonner';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
@@ -19,6 +20,7 @@ import { CalendarIcon } from 'lucide-vue-next';
 import { toDate } from 'reka-ui/date';
 import { useForm } from 'vee-validate';
 import { computed, onMounted, ref } from 'vue';
+import 'vue-sonner/style.css';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -113,8 +115,6 @@ const value2 = computed({
 });
 
 const onSubmit = handleSubmit((values) => {
-    console.log('Form submitted!', values);
-
     const profile_id = verifikasi.profile.id;
 
     router.post(
@@ -149,6 +149,7 @@ onMounted(() => {
 </script>
 
 <template>
+    <Toaster class="pointer-events-auto" position="top-center" richColors />
     <Head title="Form Profile" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
@@ -426,6 +427,7 @@ onMounted(() => {
                         dialog="Konfirmasi"
                         title="Konfirmasi Pengiriman Data"
                         description="Pastikan data sudah benar sebelum mengirim."
+                        info="Verifikasi berhasil dilakukan."
                         :event="onSubmit"
                     />
                 </div>

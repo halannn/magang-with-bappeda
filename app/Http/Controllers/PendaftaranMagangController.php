@@ -30,7 +30,7 @@ class PendaftaranMagangController extends Controller
             $query->whereDate('tanggal_mulai', $request->input('date'));
         }
 
-        $verifikasi = $query->paginate(10)->withQueryString();
+        $verifikasi = $query->paginate($request->input('rows', 10))->withQueryString();
 
         return Inertia::render('admin/verifikasi/Index', [
             'verifikasi' => $verifikasi,

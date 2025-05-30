@@ -12,31 +12,33 @@ class AbsensiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->status === 'admin') {
-            $absen = Absensi::with('profile')->orderByDesc('tanggal')->paginate(15);
+            $query = Absensi::with('profile');
 
+            if ($request->has('search') && $request->search !== '') {
+                $search = $request->input('search');
+                $query->whereHas('profile', function ($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                        ->orWhere('bidang_magang', 'like', "%{$search}%");
+                });
+            }
+
+            if ($request->has('date') && $request->date !== null) {
+                $query->whereDate('tanggal', $request->input('date'));
+            }
+
+            $absen = $query->paginate(10)->withQueryString();
             return Inertia::render('admin/AdminAbsensi', [
                 'absen' => $absen
             ]);
         }
 
-        $profile_id = auth()->user()->profile?->id;
-
-        if (request()->is('dashboard/absensi')) {
-            $absen = Absensi::where('profile_id', $profile_id)->orderByDesc('tanggal')->get();
-            return Inertia::render('absensi/Index', [
-                'absen' => $absen
-            ]);
-        }
-
-        if (request()->is('dashboard/absensi/riwayat')) {
-            $absen = Absensi::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
-            return Inertia::render('absensi/List', [
-                'absen' => $absen,
-            ]);
-        }
+        $absen = Absensi::where('profile_id', auth()->user()->profile?->id)->orderByDesc('tanggal')->limit(5)->get();
+        return Inertia::render('absensi/Index', [
+            'absen' => $absen
+        ]);
     }
 
     /**
@@ -151,6 +153,14 @@ class AbsensiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function list(Request $request)
+    {
+        $absen = Absensi::where('profile_id',  auth()->user()->profile?->id)->orderByDesc('tanggal')->Paginate(15);
+        return Inertia::render('absensi/List', [
+            'absen' => $absen,
+        ]);
     }
 
     public function showSurat($surat)
