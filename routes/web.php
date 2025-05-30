@@ -59,6 +59,7 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin
     Route::get('surat/{surat}', [AbsensiController::class, 'showSurat'])->name('absensi.surat');
 
     Route::get('/laporan-kegiatan', [LaporanKegiatanController::class, 'Index'])->name('laporan.index');
+    Route::get('/laporan-kegiatan/dokumentasi/{dokumentasi}', [LaporanKegiatanController::class, 'showDokumentasi'])->name('laporan.dokumentasi');
     Route::delete('/laporan-kegiatan/{id}', [LaporanKegiatanController::class, 'destroy'])->name('laporan.destroy');
 
     Route::get('/dokumen', [DokumenMagangController::class, 'Index'])->name('dokumen.index');

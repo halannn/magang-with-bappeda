@@ -12,19 +12,47 @@ class LaporanKegiatanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->status === 'admin') {
+            $query = LaporanKegiatan::with('profile')->orderByDesc('tanggal');
 
-            $laporan =  LaporanKegiatan::with('profile')->orderByDesc('tanggal')->Paginate(15);
+            if ($request->has('search') && $request->search !== '') {
+                $search = $request->input('search');
+                $query->whereHas('profile', function ($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                        ->orWhere('bidang_magang', 'like', "%{$search}%");
+                });
+            }
+
+            if ($request->has('date') && $request->date !== null) {
+                $query->whereDate('tanggal', $request->input('date'));
+            }
+
+            $laporan = $query->paginate($request->input('rows', 10))->withQueryString();
+
             return Inertia::render('admin/AdminLaporanKegiatan', [
-                'laporan' => $laporan
+                'laporan' => $laporan,
             ]);
         }
 
         $profile_id = auth()->user()->profile?->id;
 
-        $laporan =  LaporanKegiatan::where('profile_id', $profile_id)->orderByDesc('tanggal')->Paginate(15);
+        $query = LaporanKegiatan::where('profile_id', $profile_id)->orderByDesc('tanggal');
+
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->input('search');
+            $query->whereHas('profile', function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%{$search}%")
+                    ->orWhere('deskripsi_kegiatan', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('date') && $request->date !== null) {
+            $query->whereDate('tanggal', $request->input('date'));
+        }
+
+        $laporan = $query->paginate($request->input('rows', 10))->withQueryString();
 
         return Inertia::render('laporan_kegiatan/Index', [
             'laporan' => $laporan
