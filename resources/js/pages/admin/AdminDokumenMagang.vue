@@ -35,7 +35,7 @@ const {
     items: dokumens,
     from,
     to,
-    // total,
+    total,
     currentPage,
     lastPage,
     links,

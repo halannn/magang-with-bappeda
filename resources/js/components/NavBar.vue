@@ -54,13 +54,14 @@ const checkUrl = ref((url: string) => {
                     </Link>
                 </div>
 
-                <div v-else class="w-full flex flex-col gap-4">
-                    <Button variant="secondary" class="w-full">
-                        <Link :href="route('login')">Login</Link>
-                    </Button>
-                    <Button variant="default" class="w-full">
-                        <Link :href="route('register')">Daftar</Link>
-                    </Button>
+                <div v-else class="flex w-full flex-col gap-4">
+                    <Link :href="route('login')">
+                        <Button variant="secondary" class="w-full">Login</Button>
+                    </Link>
+
+                    <Link :href="route('register')">
+                        <Button variant="default" class="w-full">Daftar</Button>
+                    </Link>
                 </div>
             </div>
         </div>
@@ -85,12 +86,13 @@ const checkUrl = ref((url: string) => {
             </div>
 
             <div v-else class="flex flex-row gap-4">
-                <Button variant="secondary">
-                    <Link :href="route('login')">Login</Link>
-                </Button>
-                <Button variant="default">
-                    <Link :href="route('register')">Daftar</Link>
-                </Button>
+                <Link :href="route('login')">
+                    <Button variant="secondary" class="w-full">Login</Button>
+                </Link>
+
+                <Link :href="route('register')">
+                    <Button variant="default" class="w-full">Daftar</Button>
+                </Link>
             </div>
         </div>
     </nav>

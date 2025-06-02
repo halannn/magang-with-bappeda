@@ -8,29 +8,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
-use function Termwind\render;
-
 class SertifikatMagangController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (auth()->user()->status !== 'admin') {
+        if (auth()->user()->status === 'admin') {
+            $query = SertifikatMagang::with('profile');
 
-            $profile_id = auth()->user()->profile?->id;
+            if ($request->has('search') && $request->search !== '') {
+                $search = $request->input('search');
+                $query->whereHas('profile', function ($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                        ->orWhere('bidang_magang', 'like', "%{$search}%");
+                });
+            }
 
-            $sertifikat = SertifikatMagang::with('profile')->where('profile_id', $profile_id)->first();
+            if ($request->has('date') && $request->date !== null) {
+                $query->whereDate('tanggal_terbit', $request->input('date'));
+            }
 
-            return Inertia::render('sertifikat/Index', [
-                'sertifikat' => $sertifikat
+            $sertifikat = $query->paginate($request->input('rows', 10))->withQueryString();
+
+            return Inertia::render('admin/sertifikat/Index', [
+                'sertifikat' => $sertifikat,
             ]);
         }
 
-        $sertifikat = SertifikatMagang::with('profile')->paginate(15);
+        $profile_id = auth()->user()->profile?->id;
 
-        return Inertia::render('admin/sertifikat/Index', [
+        $sertifikat = SertifikatMagang::with('profile')->where('profile_id', $profile_id)->first();
+
+        return Inertia::render('sertifikat/Index', [
             'sertifikat' => $sertifikat
         ]);
     }
