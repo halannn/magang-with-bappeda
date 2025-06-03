@@ -12,7 +12,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
 import { Auth, Verifikasi, type BreadcrumbItem } from '@/types';
 import type { PageProps } from '@inertiajs/core';
-import { Head, router, usePage } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
@@ -23,18 +23,9 @@ import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin/dashboard',
-    },
-    {
-        title: 'Verifkasi mahasiswa',
-        href: '/admin/dashboard/verifikasi',
-    },
-    {
-        title: 'Detail mahasiswa',
-        href: '/admin/dashboard/pendaftar',
-    },
+    { title: 'Dashboard', href: '/admin/dashboard' },
+    { title: 'Verifkasi mahasiswa', href: '/admin/dashboard/verifikasi' },
+    { title: 'Detail mahasiswa', href: '/admin/dashboard/pendaftar' },
 ];
 
 interface Props extends PageProps {
@@ -124,10 +115,10 @@ const onSubmit = handleSubmit((values) => {
         },
         {
             onSuccess: () => {
-                toast.success('Berhasil mengirim data.');
+                toast.success('Berhasil memverifikasi mahasiswa.');
             },
             onError: () => {
-                toast.error('Gagal mengirim data.');
+                toast.error('Gagal memverifikasi mahasiswa.');
             },
         },
     );
@@ -365,13 +356,13 @@ onMounted(() => {
                     <FormItem>
                         <FormLabel>Surat atau proposal magang</FormLabel>
                         <FormControl>
-                            <a
+                            <Link
                                 v-if="verifikasi.surat_magang"
                                 class="text-sm underline"
                                 :href="route('admin.dashboard.verifikasi.proposal', verifikasi.surat_magang.split('/').pop())"
                             >
                                 Lihat Proposal
-                            </a>
+                            </Link>
                             <Input v-else type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
@@ -422,9 +413,9 @@ onMounted(() => {
                 </FormField>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('admin.dashboard.verifikasi.index')">
+                    <Link :href="route('admin.dashboard.verifikasi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
-                    </a>
+                    </Link>
                     <Alert
                         dialog="Konfirmasi"
                         title="Konfirmasi Pengiriman Data"

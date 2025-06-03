@@ -14,17 +14,12 @@ import { Head, router } from '@inertiajs/vue3';
 import { DateFormatter, DateValue, getLocalTimeZone, today } from '@internationalized/date';
 import 'dayjs/locale/id';
 import { CalendarClockIcon, CalendarIcon, Search } from 'lucide-vue-next';
+import { toast } from 'vue-sonner';
 import { ref, watch } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin/dashboard',
-    },
-    {
-        title: 'Absensi Mahasiswa',
-        href: '/admin/dashboard/absensi',
-    },
+    { title: 'Dashboard', href: '/admin/dashboard' },
+    { title: 'Absensi Mahasiswa', href: '/admin/dashboard/absensi' },
 ];
 
 const {
@@ -83,7 +78,7 @@ const verifikasiAbsen = (value: any, absen: AbsenItem['data'][0]) => {
         {
             preserveScroll: true,
             onSuccess: () => {
-                console.log('Berhasil memperbarui verifikasi pada absen');
+               toast.success('Berhasil memperbarui validasi pada absen');
             },
         },
     );
@@ -156,7 +151,7 @@ const verifikasiAbsen = (value: any, absen: AbsenItem['data'][0]) => {
                                 <TableHead>Jam Masuk</TableHead>
                                 <TableHead>Jam Pulang</TableHead>
                                 <TableHead>Surat</TableHead>
-                                <TableHead>Verifikasi</TableHead>
+                                <TableHead>Validasi</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

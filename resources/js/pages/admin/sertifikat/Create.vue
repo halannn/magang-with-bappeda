@@ -18,21 +18,13 @@ import { CalendarIcon } from 'lucide-vue-next';
 import { toDate } from 'reka-ui/date';
 import { useForm } from 'vee-validate';
 import { computed, ref } from 'vue';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin/dashboard',
-    },
-    {
-        title: 'Sertifikat',
-        href: '/admin/dashboard/sertifikat',
-    },
-    {
-        title: 'Buat Sertifikat',
-        href: '/admin/dashboard/sertifikat/tambah-sertifikat',
-    },
+    { title: 'Dashboard', href: '/admin/dashboard' },
+    { title: 'Sertifikat', href: '/admin/dashboard/sertifikat' },
+    { title: 'Buat Sertifikat', href: '/admin/dashboard/sertifikat/tambah-sertifikat' },
 ];
 
 interface Props extends PageProps {
@@ -54,12 +46,10 @@ const formSchema = toTypedSchema(
     }),
 );
 
-const form = useForm({
-    validationSchema: formSchema,
-});
+const form = useForm({ validationSchema: formSchema });
 const { handleSubmit, values, setFieldValue } = form;
 
-const df = new DateFormatter('en-US', { dateStyle: 'long' });
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 const value = computed({
     get: () => (values.tanggal_terbit ? parseDate(values.tanggal_terbit) : undefined),
     set: (val) => val,
@@ -113,7 +103,8 @@ const generatePDF = async (nama: string, asal_kampus: string, tanggal_mulai: str
     // convert to Blob
     const pdfBlob = doc.output('blob');
     return pdfBlob;
-};z
+};
+z;
 
 const loadImage = (url: any) => {
     return new Promise((resolve) => {
@@ -133,7 +124,14 @@ const onSubmit = handleSubmit(async (values) => {
     formData.append('tanggal_terbit', values.tanggal_terbit);
     formData.append('file', blob, `Sertifikat_${values.profile}.pdf`);
     formData.append('profile_id', selectedPendaftar.profile.id);
-    router.post(route('admin.dashboard.sertifikat.post'), formData);
+    router.post(route('admin.dashboard.sertifikat.post'), formData, {
+        onSuccess: () => {
+            toast.success('Berhasil membuat sertifikat.');
+        },
+        onError: () => {
+            toast.error('Gagal membuat sertifikat.');
+        },
+    });
 });
 </script>
 

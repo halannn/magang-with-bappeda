@@ -74,7 +74,7 @@ class SertifikatMagangController extends Controller
 
         SertifikatMagang::create($validated);
 
-        return Inertia::location(route('admin.dashboard.sertifikat.index'));
+        return redirect()->route('admin.dashboard.sertifikat.index');
     }
 
     /**
@@ -112,7 +112,7 @@ class SertifikatMagangController extends Controller
         }
         $sertifikat->delete();
 
-        return Inertia::location(route('admin.dashboard.sertifikat.index'));
+        return redirect()->route('admin.dashboard.sertifikat.index');
     }
 
     public function showFile($file)

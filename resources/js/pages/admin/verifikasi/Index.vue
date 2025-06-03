@@ -21,14 +21,8 @@ const df = new DateFormatter('id-ID', {
 });
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin/dashboard',
-    },
-    {
-        title: 'Verifkasi Mahasiswa',
-        href: '/admin/dashboard/verifikasi',
-    },
+    { title: 'Dashboard', href: '/admin/dashboard' },
+    { title: 'Verifkasi Mahasiswa', href: '/admin/dashboard/verifikasi' },
 ];
 
 const {

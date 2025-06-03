@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -10,11 +11,12 @@ import { usePagination } from '@/composables/usePagination';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
 import { DokumenItem, type BreadcrumbItem } from '@/types';
-import { Head, router, usePage } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { DateFormatter, DateValue, getLocalTimeZone, today } from '@internationalized/date';
 import 'dayjs/locale/id';
 import { CalendarIcon, FileClockIcon, Search } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import { toast } from 'vue-sonner';
 
 const df = new DateFormatter('id-ID', {
     dateStyle: 'full',
@@ -75,7 +77,14 @@ watch([search, selectedDate, rows], () => {
 });
 
 const handleDestroy = (id: number) => {
-    router.delete(route('admin.dashboard.dokumen.destroy', id), {});
+    router.delete(route('admin.dashboard.dokumen.destroy', id), {
+        onSuccess: () => {
+            toast.success('Berhasil menghapus dokumen.');
+        },
+        onError: () => {
+            toast.error('Gagal menghapus dokumen.');
+        },
+    });
 };
 </script>
 
@@ -161,9 +170,15 @@ const handleDestroy = (id: number) => {
                                     >
                                 </TableCell>
                                 <TableCell>
-                                    <div class="flex flex-row gap-2">
-                                        <Button variant="destructive" size="sm" @click="handleDestroy(item.id)"> Hapus </Button>
-                                    </div>
+                                    <Alert
+                                        dialog="Hapus"
+                                        dialogClass="bg-destructive hover:bg-destructive"
+                                        variant="destructive"
+                                        size="sm"
+                                        title="Konfirmasi Penghapusan Data"
+                                        description="Pastikan data sudah benar sebelum dihapus."
+                                        :event="() => handleDestroy(item.id)"
+                                    />
                                 </TableCell>
                             </TableRow>
                         </TableBody>
