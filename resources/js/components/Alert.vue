@@ -1,23 +1,27 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { toast } from 'vue-sonner';
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+
+type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
 defineProps<{
     dialog: string;
+    dialogClass?: string;
     title: string;
     description: string;
-    info: string;
+    variant?: ButtonVariant;
+    size?: ButtonSize;
     event: () => void;
 }>();
 </script>
@@ -25,7 +29,7 @@ defineProps<{
 <template>
     <AlertDialog>
         <AlertDialogTrigger as-child>
-            <Button>{{ dialog }}</Button>
+            <Button :variant="variant" :size="size">{{ dialog }}</Button>
         </AlertDialogTrigger>
         <AlertDialogContent
             class="sm:max-w-md"
@@ -45,10 +49,10 @@ defineProps<{
             <AlertDialogFooter>
                 <AlertDialogCancel variant="secondary">Batal</AlertDialogCancel>
                 <AlertDialogAction
+                    :class="dialogClass"
                     @click="
                         () => {
                             event();
-                            toast.success(info);
                         }
                     "
                     >Kirim</AlertDialogAction

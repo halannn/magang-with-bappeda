@@ -7,7 +7,6 @@ import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/for
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Toaster } from '@/components/ui/sonner';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
@@ -20,7 +19,7 @@ import { CalendarIcon } from 'lucide-vue-next';
 import { toDate } from 'reka-ui/date';
 import { useForm } from 'vee-validate';
 import { computed, onMounted, ref } from 'vue';
-import 'vue-sonner/style.css';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -117,15 +116,19 @@ const value2 = computed({
 const onSubmit = handleSubmit((values) => {
     const profile_id = verifikasi.profile.id;
 
-    router.post(
+    router.put(
         route('admin.dashboard.verifikasi.update', profile_id),
         {
-            _method: 'put',
             bidang_magang: values.bidang_magang,
             status_magang: values.status_magang,
         },
         {
-            forceFormData: true,
+            onSuccess: () => {
+                toast.success('Berhasil mengirim data.');
+            },
+            onError: () => {
+                toast.error('Gagal mengirim data.');
+            },
         },
     );
 });
@@ -149,12 +152,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <Toaster class="pointer-events-auto" position="top-center" richColors />
     <Head title="Form Profile" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <main class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
-            <form @submit="onSubmit" class="w-9/10 space-y-8">
+            <form @submit.prevent class="w-9/10 space-y-8">
                 <TextContainer title="Keterangan profile" :button="false" />
                 <FormField v-slot="{ componentField }" name="nama_lengkap">
                     <FormItem>
@@ -427,7 +429,6 @@ onMounted(() => {
                         dialog="Konfirmasi"
                         title="Konfirmasi Pengiriman Data"
                         description="Pastikan data sudah benar sebelum mengirim."
-                        info="Verifikasi berhasil dilakukan."
                         :event="onSubmit"
                     />
                 </div>

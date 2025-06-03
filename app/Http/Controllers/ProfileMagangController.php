@@ -52,7 +52,7 @@ class ProfileMagangController extends Controller
 
         Profile::create($validated);
 
-        return Inertia::location(route('pendaftaran.magang.create'));
+        return redirect()->route('pendaftaran.magang.create');
     }
 
     /**

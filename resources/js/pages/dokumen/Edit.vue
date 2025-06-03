@@ -14,6 +14,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed, onMounted } from 'vue';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -105,6 +106,12 @@ const onSubmit = veeValidate.handleSubmit((values) => {
         },
         {
             forceFormData: true,
+            onSuccess: () => {
+                toast.success('Berhasil Mengedit dokumen.');
+            },
+            onError: () => {
+                toast.error('Gagal Mengedit dokumen.');
+            },
         },
     );
 });

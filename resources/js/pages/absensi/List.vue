@@ -18,18 +18,9 @@ import { CalendarClockIcon, CalendarIcon, Search } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Absensi',
-        href: '/dashboard/absensi',
-    },
-    {
-        title: 'Riwayat Absensi',
-        href: 'riwayat',
-    },
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Absensi', href: '/dashboard/absensi' },
+    { title: 'Riwayat Absensi', href: 'riwayat' },
 ];
 
 const {
@@ -48,9 +39,7 @@ const {
     visibleLinks,
 } = usePagination<AbsenItem>('absen');
 
-const df = new DateFormatter('id-ID', {
-    dateStyle: 'full',
-});
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 
 const items = [
     { value: 1, label: 'Kemarin' },
@@ -159,8 +148,20 @@ const checkVariant = (variant: string) => {
                                 <TableCell>{{ absen.tanggal }}</TableCell>
                                 <TableCell>{{ absen.status }}</TableCell>
                                 <TableCell>{{ absen.keterangan || '-' }}</TableCell>
-                                <TableCell> {{ absen.waktu_datang || absen.status }} </TableCell>
-                                <TableCell> {{ absen.waktu_pulang || absen.status }} </TableCell>
+                                <TableCell>
+                                    {{
+                                        absen.waktu_datang || absen.status === 'Izin' || absen.status === 'Sakit'
+                                            ? absen.waktu_datang || absen.status
+                                            : '-'
+                                    }}
+                                </TableCell>
+                                <TableCell>
+                                    {{
+                                        absen.waktu_pulang || absen.status === 'Izin' || absen.status === 'Sakit'
+                                            ? absen.waktu_pulang || absen.status
+                                            : '-'
+                                    }}
+                                </TableCell>
                                 <TableCell>
                                     <a
                                         v-if="absen.surat"

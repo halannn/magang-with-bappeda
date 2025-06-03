@@ -91,7 +91,7 @@ class AbsensiController extends Controller
 
             Absensi::create($validated);
 
-            return Inertia::location(route('dashboard.absensi.index'));
+            return redirect()->route('dashboard.absensi.index');
         }
 
         return back()->withErrors([
@@ -144,7 +144,7 @@ class AbsensiController extends Controller
 
         $absen->update($validated);
 
-        return Inertia::location(route('dashboard.absensi.index'));
+        return redirect()->route('dashboard.absensi.index');
     }
 
     /**

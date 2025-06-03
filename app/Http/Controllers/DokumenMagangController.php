@@ -94,7 +94,7 @@ class DokumenMagangController extends Controller
 
         DokumenMagang::create($validated);
 
-        return Inertia::location(route('dashboard.dokumen.index'));
+        return redirect()->route('dashboard.dokumen.index');
     }
 
     /**
@@ -144,7 +144,7 @@ class DokumenMagangController extends Controller
 
         $dokumen->update($validated);
 
-        return Inertia::location(route('dashboard.dokumen.index'));
+        return redirect()->route('dashboard.dokumen.index');
     }
 
     /**
@@ -160,10 +160,10 @@ class DokumenMagangController extends Controller
 
 
         if (auth()->user()->status === 'admin') {
-            return Inertia::location(route('admin.dashboard.dokumen.index'));
+            return redirect()->route('admin.dashboard.dokumen.index');
         }
 
-        return Inertia::location(route('dashboard.dokumen.index'));
+        return redirect()->route('dashboard.dokumen.index');
     }
 
     public function showFile($file)

@@ -72,7 +72,7 @@ class PendaftaranMagangController extends Controller
 
         PendaftaranMagang::create($validated);
 
-        return Inertia::location(route('pendaftaran.pemberitahuan'));
+        return redirect()->route('pendaftaran.pemberitahuan');
     }
 
     /**
@@ -115,7 +115,7 @@ class PendaftaranMagangController extends Controller
             Mail::to($profile->user->email)->send(new VerificationNotice($profile));
         }
 
-        return Inertia::location(route('admin.dashboard.verifikasi.index'));
+        return redirect()->route('admin.dashboard.verifikasi.index');
     }
 
     /**

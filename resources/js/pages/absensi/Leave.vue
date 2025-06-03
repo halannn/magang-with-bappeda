@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import { Button } from '@/components/ui/button';
 import Calendar from '@/components/ui/calendar/Calendar.vue';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -8,15 +9,14 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed, ref } from 'vue';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
-import 'vue-sonner/style.css';
-import { Toaster } from 'vue-sonner';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -27,7 +27,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const page = usePage();
 const error = computed(() => page.props.errors.absen);
 
-const df = new DateFormatter('en-US', { dateStyle: 'long' });
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
@@ -85,6 +85,12 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 
     form.post(route('dashboard.absensi.store'), {
         forceFormData: true,
+        onSuccess: () => {
+            toast.success('Berhasil mengajukan izin.');
+        },
+        onError: () => {
+            toast.error('Gagal mengajukan izin.');
+        },
     });
 });
 </script>
@@ -94,7 +100,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col items-center justify-center gap-4 rounded-xl p-4">
-            <form class="w-9/10 space-y-8" @submit="onSubmit">
+            <form class="w-9/10 space-y-8" @submit.prevent>
                 <FormField v-slot="{ componentField }" name="tanggal">
                     <FormItem class="flex flex-col">
                         <FormLabel>Tanggal absen</FormLabel>
@@ -159,7 +165,7 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>Surat keteragan</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Silahkan upload surat atau berikan bukti (bisa dengan chat whatsapp). </FormDescription>
                         <FormMessage />
@@ -171,10 +177,15 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                 </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('dashboard.absensi.index')">
+                    <Link :href="route('dashboard.absensi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
-                    </a>
-                    <Button type="submit"> Ajukan izin </Button>
+                    </Link>
+                    <Alert
+                        dialog="Ajukan Izin"
+                        title="Konfirmasi Pengiriman Data"
+                        description="Pastikan data sudah benar sebelum mengirim."
+                        :event="onSubmit"
+                    />
                 </div>
             </form>
         </div>

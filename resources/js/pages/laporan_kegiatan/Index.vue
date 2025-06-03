@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -15,20 +16,15 @@ import { DateFormatter, DateValue, getLocalTimeZone, today } from '@internationa
 import 'dayjs/locale/id';
 import { CalendarClockIcon, CalendarIcon, Search } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import { toast } from 'vue-sonner';
 
 const df = new DateFormatter('id-ID', {
     dateStyle: 'full',
 });
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/admin/dashboard',
-    },
-    {
-        title: 'Laporan Kegiatan',
-        href: '/admin/dashboard/laporan-kegiatan',
-    },
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Laporan Kegiatan', href: '/dashboard/laporan-kegiatan' },
 ];
 
 const {
@@ -75,7 +71,14 @@ watch([search, selectedDate, rows], () => {
 });
 
 const handleDestroy = (id: number) => {
-    router.delete(route('dashboard.laporan.destroy', id), {});
+    router.delete(route('dashboard.laporan.destroy', id), {
+        onSuccess: () => {
+            toast.success('Berhasil menghapus data.');
+        },
+        onError: () => {
+            toast.error('Gagal menghapus data.');
+        },
+    });
 };
 </script>
 
@@ -129,7 +132,7 @@ const handleDestroy = (id: number) => {
                     </Popover>
 
                     <div class="relative w-full max-w-sm items-center">
-                        <Input v-model="search" id="search" type="text" placeholder="Cari nama atau bidang" class="pl-10" />
+                        <Input v-model="search" id="search" type="text" placeholder="Cari deksripsi atau hasil" class="pl-10" />
                         <span class="absolute inset-y-0 start-0 flex items-center justify-center px-2">
                             <Search class="text-muted-foreground size-6" />
                         </span>
@@ -175,7 +178,15 @@ const handleDestroy = (id: number) => {
                                         <a :href="route('dashboard.laporan.edit', keterangan.id)">
                                             <Button size="sm"> Edit </Button>
                                         </a>
-                                        <Button variant="destructive" size="sm" @click="handleDestroy(keterangan.id)"> Hapus </Button>
+                                        <Alert
+                                            dialog="Hapus"
+                                            dialogClass="bg-destructive hover:bg-destructive"
+                                            variant="destructive"
+                                            size="sm"
+                                            title="Konfirmasi Penghapusan Data"
+                                            description="Pastikan data sudah benar sebelum dihapus."
+                                            :event="() => handleDestroy(keterangan.id)"
+                                        />
                                     </div>
                                 </TableCell>
                             </TableRow>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,7 @@ import { DateFormatter, DateValue, getLocalTimeZone, today } from '@internationa
 import 'dayjs/locale/id';
 import { CalendarIcon, FileClockIcon, Search } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import { toast } from 'vue-sonner';
 
 const df = new DateFormatter('id-ID', {
     dateStyle: 'full',
@@ -75,7 +77,14 @@ watch([search, selectedDate, rows], () => {
 });
 
 const handleDestroy = (id: number) => {
-    router.delete(route('dashboard.dokumen.destroy', id), {});
+    router.delete(route('dashboard.dokumen.destroy', id), {
+        onSuccess: () => {
+            toast.success('Berhasil menghapus dokumen.');
+        },
+        onError: () => {
+            toast.error('Gagal menghapus dokumen.');
+        },
+    });
 };
 </script>
 
@@ -170,7 +179,15 @@ const handleDestroy = (id: number) => {
                                         <a :href="route('dashboard.dokumen.edit', item.id)">
                                             <Button size="sm"> Edit </Button>
                                         </a>
-                                        <Button variant="destructive" size="sm" @click="handleDestroy(item.id)"> Hapus </Button>
+                                       <Alert
+                                            dialog="Hapus"
+                                            dialogClass="bg-destructive hover:bg-destructive"
+                                            variant="destructive"
+                                            size="sm"
+                                            title="Konfirmasi Penghapusan Data"
+                                            description="Pastikan data sudah benar sebelum dihapus."
+                                            :event="() => handleDestroy(item.id)"
+                                        />
                                     </div>
                                 </TableCell>
                             </TableRow>

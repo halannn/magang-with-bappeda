@@ -14,6 +14,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed } from 'vue';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -86,6 +87,12 @@ const onSubmit = veeValidate.handleSubmit((values) => {
     const form = useForm(formData);
     form.post(route('dashboard.laporan.store'), {
         forceFormData: true,
+        onSuccess: () => {
+            toast.success('Berhasil menambah data.');
+        },
+        onError: () => {
+            toast.error('Gagal menambah data.');
+        },
     });
 });
 </script>

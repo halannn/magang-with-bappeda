@@ -14,6 +14,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed, onMounted, ref } from 'vue';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -110,6 +111,12 @@ const onSubmit = veeValidate.handleSubmit((values) => {
         },
         {
             forceFormData: true,
+            onSuccess: () => {
+                toast.success('Berhasil mengedit data.');
+            },
+            onError: () => {
+                toast.error('Gagal mengirim data.');
+            },
         },
     );
 });
@@ -189,21 +196,11 @@ onMounted(() => {
                     </FormItem>
                 </FormField>
 
-                <FormField name="dokumentasi">
+                <FormField v-slot="{ componentField: field }" name="dokumentasi">
                     <FormItem>
                         <FormLabel>Dokumentasi</FormLabel>
                         <FormControl>
-                            <Input
-                                type="file"
-                                accept="application/pdf"
-                                @change="
-                                    (e) => {
-                                        const file = e.target.files?.[0] || null;
-                                        setFieldValue('dokumentasi', file);
-                                        selectedFileName.value = file ? file.name : null;
-                                    }
-                                "
-                            />
+                            <Input type="file" accept="application/pdf" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                             <div v-if="laporan.dokumentasi" class="m-2">
                                 <a
                                     :href="route('dashboard.laporan.dokumentasi', laporan.dokumentasi.split('/').pop())"

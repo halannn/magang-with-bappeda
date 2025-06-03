@@ -43,8 +43,8 @@ class LaporanKegiatanController extends Controller
         if ($request->has('search') && $request->search !== '') {
             $search = $request->input('search');
             $query->whereHas('profile', function ($q) use ($search) {
-                $q->where('nama_lengkap', 'like', "%{$search}%")
-                    ->orWhere('deskripsi_kegiatan', 'like', "%{$search}%");
+                $q->where('deskripsi_kegiatan', 'like', "%{$search}%")
+                    ->orWhere('hasil', 'like', "%{$search}%");
             });
         }
 
@@ -90,7 +90,7 @@ class LaporanKegiatanController extends Controller
 
         LaporanKegiatan::create($validated);
 
-        return Inertia::location(route('dashboard.laporan.index'));
+        return redirect()->route('dashboard.laporan.index');
     }
 
     /**
@@ -142,7 +142,7 @@ class LaporanKegiatanController extends Controller
 
         $laporan->update($validated);
 
-        return Inertia::location(route('dashboard.laporan.index'));
+        return redirect()->route('dashboard.laporan.index');
     }
 
     /**
@@ -158,11 +158,11 @@ class LaporanKegiatanController extends Controller
 
         if (auth()->user()->status === 'admin') {
 
-            return IInertia::location(route('admin.dashboard.laporan.index'));
+            return redirect()->route('admin.dashboard.laporan.index');
         }
 
 
-        return Inertia::location(route('dashboard.laporan.index'));
+        return redirect()->route('dashboard.laporan.index');
     }
 
     public function showDokumentasi($dokumentasi)

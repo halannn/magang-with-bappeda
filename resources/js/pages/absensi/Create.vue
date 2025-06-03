@@ -9,25 +9,18 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import AppLayout from '@/layouts/AppLayout.vue';
 import { cn } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
 import { computed, ref } from 'vue';
-import { Toaster } from 'vue-sonner';
-import 'vue-sonner/style.css';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Absensi',
-        href: '/dashboard/absensi',
-    },
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Absensi', href: '/dashboard/absensi' },
     { title: 'Lupa absen', href: 'lupa-absen' },
 ];
 
@@ -35,7 +28,7 @@ const page = usePage();
 const error = computed(() => page.props.errors.absen);
 const absensi = page.props.absen as Array<any>;
 
-const df = new DateFormatter('en-US', { dateStyle: 'long' });
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 
 const formSchema = toTypedSchema(
     z
@@ -50,7 +43,7 @@ const formSchema = toTypedSchema(
                 .string()
                 .regex(/^\d{2}:\d{2}$/, { message: 'Format waktu harus HH:MM, contoh: 16:30' })
                 .optional(),
-            keterangan: z.string().max(255, { message: 'Keterangan maksimal 255 karakter.' }).optional(),
+            keterangan: z.string().max(255, { message: 'Keterangan maksimal 255 karakter.' }),
         })
         .superRefine((data, ctx) => {
             if (data.tipe === 'waktu_datang' && !data.waktu_datang) {
@@ -82,15 +75,25 @@ const value = computed({
 const onSubmit = veeValidate.handleSubmit((values) => {
     const absen = absensi.find((absen) => absen.tanggal === values.tanggal);
 
-    const formData = {
+    const form = useForm({
         tanggal: values.tanggal,
         [values.tipe!]: values[values.tipe!],
         keterangan: values.keterangan,
         status: 'Hadir',
+    });
+
+    const datang = values.tipe === 'waktu_datang';
+
+    const options = {
+        onSuccess: () => toast.success('Berhasil mengajukan absen.'),
+        onError: () => toast.error('Gagal mengajukan absen.'),
     };
 
-    const form = useForm(formData);
-    values.tipe === 'waktu_datang' ? form.post(route('dashboard.absensi.store')) : form.put(route('dashboard.absensi.update', absen.id));
+    if (datang || !absen) {
+        form.post(route('dashboard.absensi.store'), options);
+    } else {
+        form.put(route('dashboard.absensi.update', absen.id), options);
+    }
 });
 </script>
 
@@ -192,14 +195,13 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                 </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
-                    <a :href="route('dashboard.absensi.index')">
+                    <Link :href="route('dashboard.absensi.index')">
                         <Button type="button" variant="secondary"> Kembali </Button>
-                    </a>
+                    </Link>
                     <Alert
                         dialog="Konfirmasi"
                         title="Konfirmasi Pengiriman Data"
                         description="Pastikan data sudah benar sebelum mengirim."
-                        info="Pengajuan lupa absen terkirim."
                         :event="onSubmit"
                     />
                 </div>

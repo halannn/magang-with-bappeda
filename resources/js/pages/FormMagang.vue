@@ -16,6 +16,7 @@ import { CalendarIcon } from 'lucide-vue-next';
 import { toDate } from 'reka-ui/date';
 import { useForm } from 'vee-validate';
 import { computed, ref } from 'vue';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
@@ -27,9 +28,7 @@ function checkFileType(file: File) {
     return false;
 }
 
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
-});
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 
 const formSchema = toTypedSchema(
     z.object({
@@ -47,10 +46,7 @@ const formSchema = toTypedSchema(
 
 const placeholder = ref();
 
-const { handleSubmit, setFieldValue, values } = useForm({
-    validationSchema: formSchema,
-    initialValues: {},
-});
+const { handleSubmit, setFieldValue, values } = useForm({ validationSchema: formSchema });
 
 const value1 = computed({
     get: () => (values.tanggal_mulai ? parseDate(values.tanggal_mulai) : undefined),
@@ -64,8 +60,14 @@ const value2 = computed({
 const onSubmit = handleSubmit((values) => {
     console.log('Form submitted!', values);
 
-    router.post('magang', values, {
+    router.post(route('pendaftaran.magang.store'), values, {
         forceFormData: true,
+        onSuccess: () => {
+            toast.success('Berhasil mengirim data.');
+        },
+        onError: () => {
+            toast.error('Gagal mengirim data. Periksa kembali input Anda.');
+        },
     });
 });
 </script>
@@ -76,7 +78,7 @@ const onSubmit = handleSubmit((values) => {
     <HomeLayout>
         <main class="mt-18 flex flex-col gap-6 p-4 md:p-10 lg:p-20">
             <TextContainer title="Form magang" description="Silahkan mengisi keterangan magang anda." :button="false" />
-            <form @submit="onSubmit" class="flex flex-col gap-6">
+            <form @submit.prevent class="flex flex-col gap-6">
                 <FormField v-slot="{ componentField }" name="posisi_magang">
                     <FormItem>
                         <FormLabel>Posisi magang</FormLabel>
@@ -178,13 +180,13 @@ const onSubmit = handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>Surat atau proposal magang</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Upload dokumen dengan format pdf. </FormDescription>
                         <FormMessage />
                     </FormItem>
                 </FormField>
-                
+
                 <Alert
                     dialog="Konfirmasi"
                     title="Konfirmasi Pengiriman Data"

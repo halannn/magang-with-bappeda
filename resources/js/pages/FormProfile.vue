@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Alert from '@/components/Alert.vue';
 import TextContainer from '@/components/TextContainer.vue';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -7,7 +8,9 @@ import HomeLayout from '@/layouts/HomeLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
+import { toast } from 'vue-sonner';
 import * as z from 'zod';
+
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
@@ -41,15 +44,19 @@ const formSchema = toTypedSchema(
     }),
 );
 
-const form = useForm({
-    validationSchema: formSchema,
-});
+const form = useForm({ validationSchema: formSchema });
 
 const onSubmit = form.handleSubmit((values) => {
     console.log('Form submitted!', values);
 
-    router.post('profile', values, {
+    router.post(route('pendaftaran.profile.store'), values, {
         forceFormData: true,
+        onSuccess: () => {
+            toast.success('Berhasil mengirim data.');
+        },
+        onError: () => {
+            toast.error('Gagal mengirim data. Periksa kembali input Anda.');
+        },
     });
 });
 </script>
@@ -59,7 +66,7 @@ const onSubmit = form.handleSubmit((values) => {
     <HomeLayout>
         <main class="mt-18 flex flex-col gap-6 p-4 md:p-10 lg:p-20">
             <TextContainer title="Form profile" description="Silahkan mengisi keterangan pribadi anda." :button="false" />
-            <form @submit="onSubmit" class="flex flex-col gap-6">
+            <form @submit.prevent class="flex flex-col gap-6">
                 <FormField v-slot="{ componentField }" name="nama_lengkap">
                     <FormItem>
                         <FormLabel>Nama lengkap</FormLabel>
@@ -152,7 +159,7 @@ const onSubmit = form.handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>Foto profile</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Upload gambar dengan rasio 1:1. </FormDescription>
                         <FormMessage />
@@ -163,13 +170,13 @@ const onSubmit = form.handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>CV</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Upload dokumen dengan format pdf. </FormDescription>
                         <FormMessage />
                     </FormItem>
                 </FormField>
-                
+
                 <Alert
                     dialog="Konfirmasi"
                     title="Konfirmasi Pengiriman Data"
