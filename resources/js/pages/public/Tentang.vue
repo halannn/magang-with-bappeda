@@ -35,7 +35,7 @@ const contents = [
                     <div id="hero_left" class="flex w-full flex-col justify-center gap-10">
                         <div id="text" class="md:text-background text-foreground dark:text-foreground flex flex-col gap-6 py-10">
                             <p class="text-2xl font-bold">Tentang Magang with BAPPEDA</p>
-                            <p class="text-base">
+                            <p class="text-lg">
                                 Sistem ini dibangun untuk memberikan kemudahan bagi mahasiswa dalam mengikuti program magang di BAPPEDA, mulai dari
                                 pendaftaran hingga penerbitan sertifikat. Sistem ini dikembangkan sebagai respons atas proses magang yang sebelumnya
                                 masih dilakukan secara manual.

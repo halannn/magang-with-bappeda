@@ -12,14 +12,14 @@ const menuOpen = ref(false);
 
 const checkUrl = ref((url: string) => {
     if (page.url === url) {
-        return 'border-b-2 border-b-primary';
+        return 'border-b-3 border-b-primary';
     }
 });
 </script>
 
 <template>
     <nav
-        class="border-background bg-background fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-10 border-b-2 p-4 sm:px-10 lg:px-20"
+        class="bg-background border-secondary fixed top-0 right-0 left-0 z-50 flex items-center justify-between gap-10 border-b-2 p-4 sm:px-10 lg:px-20"
     >
         <div class="flex flex-row items-center gap-2">
             <AppLogo />

@@ -11,7 +11,7 @@ import AppLogo from './AppLogo.vue';
                     <AppLogo />
                 </div>
                 <p class="text-sm whitespace-pre-line lg:text-base">
-                    Platform resmi pendaftaran dan manajemen magang BAPPEDA Litbang Kota Balikpapan.
+                    Platform resmi pendaftaran dan manajemen magang Bappeda Litbang Kota Balikpapan.
                 </p>
             </div>
 
@@ -30,11 +30,11 @@ import AppLogo from './AppLogo.vue';
                 <div class="flex flex-col gap-4 text-sm lg:text-base">
                     <div class="flex flex-row items-center gap-2">
                         <MapPin />
-                        <p>Alamat: Kantor BAPPEDA Litbang Balikpapan</p>
+                        <p>Alamat: Kantor Bappeda Litbang Balikpapan</p>
                     </div>
                     <div class="flex flex-row items-center gap-2">
                         <Phone />
-                        <p>Telepon: (0542) 123456</p>
+                        <p>Telepon: (0542) 8505948</p>
                     </div>
                     <div class="flex flex-row items-center gap-2">
                         <Mail />
@@ -42,7 +42,7 @@ import AppLogo from './AppLogo.vue';
                     </div>
                     <div class="flex flex-row items-center gap-2">
                         <Clock />
-                        <p>Operasional: Senin–Jumat, 08.00–16.00 WITA</p>
+                        <p>Operasional: Senin–Jumat, 08.00–16.30 WITA</p>
                     </div>
                 </div>
             </div>
@@ -50,9 +50,15 @@ import AppLogo from './AppLogo.vue';
             <div class="mb-4 flex basis-1/5 flex-col gap-4">
                 <h5 class="font-bold">Sosial</h5>
                 <div class="flex flex-row gap-4">
-                    <Instagram />
-                    <Linkedin />
-                    <Github />
+                    <a href="https://www.instagram.com/hairul.irwn/">
+                        <Instagram />
+                    </a>
+                    <a href="https://www.linkedin.com/in/hairul-irawan/">
+                        <Linkedin />
+                    </a>
+                    <a href="https://github.com/halannn/magang-with-bappeda">
+                        <Github />
+                    </a>
                 </div>
             </div>
         </div>

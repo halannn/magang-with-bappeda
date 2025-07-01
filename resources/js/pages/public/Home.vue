@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import FeatureCard from '@/components/FeatureCard.vue';
 import ShortFAQ from '@/components/ShortFAQ.vue';
-import TestimonialCard from '@/components/TestimonialCard.vue';
 import TextContainer from '@/components/TextContainer.vue';
 import HomeLayout from '@/layouts/HomeLayout.vue';
 import { Head } from '@inertiajs/vue3';
@@ -55,29 +54,31 @@ const testimonials = [
     <Head title="Beranda" />
     <HomeLayout>
         <main class="mt-18 flex flex-col">
-            <div id="hero_section" class="bg-background flex flex-col-reverse justify-between gap-4 px-4 py-10 md:px-10 lg:flex-row lg:px-20">
+            <div
+                id="hero_section"
+                class="bg-background flex flex-col-reverse justify-between gap-4 px-4 py-10 md:gap-10 md:px-10 lg:flex-row lg:gap-20 lg:px-20 lg:py-20"
+            >
                 <TextContainer
                     caption="Tingkatkan Pengalaman, Bangun Masa Depan!"
-                    title="Magang Bersama BAPPEDA - Langkah Awal Menuju Karier Gemilang"
-                    subtitle="Magang Bersama BAPPEDA – Langkah Awal Menuju Karier Gemilang"
+                    title="Magang Bersama Bappeda Litbang - Langkah Awal Menuju Karier Gemilang"
                     description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
                     :button="true"
                     buttonText="Daftar Magang Sekarang"
                     buttonLink="pendaftaran"
                 />
                 <div id="hero_right" class="flex w-full justify-center">
-                    <img src="/Hero_Image.png" alt="" class="lg:w-full" />
+                    <img src="/Hero_Image.svg" alt="" class="lg:w-full" />
                 </div>
             </div>
 
-            <div id="why_us" class="bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
+            <div id="why_us" class="bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:gap-10 md:px-10 lg:gap-20 lg:px-20">
                 <TextContainer
                     class="text-center"
-                    title="Mengapa Magang di BAPPEDA?"
-                    description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
+                    title="Mengapa Magang Di Bappeda Litbang?"
+                    description="Program ini dirancang untuk mengasah kemampuan, memperluas jaringan, dan membuka pintu menuju karier masa depan yang cemerlang. <br/>Jangan lewatkan kesempatan untuk belajar langsung dari para ahli di bidang perencanaan pembangunan!"
                     :button="false"
                 />
-                <div id="content" class="flex flex-col-reverse lg:flex-row gap-4 md:gap-10 lg:gap-20">
+                <div id="content" class="flex flex-col-reverse gap-4 md:gap-10 lg:flex-row lg:gap-20">
                     <div id="left" class="flex w-full flex-col gap-5">
                         <FeatureCard
                             :icon="FileCheckIcon"
@@ -106,26 +107,26 @@ const testimonials = [
                 </div>
             </div>
 
-            <div id="testimonials" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:flex-col lg:px-20">
+            <!-- <div id="testimonials" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:flex-col lg:px-20">
                 <div id="head" class="flex flex-col gap-4">
                     <TextContainer
                         class="text-center"
-                        title="Apa Kata Mereka Tentang Magang di BAPPEDA?"
+                        title="Apa Kata Mereka Tentang Magang Di Bappeda Litbang?"
                         description="Kami percaya bahwa pengalaman terbaik datang dari proses yang nyata. Berikut kisah dan kesan para mahasiswa yang telah tumbuh bersama BAPPEDA."
                         :button="false"
                     />
                 </div>
                 <TestimonialCard :testimonial="testimonials" />
-            </div>
+            </div> -->
 
-            <div id="highlight" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:flex-col lg:px-20">
+            <div id="highlight" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:gap-10 md:px-10 lg:flex-col lg:px-20 lg:py-20">
                 <div id="head" class="flex flex-col gap-4">
                     <p class="text-center text-2xl font-bold">Dibangun untuk masa depan</p>
                     <p class="text-center">
                         Sejak diluncurkan, program magang BAPPEDA telah menjadi wadah pengembangan diri bagi mahasiswa dari berbagai perguruan tinggi.
                     </p>
                 </div>
-                <div id="cards" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div id="cards" class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <FeatureCard
                         :icon="Users"
                         costumStyle="flex w-full flex-row gap-5 rounded-2xl p-4 shadow items-center"
@@ -156,10 +157,7 @@ const testimonials = [
             <div id="short_faq" class="bg-muted flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
                 <div id="head" class="flex flex-col gap-5">
                     <p class="text-center font-medium">Pertanyaan yang Sering Ditanyakan</p>
-                    <p class="text-center text-2xl font-bold whitespace-normal">
-                        Temukan jawaban atas pertanyaan umum
-                        seputar program magang.
-                    </p>
+                    <p class="text-center text-2xl font-bold whitespace-normal">Temukan jawaban atas pertanyaan umum seputar program magang.</p>
                 </div>
                 <ShortFAQ />
             </div>

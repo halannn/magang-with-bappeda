@@ -31,7 +31,7 @@ const accordionItems = [
 <template>
   <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
     <AccordionItem v-for="item in accordionItems" :key="item.value" :value="item.value" class=" bg-background mt-4 p-2 rounded">
-      <AccordionTrigger>{{ item.title }}</AccordionTrigger>
+      <AccordionTrigger class="text-primary">{{ item.title }}</AccordionTrigger>
       <AccordionContent>
         {{ item.content }}
       </AccordionContent>
