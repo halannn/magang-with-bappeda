@@ -34,11 +34,11 @@ const contents = [
                 <div class="relative flex flex-row justify-between px-4 md:px-10 lg:px-20">
                     <div id="hero_left" class="flex w-full flex-col justify-center gap-10">
                         <div id="text" class="md:text-background text-foreground dark:text-foreground flex flex-col gap-6 py-10">
-                            <p class="text-2xl font-bold">Tentang Magang with BAPPEDA</p>
+                            <p class="text-2xl font-bold">Tentang Magang With BAPPEDA</p>
                             <p class="text-lg">
-                                Sistem ini dibangun untuk memberikan kemudahan bagi mahasiswa dalam mengikuti program magang di BAPPEDA, mulai dari
-                                pendaftaran hingga penerbitan sertifikat. Sistem ini dikembangkan sebagai respons atas proses magang yang sebelumnya
-                                masih dilakukan secara manual.
+                                Sistem ini dibangun untuk memberikan kemudahan bagi mahasiswa dalam mengikuti program magang di Bappeda Litbang, mulai
+                                dari pendaftaran hingga penerbitan sertifikat. Sistem ini dikembangkan sebagai respons atas proses magang yang
+                                sebelumnya masih dilakukan secara manual.
                             </p>
                         </div>
                     </div>
@@ -48,10 +48,10 @@ const contents = [
                 </div>
             </div>
 
-            <div id="why_us" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:flex-col lg:px-20">
-                <div id="head" class="flex flex-col gap-5">
-                    <p class="text-center font-bold">Dibangun untuk Kemudahan & Efisiensi</p>
-                    <p class="text-center text-2xl font-bold">
+            <div id="why_us" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:gap-10 md:px-10 lg:flex-col lg:px-20">
+                <div id="head" class="flex flex-col gap-5 font-bold">
+                    <p class="text-primary text-center">Dibangun untuk Kemudahan</p>
+                    <p class="text-center text-2xl">
                         Mengubah magang biasa <br />
                         Menuju pengalaman digital
                     </p>
@@ -80,7 +80,7 @@ const contents = [
                 </div>
             </div>
 
-            <div id="visi" class="bg-muted flex flex-col gap-4 p-4 md:gap-10 md:p-10 lg:flex-row lg:gap-20 lg:p-20">
+            <div id="visi" class="bg-muted flex flex-col gap-4 px-4 py-10 md:gap-10 md:px-10 lg:flex-row lg:gap-20 lg:px-20">
                 <div id="head" class="text-foreground flex flex-col gap-5 lg:w-1/3">
                     <p class="text-2xl font-bold">Visi Kami</p>
                     <p>
@@ -91,26 +91,26 @@ const contents = [
                 <div id="content" class="flex w-full flex-col gap-4 md:flex-row md:gap-10 lg:gap-20">
                     <FeatureCard
                         :icon="FileSliders"
-                        costumStyle=" bg-background flex w-full flex-row md:flex-col gap-5 rounded-2xl p-4 shadow items-center md:items-start"
+                        costumStyle="flex w-full flex-row md:flex-col gap-5 rounded-2xl p-4 items-center md:items-start"
                         title="Proses Magang"
                         description="Sistem yang mempermudah mahasiswa selama  masa magang mereka berlangsung"
                     />
                     <FeatureCard
                         :icon="CheckCircle2"
-                        costumStyle=" bg-background flex w-full flex-row md:flex-col gap-5 rounded-2xl p-4 shadow items-center md:items-start"
+                        costumStyle="flex w-full flex-row md:flex-col gap-5 rounded-2xl p-4 items-center md:items-start"
                         title="Monitoring yang Transparan"
-                        description="Kemudahan bagi admin BAPPEDA untuk memantau kegiatan magang"
+                        description="Kemudahan bagi admin Bappeda Litbang untuk memantau kegiatan magang"
                     />
                     <FeatureCard
                         :icon="ClipboardList"
-                        costumStyle=" bg-background flex w-full flex-row md:flex-col gap-5 rounded-2xl p-4 shadow items-center md:items-start"
+                        costumStyle="flex w-full flex-row md:flex-col gap-5 rounded-2xl p-4 items-center md:items-start"
                         title="Inovasi Digital di Instansi Pemerintah"
                         description="Solusi teknologi sebagai langkah awal transformasi digital dalam  magang di pemerintahan."
                     />
                 </div>
             </div>
 
-            <div id="timeline_sistem" class="bg-background flex justify-between gap-4 px-4 py-10 md:px-10 flex-col lg:px-20">
+            <div id="timeline_sistem" class="bg-background flex flex-col justify-between gap-4 px-4 py-10 md:px-10 lg:px-20">
                 <TextContainer
                     class=""
                     caption="Perjananan pengembangan sistem"

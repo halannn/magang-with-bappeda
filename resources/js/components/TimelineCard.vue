@@ -22,7 +22,7 @@ const props = defineProps<{
         </div>
         <div class="flex flex-col gap-5 lg:flex-row">
             <div v-for="(content, index) in contents" :key="index" class="w-full">
-                <FeatureCard :icon="content.icon" :title="content.title" :description="content.description" costumStyle="" />
+                <FeatureCard :icon="content.icon" :title="content.title" :description="content.description" costumStyle="bg-background flex w-full h-full flex-row md:flex-col gap-5 rounded-2xl p-4 shadow items-center md:items-start" />
             </div>
         </div>
     </div>
