@@ -28,7 +28,7 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthBase title="Masuk ke Akun Anda" description="Masukkan email dan kata sandi Anda di bawah ini untuk masuk">
+    <AuthBase title="Masuk Ke Akun Anda" description="Masukkan email dan kata sandi Anda di bawah ini untuk masuk">
         <Head title="Masuk" />
 
         <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
