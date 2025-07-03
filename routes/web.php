@@ -95,10 +95,10 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashbo
         Route::get('/', 'index')->name('index'); // laporan.index
         Route::post('/', 'store')->name('store'); // laporan.store
         Route::get('/tambah-kegiatan', 'create')->name('create'); // laporan.create
-        Route::get('/edit-kegiatan/{id}', 'edit')->name('edit'); // laporan.edit
+        Route::get('/edit-kegiatan/{laporan}', 'edit')->name('edit'); // laporan.edit
         Route::get('dokumentasi/{dokumentasi}', 'showDokumentasi')->name('dokumentasi');
-        Route::put('/{id}', 'update')->name('update'); // laporan.update
-        Route::delete('/{id}', 'destroy')->name('destroy'); // laporan.destroy
+        Route::put('/{laporan}', 'update')->name('update'); // laporan.update
+        Route::delete('/{laporan}', 'destroy')->name('destroy'); // laporan.destroy
     });
 
     Route::prefix('dokumen')->name('dokumen.')->controller(DokumenMagangController::class)->group(function () {

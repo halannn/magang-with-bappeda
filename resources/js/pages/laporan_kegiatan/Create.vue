@@ -26,43 +26,21 @@ const breadcrumbs: BreadcrumbItem[] = [
 const page = usePage();
 const error = computed(() => page.props.errors.absen);
 
-const df = new DateFormatter('en-US', { dateStyle: 'long' });
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
-const checkFileType = (file: File) => file.type === 'application/pdf';
-
-const formSchema = toTypedSchema(
+const formSchema = toTypedSchema(   
     z.object({
         tanggal: z.string().nonempty('Tanggal harus diisi.'),
-        deskripsi_kegiatan: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        hasil: z.string().nonempty('Berikan keterangan waktu kegiatan anda.'),
-        waktu: z.string().nonempty('Berikan keterangan hasil kegiatan anda.'),
+        deskripsi_kegiatan: z.string().min(10, 'Deskripsi kegiatan minimal 10 huruf.'),
+        hasil: z.string().min(10, 'Keterangan keigatan minimal 10 huruf.'),
+        waktu: z.string().min(11, 'Contoh 08:00-16:30'),
         dokumentasi: z
             .any()
-            .superRefine((file, ctx) => {
-                if (!(file instanceof File)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload surat anda, ukuran file maksimal 2MB dengan format .pdf.',
-                    });
-                    return;
-                }
-
-                if (file.size > MAX_FILE_SIZE) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Ukuran file maksimal 2MB',
-                    });
-                }
-
-                if (!checkFileType(file)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload dokumen dengan format .pdf.',
-                    });
-                }
-            })
+            .refine((file) => file?.size <= MAX_FILE_SIZE, `Ukuran gambar maksimal 2MB.`)
+            .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'Hanya format .jpg, .jpeg, .png yang didukung.')
             .optional(),
     }),
 );
@@ -164,11 +142,11 @@ const onSubmit = veeValidate.handleSubmit((values) => {
                     </FormItem>
                 </FormField>
 
-                <FormField v-slot="{ componentField }" name="dokumentasi">
+                <FormField v-slot="{ componentField: field }" name="dokumentasi">
                     <FormItem>
                         <FormLabel>Dokumentasi</FormLabel>
                         <FormControl>
-                            <Input type="file" v-bind="componentField" />
+                            <Input type="file" accept="ACCEPTED_IMAGE_TYPES" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Silahkan upload dokumentasi dari kegiatan anda (opsional). </FormDescription>
                         <FormMessage />

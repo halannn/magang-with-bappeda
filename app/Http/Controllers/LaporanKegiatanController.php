@@ -2,59 +2,65 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidateLaporanKegiatanRequest;
 use App\Models\LaporanKegiatan;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class LaporanKegiatanController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        if (auth()->user()->status === 'admin') {
-            $query = LaporanKegiatan::with('profile')->orderByDesc('tanggal');
+        // query setup
+        $query = LaporanKegiatan::query();
+        $user  = auth()->user();
+        $isAdmin = $user->status === 'admin';
 
-            if ($request->has('search') && $request->search !== '') {
-                $search = $request->input('search');
-                $query->whereHas('profile', function ($q) use ($search) {
-                    $q->where('nama_lengkap', 'like', "%{$search}%")
+        // check status
+        if ($isAdmin) {
+            $query->with('profile');
+        } else {
+            $query->where('profile_id', $user->profile?->id);
+        }
+
+        // filtering input
+        $query->when($request->filled('search'), function ($q) use ($request, $isAdmin) {
+            $search = $request->input('search');
+
+            // admin side
+            if ($isAdmin) {
+                return $q->whereHas('profile', function ($profileQuery) use ($search) {
+                    $profileQuery->where('nama_lengkap', 'like', "%{$search}%")
                         ->orWhere('bidang_magang', 'like', "%{$search}%");
                 });
             }
 
-            if ($request->has('date') && $request->date !== null) {
-                $query->whereDate('tanggal', $request->input('date'));
-            }
-
-            $laporan = $query->paginate($request->input('rows', 10))->withQueryString();
-
-            return Inertia::render('admin/AdminLaporanKegiatan', [
-                'laporan' => $laporan,
-            ]);
-        }
-
-        $profile_id = auth()->user()->profile?->id;
-
-        $query = LaporanKegiatan::where('profile_id', $profile_id)->orderByDesc('tanggal');
-
-        if ($request->has('search') && $request->search !== '') {
-            $search = $request->input('search');
-            $query->whereHas('profile', function ($q) use ($search) {
-                $q->where('deskripsi_kegiatan', 'like', "%{$search}%")
+            // user side
+            return $q->where(function ($mainQuery) use ($search) {
+                $mainQuery->where('deskripsi_kegiatan', 'like', "%{$search}%")
                     ->orWhere('hasil', 'like', "%{$search}%");
             });
-        }
+        });
 
-        if ($request->has('date') && $request->date !== null) {
-            $query->whereDate('tanggal', $request->input('date'));
-        }
+        // filtering date
+        $query->when($request->filled('date'), function ($q) use ($request) {
+            return $q->whereDate('tanggal', $request->input('date'));
+        });
 
-        $laporan = $query->paginate($request->input('rows', 10))->withQueryString();
+        // showing the query
+        $laporan = $query->orderByDesc('tanggal')
+            ->paginate($request->input('rows', 10))
+            ->withQueryString();
 
-        return Inertia::render('laporan_kegiatan/Index', [
+        $view = $isAdmin ? 'admin/AdminLaporanKegiatan' : 'laporan_kegiatan/Index';
+
+        return Inertia::render($view, [
             'laporan' => $laporan
         ]);
     }
@@ -70,25 +76,15 @@ class LaporanKegiatanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ValidateLaporanKegiatanRequest $request)
     {
-        $profile_id = auth()->user()->profile?->id;
-
-        $validated = $request->validate([
-            'tanggal' => ['required'],
-            'deskripsi_kegiatan' => ['required'],
-            'hasil' => ['required'],
-            'waktu' => ['required'],
-            'dokumentasi' => ['nullable'],
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('dokumentasi')) {
             $validated['dokumentasi'] = $request->file('dokumentasi')->store('dokumentasi', 'local');
         }
 
-        $validated['profile_id'] = $profile_id;
-
-        LaporanKegiatan::create($validated);
+        $request->user()->profile->laporan()->create($validated);
 
         return redirect()->route('dashboard.laporan.index');
     }
@@ -104,10 +100,8 @@ class LaporanKegiatanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(LaporanKegiatan $laporan)
     {
-        $laporan = LaporanKegiatan::where('id', $id)->get();
-
         return Inertia::render('laporan_kegiatan/Edit', [
             'laporan' => $laporan
         ]);
@@ -116,19 +110,11 @@ class LaporanKegiatanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ValidateLaporanKegiatanRequest $request, LaporanKegiatan $laporan)
     {
-        $laporan = LaporanKegiatan::where('id', $id)->firstOrFail();
+        $this->authorize('update', $laporan);
 
-        $profile_id = auth()->user()->profile?->id;
-
-        $validated = $request->validate([
-            'tanggal' => ['required'],
-            'deskripsi_kegiatan' => ['required'],
-            'waktu' => ['required'],
-            'hasil' => ['required'],
-            'dokumentasi' => ['nullable'],
-        ]);
+        $validated = $request->validated();
 
         if ($request->hasFile('dokumentasi')) {
             if ($laporan->dokumentasi && Storage::disk('local')->exists($laporan->dokumentasi)) {
@@ -138,8 +124,6 @@ class LaporanKegiatanController extends Controller
             $validated['dokumentasi'] = $request->file('dokumentasi')->store('dokumentasi', 'local');
         }
 
-        $validated['profile_id'] = $profile_id;
-
         $laporan->update($validated);
 
         return redirect()->route('dashboard.laporan.index');
@@ -148,9 +132,8 @@ class LaporanKegiatanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(LaporanKegiatan $laporan)
     {
-        $laporan = LaporanKegiatan::where('id', $id)->firstOrFail();
         if ($laporan->dokumentasi && Storage::disk('local')->exists($laporan->dokumentasi)) {
             Storage::disk('local')->delete($laporan->dokumentasi);
         }
@@ -161,7 +144,6 @@ class LaporanKegiatanController extends Controller
             return redirect()->route('admin.dashboard.laporan.index');
         }
 
-
         return redirect()->route('dashboard.laporan.index');
     }
 
@@ -170,7 +152,7 @@ class LaporanKegiatanController extends Controller
         $path = storage_path('app/private/dokumentasi/' . $dokumentasi);
 
         if (! file_exists($path)) {
-            abort(404);
+            abort(404, 'File tidak ditemukan!');
         }
 
         return response()->file($path);

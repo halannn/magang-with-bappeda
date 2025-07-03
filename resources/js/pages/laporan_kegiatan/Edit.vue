@@ -13,7 +13,7 @@ import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from 
 import { toTypedSchema } from '@vee-validate/zod';
 import { CalendarIcon } from 'lucide-vue-next';
 import { useForm as formValidated } from 'vee-validate';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import { toast } from 'vue-sonner';
 import * as z from 'zod';
 
@@ -28,60 +28,31 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    error: {
-        type: [Object, Array],
-        required: true,
-    },
 });
 
-const laporan = props.laporan[0];
-const error = computed(() => props.error);
+const laporan = props.laporan;
 
-const df = new DateFormatter('en-US', { dateStyle: 'long' });
+const df = new DateFormatter('id-ID', { dateStyle: 'full' });
 const value = computed({
     get: () => (values.tanggal ? parseDate(values.tanggal) : undefined),
     set: (val) => val,
 });
 
 const MAX_FILE_SIZE: number = 2 * 1024 * 1024;
-const checkFileType = (file: File) => file.type === 'application/pdf';
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 const formSchema = toTypedSchema(
     z.object({
         tanggal: z.string().nonempty('Tanggal harus diisi.'),
-        deskripsi_kegiatan: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        hasil: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
-        waktu: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
+        deskripsi_kegiatan: z.string().min(10, 'Deskripsi kegiatan minimal 10 huruf.'),
+        hasil: z.string().min(10, 'Keterangan keigatan minimal 10 huruf.'),
+        waktu: z.string().min(11, 'Contoh 08:00-16:30'),
         dokumentasi: z
             .any()
-            .optional()
-            .superRefine((file, ctx) => {
-                if (file === undefined || file === null) return;
-
-                if (!(file instanceof File)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload surat anda, ukuran file maksimal 2MB dengan format .pdf.',
-                    });
-                    return;
-                }
-
-                if (file.size > MAX_FILE_SIZE) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Ukuran file maksimal 2MB',
-                    });
-                }
-
-                if (!checkFileType(file)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload dokumen dengan format .pdf.',
-                    });
-                }
-            }),
+            .refine((file) => file?.size <= MAX_FILE_SIZE, `Ukuran gambar maksimal 2MB.`)
+            .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), 'Hanya format .jpg, .jpeg, .png yang didukung.')
+            .optional(),
     }),
 );
-const selectedFileName = ref<string | null>(null);
 const veeValidate = formValidated({ validationSchema: formSchema });
 const { setFieldValue, values } = veeValidate;
 
@@ -92,6 +63,7 @@ const form = useForm({
     waktu: laporan.waktu,
     dokumentasi: laporan.dokumentasi,
 });
+
 const onSubmit = veeValidate.handleSubmit((values) => {
     form.tanggal = values.tanggal;
     form.deskripsi_kegiatan = values.deskripsi_kegiatan;
@@ -200,7 +172,7 @@ onMounted(() => {
                     <FormItem>
                         <FormLabel>Dokumentasi</FormLabel>
                         <FormControl>
-                            <Input type="file" accept="application/pdf" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" accept="ACCEPTED_IMAGE_TYPES" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                             <div v-if="laporan.dokumentasi" class="m-2">
                                 <a
                                     :href="route('dashboard.laporan.dokumentasi', laporan.dokumentasi.split('/').pop())"
@@ -215,10 +187,6 @@ onMounted(() => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
-
-                <div v-if="error" class="text-red-500">
-                    {{ error }}
-                </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
                     <a :href="route('dashboard.laporan.index')">
