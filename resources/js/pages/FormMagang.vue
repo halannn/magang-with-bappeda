@@ -180,7 +180,7 @@ const onSubmit = handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>Surat atau proposal magang</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" accept=".pdf" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Upload dokumen dengan format pdf. </FormDescription>
                         <FormMessage />

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\PendaftaranMagang;
 use App\Models\Profile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,7 +19,7 @@ class VerificationNotice extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Profile $profile,) {}
+    public function __construct(public Profile $profile, public PendaftaranMagang $magang) {}
 
     /**
      * Get the message envelope.
@@ -26,7 +27,7 @@ class VerificationNotice extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('Magangwithbappeda@gmail.com', 'Admin BAPPEDA Litbang'),
+            from: new Address('Magangwithbappeda@gmail.com', 'Admin Bappeda Litbang'),
             subject: 'Verifikasi pendaftaran magang',
         );
     }

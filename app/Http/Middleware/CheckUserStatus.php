@@ -35,7 +35,7 @@ class CheckUserStatus
             }
 
             if ($statusMagang === 'Pending') {
-                return redirect()->route('pendaftaran.profile.create');
+                return redirect()->route('pendaftaran.pemberitahuan');
             }
         }
 

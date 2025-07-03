@@ -18,6 +18,7 @@ class PendaftaranMagang extends Model
         'tanggal_mulai',
         'tanggal_selesai',
         'surat_magang',
+        'balasan',
         'user_id',
         'profile_id',
     ];

@@ -159,7 +159,7 @@ const onSubmit = form.handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>Foto profile</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" accept="ACCEPTED_IMAGE_TYPES" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Upload gambar dengan rasio 1:1. </FormDescription>
                         <FormMessage />
@@ -170,7 +170,7 @@ const onSubmit = form.handleSubmit((values) => {
                     <FormItem>
                         <FormLabel>CV</FormLabel>
                         <FormControl>
-                            <Input type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
+                            <Input type="file" accept=".pdf" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                         <FormDescription> Upload dokumen dengan format pdf. </FormDescription>
                         <FormMessage />

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->string('surat_magang');
+            $table->text('balasan')->nullable();
             $table->timestamps();
         });
     }

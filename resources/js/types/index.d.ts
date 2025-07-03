@@ -76,6 +76,7 @@ interface Verifikasi {
     tanggal_mulai: string;
     tanggal_selesai: string;
     surat_magang: string | undefined;
+    balasan: string;
 }
 
 interface Absen {

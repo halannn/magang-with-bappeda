@@ -100,19 +100,27 @@ class PendaftaranMagangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $profile = Profile::findOrFail($id);;
+        $profile = Profile::findOrFail($id);
+        $magang = PendaftaranMagang::where('profile_id', $profile->id)->firstOrFail();
 
         $validated = $request->validate([
             'bidang_magang' => 'required|string',
-            'status_magang' => 'required|string'
+            'status_magang' => 'required|string',
+            'balasan' => 'required|string',
         ]);
 
         $oldStatus = $profile->status_magang;
 
-        $profile->update($validated);
+        $profile->update(
+            [
+                'bidang_magang' => $validated['bidang_magang'],
+                'status_magang' => $validated['status_magang']
+            ]
+        );
+        $magang->update(['balasan' => $validated['balasan']]);
 
         if ($oldStatus !== $validated['status_magang']) {
-            Mail::to($profile->user->email)->send(new VerificationNotice($profile));
+            Mail::to($profile->user->email)->send(new VerificationNotice($profile, $magang));
         }
 
         return redirect()->route('admin.dashboard.verifikasi.index');

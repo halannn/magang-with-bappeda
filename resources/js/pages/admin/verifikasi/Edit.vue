@@ -81,6 +81,7 @@ const formSchema = toTypedSchema(
             .optional(),
         bidang_magang: z.string().min(2),
         status_magang: z.string().min(2),
+        balasan: z.string().min(2),
     }),
 );
 
@@ -112,6 +113,7 @@ const onSubmit = handleSubmit((values) => {
         {
             bidang_magang: values.bidang_magang,
             status_magang: values.status_magang,
+            balasan: values.balasan,
         },
         {
             onSuccess: () => {
@@ -139,6 +141,7 @@ onMounted(() => {
     setFieldValue('tanggal_selesai', verifikasi.tanggal_selesai);
     setFieldValue('bidang_magang', verifikasi.profile.bidang_magang);
     setFieldValue('status_magang', verifikasi.profile.status_magang);
+    setFieldValue('balasan', verifikasi.balasan);
 });
 </script>
 
@@ -356,13 +359,13 @@ onMounted(() => {
                     <FormItem>
                         <FormLabel>Surat atau proposal magang</FormLabel>
                         <FormControl>
-                            <Link
+                            <a
                                 v-if="verifikasi.surat_magang"
                                 class="text-sm underline"
                                 :href="route('admin.dashboard.verifikasi.proposal', verifikasi.surat_magang.split('/').pop())"
                             >
                                 Lihat Proposal
-                            </Link>
+                            </a>
                             <Input v-else type="file" @change="(e: any) => field.onChange(e.target.files?.[0] ?? null)" />
                         </FormControl>
                     </FormItem>
@@ -409,6 +412,15 @@ onMounted(() => {
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
+                    </FormItem>
+                </FormField>
+
+                <FormField v-slot="{ componentField }" name="balasan">
+                    <FormItem>
+                        <FormLabel>Berikan pesan balasan (optional)</FormLabel>
+                        <FormControl>
+                            <Textarea v-bind="componentField" />
+                        </FormControl>
                     </FormItem>
                 </FormField>
 

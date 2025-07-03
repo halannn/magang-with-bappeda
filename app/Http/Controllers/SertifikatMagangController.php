@@ -125,8 +125,6 @@ class SertifikatMagangController extends Controller
 
         return response()->file($path, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="sertifikat.pdf"',
-            'X-Frame-Options' => 'SAMEORIGIN', // Atau 'ALLOWALL' jika perlu
         ]);
     }
 }

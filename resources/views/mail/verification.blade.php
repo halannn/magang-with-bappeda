@@ -4,109 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Status Magang Anda Diperbarui</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #0f172a;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-        }
-
-        h1 {
-            font-size: 20px;
-            margin-bottom: 1rem;
-        }
-
-        p {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .status-box {
-            padding: 10px 15px;
-            margin: 1rem 0;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
-        .status-aktif {
-            background-color: #ecfdf5;
-            color: #065f46;
-            border-left: 4px solid #10b981;
-        }
-
-        .status-dikeluarkan {
-            background-color: #fef2f2;
-            color: #991b1b;
-            border-left: 4px solid #ef4444;
-        }
-
-        .status-pending {
-            background-color: #eff6ff;
-            color: #1e40af;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .button {
-            padding: 10px 20px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            margin-top: 1rem;
-            display: inline-block;
-        }
-
-        .footer {
-            font-size: 12px;
-            color: #64748b;
-            text-align: center;
-            margin-top: 2rem;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <div class="container">
-        <h1>Halo {{ $profile->user->name }},</h1>
+<body class="bg-white text-slate-900 font-sans">
+    <div class="container mx-auto max-w-2xl bg-white p-8 rounded-lg border border-slate-200">
+        <h1 class="text-xl mb-4">Halo {{ $profile->user->name }},</h1>
 
-        <p>Status pendaftaran magang Anda di <strong>BAPPEDA Litbang Balikpapan</strong> telah diperbarui oleh admin.
-        </p>
+        <p class="text-sm leading-relaxed my-2">Status pendaftaran magang Anda di <strong>Bappeda Litbang
+                Balikpapan</strong> telah diperbarui oleh admin.</p>
 
         @php
             $status = strtolower($profile->status_magang);
+            $statusClasses = [
+                'aktif' => 'bg-emerald-50 text-emerald-800 border-l-4 border-emerald-500',
+                'dikeluarkan' => 'bg-red-50 text-red-800 border-l-4 border-red-500',
+                'pending' => 'bg-blue-50 text-blue-800 border-l-4 border-blue-500',
+            ];
         @endphp
 
         <div
-            class="status-box 
-            {{ $status === 'aktif' ? 'status-aktif' : ($status === 'dikeluarkan' ? 'status-dikeluarkan' : 'status-pending') }}">
-            Status terbaru: {{ strtoupper($profile->status_magang) }}
+            class="p-3 my-5 rounded-md font-bold {{ $statusClasses[$status] ?? 'bg-blue-50 text-blue-800 border-l-4 border-blue-500' }}">
+            Status terbaru: {{ $profile->status_magang }}
+        </div>
+
+        <div class="bg-slate-50 p-4 mt-4 border-l-4 border-blue-500 rounded-md">
+            <strong>Balasan Admin:</strong><br>
+            {{ $magang->balasan }}
         </div>
 
         @if ($status !== 'dikeluarkan')
-            <p>Silakan login ke dashboard Anda untuk melihat detail lebih lanjut.</p>
-
-            <p style="text-align: center;">
-                <a href="{{ route('dashboard.index') }}" class="button" target="_blank">
-                    Buka Dashboard
-                </a>
-            </p>
-
-            <p class="footer">
-                Email ini dikirim secara otomatis. Harap tidak membalas email ini.<br>
-                © {{ date('Y') }} BAPPEDA Litbang Balikpapan
+            <p class="text-sm leading-relaxed my-2">Silakan login ke dashboard Anda untuk melihat detail lebih lanjut
+                atau melakukan aktivitas magang.</p>
+            <p class="text-center">
+                <a href="{{ route('dashboard.index') }}"
+                    class="inline-block bg-blue-500 text-white py-2 px-5 rounded-md no-underline text-sm mt-6"
+                    target="_blank">Buka Dashboard</a>
             </p>
         @endif
+
+        <p class="text-xs text-slate-500 text-center mt-8">
+            Email ini dikirim secara otomatis. Harap tidak membalas email ini.<br>
+            © {{ date('Y') }} BAPPEDA Litbang Balikpapan
+        </p>
     </div>
 </body>
 

@@ -15,6 +15,7 @@ import { DateFormatter, DateValue, getLocalTimeZone, today } from '@internationa
 import 'dayjs/locale/id';
 import { CalendarIcon, ListCheckIcon, Search } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
+import { Badge } from '@/components/ui/badge'; 
 
 const df = new DateFormatter('id-ID', {
     dateStyle: 'full',
@@ -67,6 +68,12 @@ watch([search, selectedDate, rows], () => {
         },
     );
 });
+
+const checkVariant = (variant: string) => {
+    if (variant === 'Aktif') return 'success';
+    if (variant === 'Dikeluarkan') return 'destructive';
+    return 'pending';
+};
 </script>
 
 <template>
@@ -133,7 +140,8 @@ watch([search, selectedDate, rows], () => {
                                 <TableHead>Deskripsi magang</TableHead>
                                 <TableHead>Tanggal mulai</TableHead>
                                 <TableHead>Tanggal selesai</TableHead>
-                                <TableHead>Proposal magang</TableHead>
+                                <TableHead>Surat</TableHead>
+                                <TableHead>Status</TableHead>
                                 <TableHead>Aksi</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -141,12 +149,12 @@ watch([search, selectedDate, rows], () => {
                             <TableRow v-for="(daftar, index) in pendaftar" :key="index">
                                 <TableCell class="w-fit font-medium"> {{ daftar.id }} </TableCell>
                                 <TableCell>{{ daftar.profile.nama_lengkap }}</TableCell>
-                                <TableCell>{{ daftar.profile.asal_kampus }}</TableCell>
-                                <TableCell>{{ daftar.posisi_magang }}</TableCell>
-                                <TableCell class="line-clamp-3 whitespace-pre-line">{{ daftar.deskripsi_magang }}</TableCell>
-                                <TableCell>{{ daftar.tanggal_mulai }}</TableCell>
-                                <TableCell>{{ daftar.tanggal_selesai }}</TableCell>
-                                <TableCell>
+                                <TableCell class="whitespace-pre-line">{{ daftar.profile.asal_kampus }}</TableCell>
+                                <TableCell class="whitespace-pre-line">{{ daftar.posisi_magang }}</TableCell>
+                                <TableCell class="whitespace-pre-line">{{ daftar.deskripsi_magang }}</TableCell>
+                                <TableCell class="w-fit">{{ daftar.tanggal_mulai }}</TableCell>
+                                <TableCell class="w-fit">{{ daftar.tanggal_selesai }}</TableCell>
+                                <TableCell class="w-fit">
                                     <a
                                         v-if="daftar.surat_magang"
                                         :href="route('admin.dashboard.verifikasi.proposal', daftar.surat_magang.split('/').pop())"
@@ -157,6 +165,11 @@ watch([search, selectedDate, rows], () => {
                                     >
                                     <p v-else>-</p>
                                 </TableCell>
+                                <TableCell class="w-fit">
+                                <Badge :variant="checkVariant(daftar.profile.status_magang)">
+                                    {{ daftar.profile.status_magang }}
+                                </Badge>
+                            </TableCell>
                                 <TableCell>
                                     <div class="flex flex-row gap-2">
                                         <a :href="route('admin.dashboard.verifikasi.edit', daftar.id)">
