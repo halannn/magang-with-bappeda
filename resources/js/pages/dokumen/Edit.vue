@@ -28,19 +28,19 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    error: {
-        type: [Object, Array],
-        required: true,
-    },
 });
-const dokumen = props.dokumen[0];
-const error = computed(() => props.error);
+const dokumen = props.dokumen;
 
-const df = new DateFormatter('en-US', { dateStyle: 'long' });
+const df = new DateFormatter('id-Id', { dateStyle: 'full' });
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
-
-const checkFileType = (file: File) => file.type === 'application/pdf';
+function checkFileType(file: File) {
+    if (file?.name) {
+        const fileType = file.name.split('.').pop();
+        if (fileType === 'pdf') return true;
+    }
+    return false;
+}
 
 const formSchema = toTypedSchema(
     z.object({
@@ -48,32 +48,9 @@ const formSchema = toTypedSchema(
         deskripsi_dokumen: z.string().nonempty('Berikan deskripsi tentang kegiatan anda.'),
         file: z
             .any()
-            .optional()
-            .superRefine((file, ctx) => {
-                if (file === undefined || file === null) return;
-
-                if (!(file instanceof File)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload surat anda, ukuran file maksimal 2MB dengan format .pdf.',
-                    });
-                    return;
-                }
-
-                if (file.size > MAX_FILE_SIZE) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Ukuran file maksimal 2MB',
-                    });
-                }
-
-                if (!checkFileType(file)) {
-                    ctx.addIssue({
-                        code: z.ZodIssueCode.custom,
-                        message: 'Mohon upload dokumen dengan format .pdf.',
-                    });
-                }
-            }),
+            .refine((file) => file instanceof File, 'File diperlukan')
+            .refine((file) => file?.size < MAX_FILE_SIZE, 'Ukuran dokumen maksimal 2MB.')
+            .refine((file) => checkFileType(file), 'Hanya format .pdf yang didukung.'),
     }),
 );
 
@@ -182,10 +159,6 @@ onMounted(() => {
                         <FormMessage />
                     </FormItem>
                 </FormField>
-
-                <div v-if="error" class="text-red-500">
-                    {{ error }}
-                </div>
 
                 <div class="mt-10 flex flex-row justify-end-safe gap-5">
                     <a :href="route('dashboard.dokumen.index')">

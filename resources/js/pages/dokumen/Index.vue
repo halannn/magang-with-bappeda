@@ -25,11 +25,11 @@ const df = new DateFormatter('id-ID', {
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/admin/dashboard',
+        href: '/dashboard',
     },
     {
         title: 'Laporan Kegiatan',
-        href: '/admin/dashboard/laporan-kegiatan',
+        href: '/dashboard/dokumen',
     },
 ];
 
@@ -179,7 +179,7 @@ const handleDestroy = (id: number) => {
                                         <a :href="route('dashboard.dokumen.edit', item.id)">
                                             <Button size="sm"> Edit </Button>
                                         </a>
-                                       <Alert
+                                        <Alert
                                             dialog="Hapus"
                                             dialogClass="bg-destructive hover:bg-destructive"
                                             variant="destructive"

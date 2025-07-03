@@ -14,48 +14,49 @@ class DokumenMagangController extends Controller
      */
     public function index(Request $request)
     {
+        // query setup
+        $query = DokumenMagang::query();
+        $user  = auth()->user();
+        $isAdmin = $user->status === 'admin';
 
-        if (auth()->user()->status === 'admin') {
-            $query = DokumenMagang::with('profile')->orderByDesc('tanggal');
+        // check status
+        if ($isAdmin) {
+            $query->with('profile');
+        } else {
+            $query->where('profile_id', $user->profile?->id);
+        }
 
-            if ($request->has('search') && $request->search !== '') {
-                $search = $request->input('search');
-                $query->whereHas('profile', function ($q) use ($search) {
-                    $q->where('nama_lengkap', 'like', "%{$search}%")
+        // filtering input
+        $query->when($request->filled('search'), function ($q) use ($request, $isAdmin) {
+            $search = $request->input('search');
+
+            // admin side
+            if ($isAdmin) {
+                return $q->whereHas('profile', function ($profileQuery) use ($search) {
+                    $profileQuery->where('nama_lengkap', 'like', "%{$search}%")
                         ->orWhere('bidang_magang', 'like', "%{$search}%");
                 });
             }
 
-            if ($request->has('date') && $request->date !== null) {
-                $query->whereDate('tanggal', $request->input('date'));
-            }
-
-            $dokumen = $query->paginate($request->input('rows', 10))->withQueryString();
-
-            return Inertia::render('admin/AdminDokumenMagang', [
-                'dokumen' => $dokumen,
-            ]);
-        }
-
-        $profile_id = auth()->user()->profile?->id;
-
-        $query = DokumenMagang::where('profile_id', $profile_id)->orderByDesc('tanggal');
-
-        if ($request->has('search') && $request->search !== '') {
-            $search = $request->input('search');
-            $query->whereHas('profile', function ($q) use ($search) {
-                $q->where('nama_lengkap', 'like', "%{$search}%")
-                    ->orWhere('deskripsi_dokumen', 'like', "%{$search}%");
+            // user side
+            return $q->where(function ($mainQuery) use ($search) {
+                $mainQuery->where('deskripsi_dokumen', 'like', "%{$search}%");
             });
-        }
+        });
 
-        if ($request->has('date') && $request->date !== null) {
-            $query->whereDate('tanggal', $request->input('date'));
-        }
+        // filtering date
+        $query->when($request->filled('date'), function ($q) use ($request) {
+            return $q->whereDate('tanggal', $request->input('date'));
+        });
 
-        $dokumen = $query->paginate($request->input('rows', 10))->withQueryString();
+        // showing the query
+        $dokumen = $query->orderByDesc('tanggal')
+            ->paginate($request->input('rows', 10))
+            ->withQueryString();
 
-        return Inertia::render('dokumen/Index', [
+        $view = $isAdmin ? 'admin/AdminDokumenMagang' : 'dokumen/Index';
+
+        return Inertia::render($view, [
             'dokumen' => $dokumen
         ]);
     }
@@ -65,12 +66,7 @@ class DokumenMagangController extends Controller
      */
     public function create()
     {
-        $profile_id = auth()->user()->profile?->id;
-        $dokumen = DokumenMagang::where('profile_id', $profile_id)->get();
-
-        return Inertia::render('dokumen/Create', [
-            'dokumen' => $dokumen
-        ]);
+        return Inertia::render('dokumen/Create');
     }
 
     /**
@@ -108,10 +104,8 @@ class DokumenMagangController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(DokumenMagang $dokumen)
     {
-        $dokumen = DokumenMagang::where('id', $id)->get();
-
         return Inertia::render('dokumen/Edit', [
             'dokumen' => $dokumen
         ]);
@@ -120,10 +114,8 @@ class DokumenMagangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, DokumenMagang $dokumen)
     {
-        $dokumen = DokumenMagang::where('id', $id)->firstOrFail();
-
         $profile_id = auth()->user()->profile?->id;
 
         $validated = $request->validate([
@@ -150,9 +142,8 @@ class DokumenMagangController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(DokumenMagang $dokumen)
     {
-        $dokumen = DokumenMagang::where('id', $id)->firstOrFail();
         if ($dokumen->file && Storage::disk('local')->exists($dokumen->file)) {
             Storage::disk('local')->delete($dokumen->file);
         }

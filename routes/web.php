@@ -105,10 +105,10 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashbo
         Route::get('/', 'index')->name('index'); // dokumen.index
         Route::post('/', 'store')->name('store'); // dokumen.store
         Route::get('/tambah-dokumen', 'create')->name('create'); // dokumen.create
-        Route::get('/edit-dokumen/{id}', 'edit')->name('edit'); // dokumen.edit
+        Route::get('/edit-dokumen/{dokumen}', 'edit')->name('edit'); // dokumen.edit
         Route::get('file/{file}', 'showFile')->name('file'); // dokumen.file
-        Route::put('/{id}', 'update')->name('update'); // dokumen.update
-        Route::delete('/{id}', 'destroy')->name('destroy'); // dokumen.destroy
+        Route::put('/{dokumen}', 'update')->name('update'); // dokumen.update
+        Route::delete('/{dokumen}', 'destroy')->name('destroy'); // dokumen.destroy
     });
 
     Route::get('/sertifikat', [SertifikatMagangController::class, 'Index'])->name('sertifikat.index');
