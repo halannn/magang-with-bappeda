@@ -11,8 +11,8 @@ import 'vue-pdf-embed/dist/styles/annotationLayer.css';
 import 'vue-pdf-embed/dist/styles/textLayer.css';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/admin/dashboard' },
-    { title: 'Sertifikat', href: '/admin/dashboard/sertifikat' },
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Sertifikat', href: '/dashboard/sertifikat' },
 ];
 
 interface Props extends PageProps {

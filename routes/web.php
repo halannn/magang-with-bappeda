@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DokumenMagangController;
 use App\Http\Controllers\LaporanKegiatanController;
 use App\Http\Controllers\PendaftaranMagangController;
@@ -41,9 +42,7 @@ Route::middleware(['auth', 'verified'])
     });
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('admin/AdminDashboard');
-    })->name('index');
+    Route::get('/', [DashboardController::class, 'admin'])->name('index');
 
     Route::prefix('verifikasi')->name('verifikasi.')->controller(PendaftaranMagangController::class)->group(function () {
         Route::get('/', 'index')->name('index');
@@ -77,9 +76,7 @@ Route::middleware(['auth', 'verified', 'checkStatus' . ':admin'])->prefix('admin
 
 Route::middleware(['auth', 'verified', 'checkStatus' . ':user'])->prefix('dashboard')->name('dashboard.')->group(function () {
 
-    Route::get('/', function () {
-        return Inertia::render('Dashboard');
-    })->name('index');
+    Route::get('/', [DashboardController::class, 'user'])->name('index');
 
     Route::prefix('absensi')->name('absensi.')->group(function () {
         Route::get('/', [AbsensiController::class, 'index'])->name('index'); // absensi.index
